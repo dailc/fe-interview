@@ -1117,6 +1117,18 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
   table { border-collapse:collapse; border-spacing:0; }
 ```
 
+### chrome中可以显示11px大小的文本么？
+
+```js
+chrome浏览器中，默认会有一个最小字体限制
+
+小于12px的文本会默认安装12px显示
+
+如何解决：
+-webkit-text-size-adjust: none;
+这样可以关闭chrome的自动调整，就不会有这个问题了
+```
+
 ### inline-block之间的间距？
 
 http://www.zhangxinxu.com/wordpress/2012/04/inline-block-space-remove-%E5%8E%BB%E9%99%A4%E9%97%B4%E8%B7%9D/?_t_t_t=0.9321090382856176
@@ -2388,6 +2400,85 @@ constructor[Symbol.hasInstance](object)。这意味着它是可扩展的。
 
 实际上，symbol是PHP和Python中的__doubleUnderscores在JavaScript语言环境中的改进版。
 symbol在Firefox 36和Chrome 38中均已被实现。
+```
+
+### 对象到字符串的转换步骤
+
+```js
+1.如果对象有toString()方法，javascript调用它。如果返回一个原始值（primitive value如：string number boolean）,将这个值转换为字符串作为结果
+
+2.如果对象没有toString()方法或者返回值不是原始值，javascript寻找对象的valueOf()方法，如果存在就调用它，返回结果是原始值则转为字符串作为结果
+
+3.否则，javascript不能从toString()或者valueOf()获得一个原始值，此时throws a TypeError
+```
+
+### 对象到数字的转换步骤
+
+```js
+1.如果对象有valueOf()方法并且返回元素值，javascript将返回值转换为数字作为结果
+
+2.否则，如果对象有toString()并且返回原始值，javascript将返回结果转换为数字作为结果
+
+3.否则，throws a TypeError
+```
+
+### +运算符工作流程
+
+```js
+1.如果有操作数是对象，转换为原始值
+
+2.此时如果有一个操作数是字符串，其他的操作数都转换为字符串并执行连接
+
+3.否则：所有操作数都转换为数字并执行加法
+```
+
+### 为什么说+拼接字符串效率低
+
+```js
+因为js中，字符串是原始值，创建后是无法更改的（栈内存中）
+
+var lang = 'hello';
+
+lang = lang + ' world';
+
+1.变量lang开始时包含字符串'hello'
+
+2.第二行代码把'hello'重新定义为'hello'与' world'的组合
+
+实现这个操作的过程如下：
+1.首先创建一个新的字符串（容纳组合的所有字符）
+2.然后这个字符串填充'hello'与' world'的组合
+3.销毁原来的字符串'hello'与' world'（因为这两个字符串已经没用了）
+
+这也是为什么某些旧版浏览器字符串拼接时速度很慢
+
+-不过，一般新版的浏览器中已经修复了这个问题，当然了，一般情况下我们还是会避免代码拼接字符串的
+```
+
+### String()与toString()的区别
+
+```js
+String()转换规则：
+
+1.如果值有toString()，调用值的toString-不带参
+
+2.如果值是null，返回'null'
+
+3.如果值是undefined，返回'undefined'
+
+出了null与undefined外的值都有toString()
+
+而且toString(基数)可以接收一个基数，譬如传8代表8进制输出
+
+但是注意：
+
+console.log(('11').toString()); // 合法输出11
+console.log((true).toString()); // 合法输出true
+console.log((22).toString()); // 合法输出22
+
+console.log('11'.toString()); // 合法输出11
+console.log(true.toString()); // 合法输出true
+console.log(22.toString()); // 报错Uncaught SyntaxError: Invalid or unexpected token
 ```
 
 ### js的浮点误差？
