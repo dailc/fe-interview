@@ -1835,6 +1835,20 @@ user-scalable来控制用户是否可以通过手势对页面进行缩放。该�
 http://www.css88.com/archives/5975
 ```
 
+### meta viewport minimum-scale无效？
+
+```html
+<meta name="viewport" content="width=device-width, minimum-scale=0.5, initial-scale=1.0, maximum-scale=3.0">
+```
+
+```js
+这样声明时会发现页面只能放大不能缩小
+https://www.2cto.com/kf/201607/528515.html
+
+可能与兼容性有关，譬如有一种说法是：
+Android WebKit内核和IE浏览器的layout viewport永不会小于320px。
+```
+
 ### 视差滚动效果，如何给每页做不同动画？（回到顶部，向下滑动要再次出现，和只出现一次分别怎么做？）
 
 ```js
@@ -2422,6 +2436,88 @@ symbol在Firefox 36和Chrome 38中均已被实现。
 3.否则，throws a TypeError
 ```
 
+### `<,>,<=,>=`的比较规则
+
+```js
+所以比较运算符都支持任意类型，但是比较只支持数字和字符串，所以需要执行必要的转换然后进行比较，转换规则如下：
+
+1.如果操作数是对象，转为原始值：如果valueOf方法返回原始值，则使用这个值，否则使用toString方法的结果，如果转换失败则报错
+
+2.经过必要的对象到原始值的转换后，如果两个操作数都是字符串，按照字符串顺序进行比较（它们的16位unicode值的大小）
+
+3.否则，如果有一个操作数不是字符串，将两个操作数转位数字进行比较
+```
+
+### ==运算符判断相等的流程是怎样的
+
+```js
+1.如果两个值类型相同，按照===比较方法进行比较
+
+2.如果类型不同，使用如下规则进行比较
+
+3.如果其中一个值是null，另一个是undefined，它们相等
+
+4.如果一个值是数字另一个是字符串，将字符串转换为数字进行比较
+
+5.如果有布尔类型，将true转换为1，false转换为0，然后用==规则继续比较
+
+6.如果一个值是对象，另一个是数字或字符串，将对象转换为原始值然后用==规则继续比较
+
+7.其他所有情况都认为不相等
+```
+
+### ===运算符判断相等的流程是怎样的
+
+```js
+1.如果两个值不是相同类型，它们不相等
+
+2.如果两个值都是null或者都是undefined，它们相等
+
+3.如果两个值都是布尔类型true或者都是false，它们相等
+
+4.如果其中有一个是NaN，它们不相等
+
+5.如果都是数值型并且数值相等，他们相等， -0等于0
+
+6.如果他们都是字符串并且在相同位置包含相同的16位值，他它们相等;
+如果在长度或者内容上不等，它们不相等；
+两个字符串显示结果相同但是编码不同==和===都认为他们不相等
+
+7.如果他们指向相同对象、数组、函数，它们相等；
+如果指向不同对象，他们不相等
+```
+
+### ++和--运算符的工作流程
+
+```js
+数值的或直接++或--，其它的
+
+1.如果应用对象是一个包含有效数字的字符串时，会先将其转换为数字，然后++或--，字符串变数值
+
+2.如果不包含有效数字，将变量的值设置为NaN，字符串变数值
+
+3.如果是false，先变为0，然后++或--，布尔变数值
+
+4.如果是true，先变为1，然后++或--，布尔变数值
+
+5.如果是浮点数字，直接++或--
+
+6.应用于对象，先调用对象的valueOf()以取得一个可操作的值，按照前述规则解析，如果是NaN，继续调用toString()，
+继续前述规则解析，对象变数值
+```
+
+### +和-运算符的工作流程
+
+```js
+改操作符会像Number()一样对值进行转换
+
+1.false,true-0,1
+
+2.字符串按照特殊规则解析
+
+3.对象先调用valueOf()，如果非法则调用toString()
+```
+
 ### +运算符工作流程
 
 ```js
@@ -2479,6 +2575,36 @@ console.log((22).toString()); // 合法输出22
 console.log('11'.toString()); // 合法输出11
 console.log(true.toString()); // 合法输出true
 console.log(22.toString()); // 报错Uncaught SyntaxError: Invalid or unexpected token
+```
+
+### 判断是否是函数
+
+```js
+/**
+ * 判断对象是否为函数，如果当前运行环境对可调用对象（如正则表达式）
+ * 的typeof返回'function'，采用通用方法，否则采用优化方法
+ *
+ * @param {Any} arg 需要检测是否为函数的对象
+ * @return {boolean} 如果参数是函数，返回true，否则false
+ */
+function isFunction(arg) {
+    if (arg) {
+        if (typeof (/./) !== 'function') {
+            return typeof arg === 'function';
+        } else {
+            return Object.prototype.toString.call(arg) === '[object Function]';
+        }
+    } // end if
+    return false;
+}
+```
+
+```js
+https://github.com/qiu-deqing/FE-interview#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%90%A6%E4%B8%BA%E5%87%BD%E6%95%B0
+解释：
+typeof (/./) !== 'function'的作用是-
+typeof /./ === 'function'; // Chrome 1-12 , 不符合 ECMAScript 5.1
+typeof /./ === 'object'; // Firefox 5+ , 符合 ECMAScript 5.1
 ```
 
 ### js的浮点误差？
