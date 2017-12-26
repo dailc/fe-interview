@@ -128,6 +128,7 @@ Html5新元素(如header、nav、footer、adide、article、section等标签，a
 html只有4.01和h5
 xhtml有1.0和1.1
 
+XML 是可扩展的标记语言
 XHTML 1.0 是 XML 风格的 HTML 4.01。
 XHTML 1.1 主要是初步进行了模块化。
 HTML5 是下一代 HTML，取代 HTML 4.01。
