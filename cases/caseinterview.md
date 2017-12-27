@@ -6,102 +6,6 @@ https://github.com/markyun/My-blog/tree/master/Front-end-Developer-Questions
 
 ## HTML
 
-### Doctype作用？严格模式与混杂模式如何区分？它们有何意义?
-
-1. doctype用来决定页面以什么样的方式渲染，位于文档的最前面的位置(<html>标签前)
-
-HTML5之前，HTML是SGML的子集
-
-doctype里有DTD可以决定以什么样的格式来渲染
-
-HTML5中，`!doctype html`即可声明是`H5`页面
-
-2.默认如果没有`doctype`声明就是混杂模式，混杂模式兼容老版本的浏览器显示
-
-制定`doctype`则是严格模式，严格模式中页面严格按照HTML规则渲染
-
-```js
-1.<!doctype>声明位于HTML文档的第一行，告知浏览器的解析器用什么文档标准解析这个文档
-DOCTYP不存在或格式不正确会导致文档以兼容模式呈现
-
-2.标准模式的排版和JS运作模式都是以改浏览器支持的最高标准运行
-兼容模式中，页面以宽松的向后兼容的方式显示，模拟老式浏览器的行为以防止站点无法工作
-```
-
-### HTML5 为什么只需要写 <!DOCTYPE HTML>？
-
-因为HTML5已经不再是SGML的子集，浏览器识别到`!DOCTYPE HTML`即可判断是H5页面
-
-```js
-HTML5不基于SGML，因此不需要DTD引用，但也需要doctype来规范浏览器的行为
-
-HTML4.01基于SGML，所以需要对DTD进行引用，才能告知浏览器使用的文档类型
-```
-
-### noscript标签知道么？
-
-类别：基础概念
-
-```html
-这是为了解决早起浏览器不兼容javascript或者脚本被禁用后的问题而创造出的标签
-
-<noscript>
-<p>本页面需要浏览器支持（启用）javascript</p>
-</noscript>
-
-示例如上
-只是为了提升用户体验，现在一般用不到
-```
-
-### 加载远程脚本时，script标签中嵌入执行代码会怎么样？
-
-类别：基础概念
-
-```html
-<script src="xxx.jd">
-alert('hello world');
-</script>
-```
-
-
-```js
-带有src属性的script标签中嵌入的任何代码都会被忽略
--这个标签只会去加载src
-```
-
-### script标签中defer和async的区别？
-
-```js
-https://segmentfault.com/a/1190000006778717
-async：异步加载
-xHTML中要设为：async="async"
-表示立即加载脚本-但是异步加载，也就是说页面的其它操作并不会暂停
-并且只对外部脚本生效
-而且异步加载的脚本并不确保执行顺序（所以建议异步脚本不要再加载期间修改dom）
-异步脚本一定会在load事件前执行，但是可能在DOMContentLoaded事件的前面或后面
-
-defer：延迟执行
-xHTML中要设为：defer="defer"
-立即下载，但延迟执行（同样异步加载），这个脚本会被等到文档完全解析和显示后在执行
-并且只对外部脚本生效
-html5规范要求，延迟加载的执行顺序是和引入顺序一样的，而且脚本执行顺序先于DOMContentLoaded事件
-（但是实际上不一定按这个顺序，而且也不一定在DOMContentLoaded事件执行-浏览器的实现问题）
-按规范来说，defer应该是立即异步下载并延迟执行，
-但是实际实现来说，譬如chrome中defer是和将script放到body底部一样的效果。
-（相当于延迟下载了-浏览器优化的结果）
-
-注意，如果普通的script，下载和执行时都会阻塞文档解析
-```
-
-### load事件与DOMContentLoaded事件
-
-```js
-当 onload 事件触发时，页面上所有的DOM，样式表，脚本，图片，flash都已经加载完成了。
-
-当 DOMContentLoaded 事件触发时，仅当DOM加载完成，不包括样式表，图片，flash。
-(譬如如果有async加载的脚本就不一定完成)
-```
-
 ### 请问html5的主要特点是什么(初级)？html5与前面个版本的主要区别？(高级)？
 
 ```js
@@ -148,24 +52,12 @@ HTML5 是下一代 HTML，取代 HTML 4.01。
 
 ，`br`，`hr`，`img`，`input`，`link`，`meta`
 
-### 页面导入样式时，使用link和@import有什么区别？
-
-1. link是XHML自带的，可以加载css，也可以加载一些其它文件，而且所有浏览器都支持
-link加载时不会阻塞页面，而是会异步加载（譬如某浏览器可同时并发下载5个css）
-(注意，并行下载，甚至可以并行解析dom，但是会阻塞DOM的渲染)
-
-2.@import是css中才有的，只能用来载入css
-~~@import加载时会阻塞，也就是说，如果css用@import来加载，页面会先等待这个加载完后才会进行其它操作~~
-
-一般的页面规范中都是禁止使用@import加载的，很影响体验
+### video如何自适应撑开宽度
 
 ```js
-link属于XHTML标签的，除了加载css外，还能用于定义RSS，定义REL链接属性等作用
-@import是css提供的，只能用于加载css
+试试给video加object-fit: fill;
 
-页面被加载的同时，link会被加载，而@import引用的css必须等页面被加载完再加载
-
-@import是css2.1提出的，只有IE5上才能被识别，link是XHTML标签，无兼容问题（现在一般无需考虑IE兼容）
+https://developer.mozilla.org/zh-CN/docs/Web/CSS/object-fit
 ```
 
 ### 介绍一下你对浏览器内核的理解？
