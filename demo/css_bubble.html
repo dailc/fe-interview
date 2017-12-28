@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>css实现聊天气泡</title>
+        <style>
+            .chat-box {
+                display: flex;
+            }
+            
+            .chat-box .content {
+                position: relative;
+                padding: 8px;
+                margin-left: 10px;
+                background-color: #38adff;
+                border: 1px solid #38adff;
+                border-radius: 14px;
+                font-size: 15px;
+                word-break: break-all;
+            }
+            
+            .chat-box .head {
+                width: 40px;
+                min-width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: chartreuse;
+            }
+            
+            .chat-box .content:before {
+                position: absolute;
+                top: 8px;
+                left: -17px;
+                width: 0;
+                height: 0;
+                border: 10px solid #38adff;
+                border-color: transparent #38adff transparent transparent;
+                content: '';
+             }
+        </style>
+    </head>
+
+    <body>
+        <div class="chat-box">
+            <img class="head" />
+            <div class="content">发送的内容，发送的内容。。。</div>
+        </div>
+    </body>
+
+</html>

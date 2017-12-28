@@ -1,12 +1,46 @@
-# 难度等级1，最常见的一些概念，新手必须了解
+# 难度等级1，最常见的一些概念，初级必须了解
 
-## html5的头部声明？
+## HTML5 为什么只需要写 `<!DOCTYPE HTML>`，而不是`<!DOCTYPE HTML PUBLIC "-xxx.dtd">`？
 
-```html
-<!DOCTYPE html >
-```
+因为HTML5已经不再是SGML的子集，浏览器识别到`!DOCTYPE HTML`即可判断是H5页面
 
-页面如果以这个头部声明开始，浏览器就会以html5模式显示
+HTML5与HTML4.01的区别
+
+- HTML5不基于SGML，因此不需要DTD引用，但也需要doctype来规范浏览器的行为
+
+- HTML4.01基于SGML，所以需要对DTD进行引用，才能告知浏览器使用的文档类型
+
+## HTML5的一些特点
+
+1. H5不再基于SGML，而是作为一个独立的版本
+
+2. H5使用新的头部声明类别`DOCTYPE html`声明
+
+3. H5语言规则定义更为完善，H5减少了Flash的依赖，能够不依赖于Flash完成网页的功能
+
+4. H5对移动端的兼容很到位，目前几乎所有浏览器都支持H5。通过H5+CSS3，让移动开发成为主流。
+
+5. html5新增了自己独特的元素(video,canvas,footer标签等)
+
+Html5新元素(如header、nav、footer、adide、article、section等标签，audio、video、 canvas、geolocation等新的元素)，
+表单控件(calender、date、time、email、url、search)，
+新的API(如localStorage、sessionStorage、indexedDB、websocket)，
+增加离线缓存(可以通过manifest配置- <html manifest=”路径”>)，
+废弃了部分属性(如img废弃name、html废弃version、form废弃accept…)，
+
+## 行内元素有哪些？块级元素有哪些？ 空(void)元素有那些？
+
+1.行内
+
+`span`，`a`，`i`，`b`，`strong`，`pre`，`img`，`select`
+
+2.块级
+
+`div`，`p`，`ul`，`ol`，`li`，`code`，`h1`，`dt`，`dl`，`dd`
+
+3.空元素
+
+，`br`，`hr`，`img`，`input`，`link`，`meta`
 
 ## load事件与DOMContentLoaded事件
 

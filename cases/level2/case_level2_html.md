@@ -1,14 +1,5 @@
 # 难度等级2，进阶需掌握
 
-## HTML5 为什么只需要写 `<!DOCTYPE HTML>`，而不是`<!DOCTYPE HTML PUBLIC "-xxx.dtd">`？
-
-因为HTML5已经不再是SGML的子集，浏览器识别到`!DOCTYPE HTML`即可判断是H5页面
-
-HTML5与HTML4.01的区别
-
-- HTML5不基于SGML，因此不需要DTD引用，但也需要doctype来规范浏览器的行为
-
-- HTML4.01基于SGML，所以需要对DTD进行引用，才能告知浏览器使用的文档类型
 
 ## Doctype的作用？Doctype的来由？
 
