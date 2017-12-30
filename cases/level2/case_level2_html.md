@@ -1,6 +1,5 @@
 # 难度等级2，进阶需掌握
 
-
 ## Doctype的作用？Doctype的来由？
 
 doctype用来决定页面以什么样的方式渲染，位于文档的最前面的位置(<html>标签前)
@@ -91,6 +90,21 @@ DOCTYPE的来由：
 
 ```html
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+```
+
+## 如何处理HTML5新标签的浏览器兼容问题
+
+如canvas，一般会加一句当前浏览器不支持canvas，用来提示用户
+
+IE8/IE7/IE6支持通过document.createElement方法产生的标签，可以利用这一特性让这些浏览器支持HTML5新标签，
+浏览器支持新标签后，还需要添加标签默认的样式
+
+也可以直接使用成熟的框架、比如html5shim;
+
+```html
+<!--[if lt IE 9]>
+    <script> src="http://html5shim.googlecode.com/svn/trunk/html5.js"</script>
+<![endif]-->
 ```
 
 ## 详解下script标签中defer和async的区别？

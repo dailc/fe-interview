@@ -3,110 +3,6 @@
 
 ## HTML
 
-### 常见的浏览器内核有哪些？
-
-一般分为几大阵营：
-
-- `Trident`IE（7，8，9，...），号称自己都不兼容自己，好在移动端不需要兼容，其实IE11等性能以及赶上去了，但无奈声名已狼藉
-
-- 范Webkit内核（包括它的升级变种Blink），Chrome，Safari等现今主流浏览器都是基于这个或它的变种
-    这种内核对W3C标准支持的很好
-    
-- `Gecko`Firefox浏览器的内核，火狐的内核，虽然和Webkit有区别，但是W3C标准也支持的很好，如果使用标准的CSS等属性，几乎无需另外兼容
-
-- 微软的新版浏览器，Edge,号称全面兼容webkit等内核的属性，作为新作，去除了历史兼容的包袱，应该也走在W3C标准支持的路上了
-
-- 其它阵营，如opera等（以前是`Presto`），一般一些历史上层级采用IE内核的浏览器大多接近阵亡了（如世界之窗等），像opera等这种浏览器也开始采用webkit，往标准上靠
-
-基本上，未来的趋势就是往W3C标准靠，然后各大浏览器在这基础上实现自己的特色
-
-另外，有一点，Webkit内核并不是完全标准，里面有很多私有属性，但是它对标准的支持确实不错，
-还有就是多个浏览器都采用了webkit，导致只需要兼容一个`-webkit-xxx`就可以兼容大多浏览器，
-这使的开发者都普遍拥抱webkit内核的浏览器
-
-番外，webkit是苹果开源的一个内核，Google在它基础上自己弄了一个chromium，然后chrome是基于chromium的，
-所以一般很多人会直接把chrome代指webkit内核
-
-### html5有哪些新特性、移除了那些元素？如何处理HTML5新标签的浏览器兼容问题？如何区分 HTML 和 HTML5？
-
-不再是`SGML`的子集。增加了一些图像，位置，存储，多任务等功能的增加
-
-增加
-
-```js
-canvas
-sessionStorage
-localStorage
-webworker
-websocket
-Geolocation
-video
-audio
-标签元素
-article
-nav
-footer
-section
-header
-calendar
-date
-url
-search
-```
-
-移除了一些
-
-```js
-表现型
-basefont
-big
-center
-font
-s
-strike
-tt
-u
-可用型
-frame
-frameset
-noframes
-等
-```
-
-```js
-如canvas，一般会加一句当前浏览器不支持canvas，用来提示用户
-IE8/IE7/IE6支持通过document.createElement方法产生的标签，
-可以利用这一特性让这些浏览器支持HTML5新标签，
-浏览器支持新标签后，还需要添加标签默认的样式
-
-也可以直接使用成熟的框架、比如html5shim;
-<!--[if lt IE 9]>
-    <script> src="http://html5shim.googlecode.com/svn/trunk/html5.js"</script>
-<![endif]-->
-```
-
-```js
-doctype声明
-结构元素
-功能元素
-可区分html5
-```
-
-### 简述一下你对HTML语义化的理解？
-
-譬如`<stoing>`是语义化的强调，语音设备会重读，而`<b>`仅仅是自然样式上的加粗
-
-通用，如果是列表，优先使用`ul,li`，而不是`div`大法层层嵌套
-
-一般的语义化标签
-
-```js
-用正确的标签做正确的事情
-html语义化让页面内容结构化，结构更清晰，便于浏览器解析，搜索引擎解析
-而且即使丢失css，也能保持基本格式
-搜索引擎依赖于html标记来确定上下文和关键字权重，利于seo
-同样，阅读源码时也更容易将网站分块，便于阅读维护理解
-```
 
 ### HTML5的离线储存怎么使用，工作原理能不能解释一下？
 
@@ -135,25 +31,22 @@ html5离线缓存是基于.appcache文件的缓存机制（不是存储技术）
 http://yanhaijing.com/html/2014/12/28/html5-manifest/
 ```
 
-### 描述下cookies,sessionStorage,localStorage的区别
+
+
+### 表单元素都有哪些？
 
 ```js
-cookie是网站为了标志用户身份而存储在用户本地终端上的数据（会有加密）
-cookie在同源的http请求中总是会携带（即使不需要），跨域的ajax请求需要开启`xhr`的`withCredentials`为`true`
-很多情况下都是服务端读取cookie中的jsessionid，然后根据服务端的session判断是那一个用户
+fieldset
+legend
+input text submit password
+select
+input checkbox radio
 
-sessionStorage和localStorage仅本地保留，不会发送给服务端
+fieldset 标签将表单内容的一部分打包，生成一组相关表单的字段。
+当一组表单元素放到 fieldset 标签内时，浏览器会以特殊方式来显示它们，
+它们可能有特殊的边界、3D 效果，或者甚至可创建一个子表单来处理这些元素。
 
-大小限制：
-
-cookie一般不能超过4k
-sessionStorage和localStorage一般是5m左右
-
-时间限制：
-
-localStorage: 持久化，永久保存，除非主动删除
-sessionStorage: 当前浏览器窗口关闭后删除
-cookie: 设置的cookie过期时间之前一直有效，即使窗口或浏览器关闭
+legend 元素为 fieldset 元素定义标题（caption）。
 ```
 
 ### iframe有哪些缺点
@@ -4965,3 +4858,4 @@ var foo = {
 console.log(foo.getA());  // 10
 
 ```
+
