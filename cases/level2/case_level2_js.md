@@ -78,3 +78,27 @@ var tmp = new String('123');
 tmp.substr(1);
 tmp = null;
 ```
+
+
+## ECMAScript的单体内置对象？
+
+1. Global
+在浏览器中变为window的一部分（注意，window不止有global对象，除了这个还有一些其它的内容）
+
+2. Math
+
+定义了两个不依赖于宿主环境的对象。其中
+
+math定义了一些数学公式的使用
+
+global在浏览器中是window形式表现，作为兜底对象，
+譬如undefined，Date，Boolean等都属于global。也就是：
+
+**所有在全局作用域中定义的属性和函数，都是global对象的属性**
+
+一些注意：
+
+- 给eval重新赋值会报错
+
+- ECMAScript5中明确禁止给undefined，NaN，Infinity赋值（即使在非严格模式）
+
