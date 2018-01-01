@@ -14,6 +14,10 @@ https://github.com/markyun/My-blog/tree/master/Front-end-Developer-Questions
 
 https://segmentfault.com/a/1190000006778717
 
+### manifest
+
+https://www.zhihu.com/question/35130316/answer/91006638
+
 ## js
 
 ### node.js垃圾回收机制与内存管理

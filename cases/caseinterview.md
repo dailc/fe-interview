@@ -4,32 +4,6 @@
 ## HTML
 
 
-### HTML5的离线储存怎么使用，工作原理能不能解释一下？
-
-在用户没有联网时可以正常访问站点或应用，联网时再更新机器上的缓存
-
-原理：
-html5离线缓存是基于.appcache文件的缓存机制（不是存储技术）
-通过这个文件的解析清单离线存储资源
-这些资源就像cookie一样会被存储下来，处于离线状态时浏览器会展示离线缓存数据
-
-使用
-
-```js
-1、页面头部像下面一样加入一个manifest的属性；
-2、在cache.manifest文件的编写离线存储的资源；
-    CACHE MANIFEST
-    #v0.11
-    CACHE:
-    js/app.js
-    css/style.css
-    NETWORK:
-    resourse/logo.png
-    FALLBACK:
-    / /offline.html
-3、在离线状态时，操作window.applicationCache进行需求实现。
-http://yanhaijing.com/html/2014/12/28/html5-manifest/
-```
 
 
 
