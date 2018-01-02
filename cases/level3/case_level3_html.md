@@ -91,3 +91,46 @@ JavaScript高级程序设计中有提到过：
 
 带有src属性的script标签中嵌入的任何代码都会被忽略（也就是说这个标签只会去加载src，不会执行中间的代码），
 所以上述的alert无效
+
+
+## HTML5的form如何关闭自动完成功能
+
+自动完成功能的意思时：输入的时候会有补全提示
+
+给不想提示的form或某个input设置为`autocomplete=off`
+
+默认整个表单是默认开启（自动补全字段-根据以前输入）
+
+
+## webSocket如何兼容低版本浏览器
+
+注意，IE >= 10 才支持websocket，注意，以下方案，在现代浏览器中，已经被淘汰，非常不建议使用
+
+- 用Adobe Flash Socket
+
+- Active HTMLFile(IE的控件)
+
+- 基于multipart编码发送XHR（流化，服务器会维护一个持续更新和保持打开的开放响应，除非超时或主动关闭）
+    需要浏览器支持才行
+    
+- 基于长轮询的XHR(keep-alive, 如果没数据，会一直挂起，知道等到数据，有数据会返回，然后结束后再次向服务器请求)
+    建立多个长连接可能会造成阻塞，要考虑性能
+    
+## 页面可见性（visibility）可以有哪些用途？
+
+通过visibilityState的值检测页面当前是否可见，以及打开网页的时间等
+
+可以在页面被切换到其它后台进程时，自动暂停音乐或视频的播放
+
+document.visibilityState返回当前页面的可见性，有以下值
+
+- hidden
+
+- visible
+
+- prerender，预渲染
+
+- preview，预览（如win7鼠标放底部预览时）
+
+
+visibilityChange: 当可见性状态改变时触发的事件

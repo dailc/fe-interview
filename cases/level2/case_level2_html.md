@@ -202,3 +202,69 @@ http://yanhaijing.com/html/2014/12/28/html5-manifest/
 - 缺乏足够容错机制，当清单中任意资源文件出现加载异常，都会导致整个manifest策略运行异常
 
 但是移动app，如 hybrid中，这个优点不明显，而很麻烦，想要达到理想效果比较难。所以应用并不是很广。
+
+## iframe有哪些缺点
+
+- iframe会阻塞页面的onload事件
+
+- 搜索引擎的检索程序无法解读这种页面，不利于seo
+
+- iframe和主页面共享连接池，而浏览器对相同域的链接有限制，所以会影响页面的并行加载
+
+如果一定要用iframe，最好是通过js动态给iframe添加src
+
+## 如何实现浏览器内多个标签页之间的通信
+
+- WebSocket（简单场景不建议使用），建立链接，多个页面可以交互
+
+- localstorage API，它被添加，修改或删除时会触发一个事件
+
+```js
+window.addEventListener("storage", function(e){  
+  console.log('key:', e.key); // "abc"
+  console.log('oldValue:', e.oldValue); // null
+  console.log('newValue:', e.newValue); // 123
+});
+```
+
+但是需要注意，（无痕模式下，localStorage可能会有问题）
+
+- 通过SharedWorker
+
+```js
+// main.html
+var worker = new SharedWorker('shared.js');
+// note: not worker.onmessage!
+worker.port.onmessage = function(e) {
+    // e.data
+};
+
+// shared.js
+onconnect = function(e) {
+  var port = e.ports[0];
+  port.postMessage('Hello World!');
+};
+```
+
+注意，页面必须同域，两个页面可以链接一个shareworker，页面A存储的数据页面B可以取出
+
+worker这个新特性在某些场景下很实用，但是常常容易被人忽视。
+
+## 如何在页面实现一个圆形的可点击区域？
+
+1.border-radius 属性矩形区域变成圆形
+
+2.圆形的svg
+
+3.使用map+area，img标签usemap，area区域约定圆形区域
+
+```html
+<img src="xxx.png" width="1366" height="768" border="0" usemap="#Map" />  
+<map name="Map" id="Map">  
+<area shape="circle" coords="100,100,50" href="https://www.baidu.com" target="_blank" />  
+</map>
+```
+
+map + area可以让一张图片拥有多个超链接(也可以监听实现自定义事件)
+
+4.纯JS实现，譬如获取鼠标坐标，通过算法判断是否在目标圆形之内（不建议）

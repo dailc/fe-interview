@@ -159,3 +159,77 @@ sessionStorage和localStorage一般是5m左右
 localStorage: 持久化，永久保存，除非主动删除
 sessionStorage: 当前浏览器窗口关闭后删除
 cookie: 设置的cookie过期时间之前一直有效，即使窗口或浏览器关闭
+
+## 表单内包含元素都有哪些
+
+包含的元素:
+
+```js
+fieldset
+legend
+input text submit password
+select
+input checkbox radio
+```
+
+一些解释：
+
+fieldset 标签将表单内容的一部分打包，生成一组相关表单的字段。
+当一组表单元素放到 fieldset 标签内时，浏览器会以特殊方式来显示它们，
+它们可能有特殊的边界、3D 效果，或者甚至可创建一个子表单来处理这些元素。
+
+legend 元素为 fieldset 元素定义标题（caption）。
+
+## label的作用是什么？如何用
+
+label标签用来定义表单控制间的关系,
+当用户选择该标签时（譬如点击label时），浏览器自动将焦点转到和标签相关的表单控件上
+
+```html
+  <label for="Name">Number:</label>
+  <input type="text" name="Name" id="Name"/>
+
+  <label>Date:<input type="text" name="B"/></label>
+```
+
+## 实现不使用border画出1px高的线，在不同浏览器的标准模式和怪异模式下都能保持一致的效果
+
+使用div（主要是考虑怪异模式下-那个模式非常的古老）
+
+```html
+<div style="height:1px;overflow:hidden;background:black"></div>
+```
+
+如果兼容性没有这么多要求的话，方式更多
+
+譬如after可以插入伪元素（较常用），然后定义高度为1px，content为''，可以进行绝对定位，再设置背景色
+
+### title与h1的区别，b与strong的区别，i与em的区别？
+
+- title的属性没有明确意义，只表示是一个标题（也不会显示在页面中），h1则表示层次明确的标题，对页面的抓取也有影响
+
+    - title是每一个页面必须要的属性
+
+其它主要是： 语义化与自然样式的区别
+
+- 语义化标签strong,em更利于SEO，一些特殊设备也会处理（如朗读）譬如
+
+    - strong，标明的重点内容，有语气加强的含义，也同样会加粗，使用阅读设备时，会重度
+    而b仅展示强调内容（譬如加粗）
+
+- i内容为斜体，em表示强调的文本，也同样会斜
+
+一些拓展：
+自然样式标签
+
+```js
+b,i,u,s,pre
+```
+
+语义样式标签
+
+```js
+strong,em,ins,del,code
+```
+
+正常来说应该使用最符合的语义化标签（但是请勿滥用）

@@ -62,3 +62,89 @@ JS引擎解析和执行JS来实现网页的动效，最开始渲染引擎和JS�
 
 番外，webkit是苹果开源的一个内核，Google在它基础上自己弄了一个chromium，然后chrome是基于chromium的，
 所以一般很多人会直接把chrome代指webkit内核
+
+## 前端需要注意那些seo?
+
+```html
+<meta content="xxxx" name="keywords">
+<meta content="xxx" name="description">
+```
+
+1.合理的title,description,keywords
+引擎搜索对三项的权重逐渐减小，
+title强调重点即可(重点关键词出现不要超过2次，而且要靠前)，不同页面title要不同
+description把页面内容高度概括，长度合适，不可过分堆砌关键词，不同页面的description要有所区分
+keywords列举出重点关键词
+
+2.语义化html，符合w3c规范，语义化让搜索引擎容易理解网页
+
+3.重要的html内容放在最前方，搜索引擎抓取html顺序是从上到下，
+有得搜索引擎长度有限制，因此要确保重要内容被抓取
+
+4.重要内容不要用js输出（爬虫不会执行js获取内容）
+
+5.避免iframe,爬虫不会抓取iframe中的内容
+
+6.非装饰性图片必须加alt(图片无法显示时替代，图片内容的等价描述，读屏器会阅读图片，搜索引擎重点分析)
+
+7.提高网站访问速度，网站速度是搜索引擎排序的一个重要指标
+
+## 谈谈src与href的区别？
+
+- src用于替换当前的元素，href在当前文档和引用资源之间确立关系
+
+src是source的缩写，指向外部资源的位置，指向的内容会嵌入到当前文档中当前标签所在位置，
+
+```html
+<img src ='xxx.jpg'/>
+```
+
+如，在请求上述src资源时，会将其指向的资源下载并应用到文档内（替换到原有的img标签位置）
+
+- href是 Hypertext Reference 的缩写，指向网络资源所在位置，建立和当前元素（锚点）或当前文档（链接）之间的链接
+
+如果我们在文档中添加
+
+```html
+<link href='common.css' rel='stylesheet'/>
+```
+
+那么浏览器会识别该文档为css文件，就会并行下载资源并且不会停止对当前文档的处理。
+这也是为什么建议使用 link 方式来加载 css ，而不是使用 @import 方式。
+
+## src加载img和加载script的区别？
+
+```html
+<script src ='js.js'></script>
+```
+
+当浏览器解析到该元素时，会暂停其他资源的下载和处理，直到将该资源加载、编译、执行完毕，这也是为什么将js脚本放在底部而不是头部。
+
+```html
+<img src ='xxx.jpg'/>
+```
+当浏览器解析到该元素时，并不会阻塞渲染，而是异步加载（src引用的图片等外部资源不会阻塞渲染）
+
+因为：
+
+- js脚本阻塞渲染并不是因为他是src引入的，而是因为他有可能改变DOM树或CSSOM树，所以遇到脚本会先下载并执行
+
+## 浏览器渲染过程
+
+浏览器渲染过程参考：
+
+1、输入url发送请求
+
+2、加载html文件
+
+3、加载完后解析html，并在解析的过程中构建DOM树
+解析遇到link、script、img标签时，浏览器会向服务器发送请求资源。
+script的加载或者执行都会阻塞html解析、其他下载线程以及渲染线程。
+link加载完css后会解析为CSSOM(层叠样式表对象模型,一棵仅含有样式信息的树)。css的加载和解析不会阻塞html的解析，但会阻塞渲染。
+img的加载不会阻塞html的解析，但img加载后并不渲染，它需要等待Render Tree生成完后才和Render Tree一起渲染出来。未下载完的图片需等下载完后才渲染。
+
+4、当css解析为CSSOM后，html解析为DOM后，两者将会结合在一起生成Render Tree(渲染树)。
+
+5、Layout: 计算出Render Tree每个节点的具体位置。
+
+6、Painting：通过显卡，将Layout后的节点内容(含已下载图片)分别呈现到屏幕上。
