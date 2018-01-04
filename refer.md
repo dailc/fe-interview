@@ -37,3 +37,8 @@ http://blog.csdn.net/freshlover/article/details/11579669
 ### node.js垃圾回收机制与内存管理
 
 https://www.jianshu.com/p/4129a3fce7bb
+
+### symbol
+
+http://www.infoq.com/cn/articles/es6-in-depth-symbols
+https://my.oschina.net/u/2903254/blog/818796

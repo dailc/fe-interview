@@ -188,3 +188,5 @@ left: auto; right: 20px;...
 可以加上 overflow: auto;  处理内容高度大于块元素或容器（视区viewport或设为position:relative的父容器）的溢出问题
 
 可以通过resize: both;  来处理窗口改变的重绘问题
+
+
