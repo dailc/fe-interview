@@ -42,3 +42,11 @@ https://www.jianshu.com/p/4129a3fce7bb
 
 http://www.infoq.com/cn/articles/es6-in-depth-symbols
 https://my.oschina.net/u/2903254/blog/818796
+
+### scrollIntoViewIfNeeded
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollIntoViewIfNeeded
+
+### Date无法继承
+
+https://stackoverflow.com/questions/6075231/how-to-extend-the-javascript-date-object

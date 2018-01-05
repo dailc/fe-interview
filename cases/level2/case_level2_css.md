@@ -27,6 +27,78 @@ p:last-of-type
 p:nth-child(2)
 ```
 
+## 请解释一下CSS3的Flexbox（弹性盒布局模型）,以及适用场景？
+
+是`display`的一个属性
+
+一个用于页面布局的全新css3功能
+flexbox可以把列表放在同一个方向（从上到下或左到右），并让列表延伸到占用可用的空间
+
+采用flex布局的元素位flex容器,它的所有子元素都是容器成员（flex item）
+
+常规布局是基于块和内联流方向，而flex布局是基于flex-flow流，可以很方便的用来对不同屏幕大小进行适应
+布局上比以前更灵活
+
+## 用纯CSS创建一个三角形的原理是什么？
+
+一般是隐藏其它几个边（颜色设为transparent），需要设置的角的反面设置颜色，譬如
+
+```js
+#demo {
+    width: 0;
+    height: 0;
+    border-width: 20px;
+    border-style: solid;
+    border-color: transparent transparent red transparent;
+  }
+```
+
+上右下左映射为下左上右
+
+当然，有时候需要对定位进行一些调整
+
+## css多列等高如何实现？
+
+利用padding-bottom,margin-bottom正负值相抵
+
+设置父容器设置overflow:hidden
+这样父容器的高度就是它里面的列没有设置padding-bottom时的高度
+当它里面的任意一列高度增加了，父容器的高度被撑到了里面最高列的高度
+
+其它比这列矮的列会用它们的padding-bottom补偿这部分高度差
+
+(这不是自适应的高度，只是利用了overflow:hidden来隐藏两边div的多余部分。)
+
+给左右两个div分别设置了一个200像素高的空白占位高度，
+把整个div往上挤了200像素，
+然后又通过负的margin把div往下挪200像素。(-200相当于下面200多余的被剪切了一样)
+当中间的div高度到了200以上的时候
+（准确的说是比两边div内部除了padding之外的高度多200以上），
+左右两边的div高度可能就不够了，会比中间矮。
+
+譬如
+
+```css
+#first {
+    overflow: hidden;
+    border: 1px solid red;
+}
+#second {
+    float: left;
+    width: 30 % ;
+    padding-bottom: 200px;
+    margin-bottom: -200px;
+    border: 1px solid blue;
+}
+#third {
+    float: left;
+    width: 30 % ;
+    padding-bottom: 200px;
+    margin-bottom: -200px;
+    border: 1px solid green;
+}
+```
+
 ## 如何居中div？如何居中一个浮动元素？如何让绝对定位的div居中？
 
 1.居中div

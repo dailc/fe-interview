@@ -71,6 +71,15 @@
 也就是说“响应式的概念覆盖了自适应”。响应式实现的原理是基于CSS3的Media Query
 (这个媒介查询可以根据不同的屏幕分辨率，调整网页设计，改变展示布局，需要注意的是对于响应式来说，Media Query必不可少)。
 
+### 一个满屏 品 字布局 如何设计?
+
+一般常用为：
+
+上面的一个div 100%宽
+下面的两个div分别宽 50%
+用float或者inline或绝对定位使得不换行
+简单的可以用border来区分是否正确
+
 ## CSS选择符有哪些？
 
 选择符包括：
@@ -88,6 +97,32 @@
 `a[rel = "external"]`（属性选择）
 等等
 ```
+
+## CSS3有哪些新特性？
+
+新增各种css选择器
+如:not(.input)   所有class不是input的节点
+
+圆角
+border-radius:6px
+
+多列布局
+multi-column layout
+
+阴影与反射
+shadow/reflect
+
+文字特效
+text-shadow
+
+文字渲染
+text-decoration
+
+线性渐变
+gradient
+
+旋转，平移等变化
+rotate transform
 
 ## CSS哪些属性可以继承？
 

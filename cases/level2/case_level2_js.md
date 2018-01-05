@@ -336,3 +336,16 @@ constructor[Symbol.hasInstance](object)。这意味着它是可扩展的。
 
 实际上，symbol是PHP和Python中的__doubleUnderscores在JavaScript语言环境中的改进版。
 symbol在Firefox 36和Chrome 38中均已被实现。
+
+## ES5中js经典的继承代码（最公认有效的那个）
+
+```js
+    function inherit(subClass, superClass) {  
+        function F() {}
+        F.prototype = superClass.prototype;
+        // 将实例作为子类的原型
+        // 为什么不直接 new superClass()，因为new superClass消耗的内存更多，而一个空对象消耗的较少
+        subClass.prototype = new F();
+        subClass.prototype.constructor = subClass.constructor;
+    }
+```
