@@ -50,3 +50,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/API/Element/scrollIntoViewIfNeeded
 ### Date无法继承
 
 https://stackoverflow.com/questions/6075231/how-to-extend-the-javascript-date-object
+
+### setInterval
+
+https://www.cnblogs.com/hyea/p/5596079.html
