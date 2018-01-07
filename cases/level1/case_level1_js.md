@@ -8,7 +8,7 @@ javascript是实现
 ECMAScript定义javascript语言的实现
 但是浏览器端的javascript是一般意义上的泛指，同时还包括bom（如navigator对象）和dom等
 
-## JavaScript有几种基本数据类型？
+## JavaScript有几种基本数据类型，你能画一下他们的内存图吗？
 
 7种（es6新增一种symbol）
 
@@ -25,6 +25,20 @@ ECMAScript定义javascript语言的实现
 6. `object`，复杂对象
 
 7. `symbol`，`es6`新增，表示独一无二
+
+简单类型在栈中，复杂类型栈中有一个堆中的引用（栈中只保留指针，堆中才是实际数据）
+
+分为两大类型： 原始数据类型（栈），引用数据类型（堆）
+
+## 判断一个对象是否是数组？
+
+1.`Array.isArray(arr)`(ECMAScript5引入-当然了，不考虑ie8)
+2.`arr instanceof Array`
+3.`arr.constructor === Array`
+
+注意，由于跨iframe实例化的对象彼此不共享原型，因此2，3检测可能会有问题
+
+4.`Object.prototype.toString.call(arr) === '[object Array]'`最保险的一种判断
 
 ## JS数组的迭代与归并方法？
 
@@ -141,3 +155,87 @@ location.reload();
 location.reload(true);
 ```
 
+## event.prventDefault()与event.stopPropagation()的区别？
+
+(不考虑部分IE浏览器，
+IE浏览器的`preventDefault`得用`Window.event.returnValue=false`替代。
+IE下的`stopPropagation`要用`event.cancelBubble=true`替代)
+
+`event.preventDefault()`用于取消事件的默认行为，
+例如当点击提交按钮时，监听方法内部使用了这句代码可以阻止默认的表单提交行为。
+同理可以适用于阻止a标签的跳转行为等等
+
+`event.stopPropagation()`用于取消事件的传递，
+即事件冒泡或事件捕获时阻止事件的冒泡或者阻止被下一级捕获。
+
+比如div中点击a标签。事件冒泡中,在a标签的监听函数内部使用这句代码可以阻止事件冒泡到div上，所以div无法获取到点击事件。
+在事件捕获中，在div的监听函数内部使用这句代码可以阻住a标签捕获事件，所以a标签无法捕获到监听事件。
+(avveventListener的第三个参数为false代表使用冒泡机制，为true代表使用捕获机制，默认为false)
+
+
+## 说说写JavaScript的基本规范？
+
+1. 良好的代码规范，无规矩不成方圆，譬如airbnb的规范
+
+2. 如果是es5，采用严格模式，避免错误
+
+3. 尽量优雅
+
+```js
+===而不是==
+不使用全局变量
+使用[]而不是new Array
+for循环使用大括号
+if使用大括号
+不在一行声明多个变量
+等等
+```
+
+## JavaScript原型，原型链 ? 有什么特点？
+
+这里随便简单描述点。
+
+每一个对象都有原型链`__proto__`对象（由浏览器决定）可以顺着原型链往上找
+
+函数对象有一个`prototype`，`(new Func()).xxx`即可调用`prototype.xxx`（如果对象没有，才会顺着原型链找）
+
+`prototype`中的方法属于`xxx.prototype`，不属于实例对象，这点得区分
+
+原型和原型链常被用于模拟其它面向对象语言的继承语法
+
+```js
+instance.constructor.prototype = instance.__proto__
+```
+
+我们找一个属性时，会先看对象中是否有，如果没有，沿着原型链判断是否有，一直到检索Object的内置对象
+
+## What is a Polyfill?
+
+polyfill
+是指在旧浏览器上复制标准API的JavaScript补充
+可以动态地加载 JavaScript 代码或库，在不支持这些标准API的浏览器模拟它们
+
+因为 polyfill 模拟标准 API，所以能够以一种面向所有浏览器未来的方式针对这些 API 进行开发，
+一旦对这些 API 的支持变成绝对大多数，则可以方便地去掉 polyfill，无需做任何额外工作。
+
+例如，geolocation（地理位置）polyfill 可以在 navigator 对象上添加全局的 geolocation 对象，
+还能添加 getCurrentPosition 函数以及“坐标”回调对象，
+所有这些都是 W3C 地理位置 API 定义的对象和函数。
+
+## 做的项目中，有没有用过或自己实现一些 polyfill 方案（兼容性处理方案）？
+
+譬如：
+html5shiv(h5语义化标签)
+Geolocation
+Placeholder
+
+但是JQ之类的并不属于这个范畴
+polyfill是指标准API的适配，而jq是自己定义一套api
+
+譬如对requestAnimationFrame的兼容适配就属于一种polyfill
+
+### 使用正则实现获取文件扩展名？
+
+可以用正则提取(捕获组)
+str.match(/[.]([^.]+)$/)[1];
+没有可以设置为空

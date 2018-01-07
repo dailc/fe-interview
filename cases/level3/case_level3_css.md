@@ -15,3 +15,9 @@ skew的默认transform-origin是这个物件的中心点
 
 skewX(30deg) 表示X轴朝逆时针方向旋转30deg，坐标系上的物体也会随着X轴旋转。
 skewY(30deg) 表示Y轴朝顺时针方向旋转30deg，坐标系上的物体也会随着Y轴旋转。
+
+## css的@viewport？
+
+可以实现 meta标签中的viewport同样的效果，但是现在的浏览器很多都不兼容
+（如Safari和Firefox根本就未实现）
+

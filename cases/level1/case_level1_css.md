@@ -187,3 +187,37 @@ rotate transform
 
 - inherit
 从父元素集成position值
+
+### 移动端布局用过媒体查询（@media）么
+
+媒体查询相关代码在满足相应条件后才会生效，经常用于响应式布局中。
+媒体查询可以在不同的条件下设置不同样式，也特别适合于移动端响应式布局
+
+有两种方案，一种是直接写在css中。
+
+```js
+@media (min-width:700px) and (orientation: landscape) {
+    .sidebar {
+        display: none;
+    }
+}
+```
+
+还有一种方案是直接放html标签中，在满足条件下才会加载对应样式并生效
+
+注意，就算不满足要求，也会去下载，只不过是满足要求后才生效而已。（就跟写css中效果一样）
+
+```html
+<link href='xxx' rel='stylesheet' media='(min-width:700px)'>
+```
+
+## display:none和visibility:hidden的区别？
+
+相同点： 都能将网页上的某个元素隐藏
+
+不同点：
+display:none。隐藏对象并且不保留空间，即使用后该对象会从页面上消失，看不见，摸不着
+涉及到了DOM结构，故产生reflow与repaint
+
+visibility:hidden。使得对象在网页不可见（点击事件也无法触发），但是对象在网页上所占的空间没变（变为一块空白占据原有空间）
+保留空间，不影响结构，故只产生repaint

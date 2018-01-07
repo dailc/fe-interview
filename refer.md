@@ -32,6 +32,18 @@ https://www.zhihu.com/question/21725826
 
 http://blog.csdn.net/freshlover/article/details/11579669
 
+### 安卓上如何实现1px像素线
+
+https://zhuanlan.zhihu.com/p/27048192
+
+### 回流与重绘
+
+https://www.cnblogs.com/dll-ft/p/5810639.html
+
+### css加载是否会阻塞dom树渲染
+
+http://www.php.cn/div-tutorial-372927.html
+
 ## js
 
 ### node.js垃圾回收机制与内存管理
@@ -54,3 +66,21 @@ https://stackoverflow.com/questions/6075231/how-to-extend-the-javascript-date-ob
 ### setInterval
 
 https://www.cnblogs.com/hyea/p/5596079.html
+
+### var和let作用域
+
+https://www.zhihu.com/question/55653122
+
+### 什么是点透行为
+
+http://www.jianshu.com/p/fed6b110ff2e
+
+### 如何实现Tap事件
+
+https://segmentfault.com/a/1190000008578783
+
+### xss和csrf
+
+https://segmentfault.com/a/1190000012693772
+http://netsecurity.51cto.com/art/201407/446775.htm
+https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html

@@ -262,3 +262,72 @@ left: auto; right: 20px;...
 可以通过resize: both;  来处理窗口改变的重绘问题
 
 
+### 安卓上如何实现1px像素线？
+
+先看看按照正常思路如何实现这个逻辑：
+
+```css
+border:1px solid #000
+```
+
+但是，用这个后，会发现在高分辨率的手机中，线会变胖，并不是1px
+
+原理如下：
+
+iPhone 3GS 和 iPhone 4 的像素分别是 320px 和 640px，但是显示屏的宽度却却都是相同的，
+所以为了在所有设备上渲染出的显示效果相同，CSS 中的 1px 映射到 iPhone 4 的物理像素上，就会是 2px
+同样的道理，在 iPhone 5、6 上 CSS 的 1px 对应物理像素 2px，6plus 则是 3px
+
+上述的描述就是：逻辑分辨率和物理分辨率的区别，一般通过设置下面的meta实现（设置后视口中的像素和物理像素就又一个比例了）
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+```
+
+所以当我们设置 1px 时，实际的显示效果其实是由两个甚至三个像素点所绘制的
+
+那么如何设置真实的1px线？（注意，android中，直接0.5px并不适应-或许未来可以，但现在还是不能这样）
+
+- 先放大，然后利用transform(scale(0.5));缩小（一般不会单独兼容3倍像素的，兼容2devicePixelRatios就可以了）
+即构建1个伪元素, 将它的长宽放大到2倍, 边框宽度设置为1px, 再以transform缩放到50%.
+（为什么放大200%，因为，需要缩小0.5，否则的话可能长度就不对了，比如绘制100px的1px宽线，先绘制200px的2px，然后缩小一半）
+-1csspx(实际两像素),缩小0.5后就是实际一像素
+
+- 或者通过设置对应viewport的rem基准值，这种方式就可以像以前一样轻松愉快的写1px了。
+(2的时候，viewport缩放为0.5,3的时候，viewport缩放为0.33，然后这样就1px就是实际的像素了（不过和viewport为1时的像素大小是不一样的，注意）)
+或者用对多背景渐变实现的也有
+
+## li与li之间有看不见的空白间隙是什么原因引起的？有什么解决办法？
+
+行框的排列会受到中间空白（回车，空格）的影响，
+因为空格也属于字符，这些空白也会被应用样式，占据空间，所以会有间隔
+
+把字符大小设为0，就没有空格了
+
+## chrome中可以显示11px大小的文本么？
+
+chrome浏览器中，默认会有一个最小字体限制
+
+小于12px的文本会默认按照12px显示
+
+如何解决：
+
+```css
+-webkit-text-size-adjust: none;
+```
+
+这样可以关闭chrome的自动调整，就不会有这个问题了
+
+## absolute的containing block(容器块)计算方式跟正常流有什么不同？
+
+absolute中的定位都会找到其祖先position不为static的元素，然后判断
+1.若此元素为inline元素，则containing block就是
+    能包含这个元素生成的第一个和最后一个inline box的padding box(除margin,border外的区域)的最小矩形
+2.否则，则由这个祖先元素的padding box构成
+
+如果都找不到，则为 initial containing block
+
+supplement:
+1.static/relative: 简单的说就是它的父元素的内容框（去掉padding部分）
+2.absolute: 向上找最近的定位不为static
+3.fixed:它的containing block一律为跟元素(html/body)，跟元素也是initial containing block

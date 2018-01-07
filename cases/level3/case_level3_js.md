@@ -122,6 +122,28 @@ $('input').on('click', function() {
 });
 ```
 
+## return?
+
+```js
+return {
+     name: "hello"
+};
+return
+{
+     name: "hello"
+};
+```
+
+前者是一个Object，后者是undefined.
+这是return的设计缺陷-程序被自动补全为了（自动修复机制）
+
+```js
+return;
+{
+     name: "hello"
+};
+```
+
 ## 有试过继承Date对象么？
 
 首先，一般情况下，这个需求都是，由于需要自己定制拓展一个Date工具类才有的。
