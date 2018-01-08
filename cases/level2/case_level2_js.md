@@ -860,3 +860,73 @@ setTimeout(function(){
 少的时候只有几毫米，多的时候有二三十毫秒，因此tap需要延时在30毫秒之后，
 保证它在click之后执行。
 （因为要确保tap不影响原有的）
+
+## String()与toString()的区别
+
+String()转换规则：
+
+1.如果值有toString()，调用值的toString-不带参
+
+2.如果值是null，返回'null'
+
+3.如果值是undefined，返回'undefined'
+
+除了null与undefined外的值都有toString()
+
+而且toString(基数)可以接收一个基数，譬如传8代表8进制输出
+
+但是注意：
+
+```js
+console.log(('11').toString()); // 合法输出11
+console.log((true).toString()); // 合法输出true
+console.log((22).toString()); // 合法输出22
+
+console.log('11'.toString()); // 合法输出11
+console.log(true.toString()); // 合法输出true
+console.log(22.toString()); // 报错Uncaught SyntaxError: Invalid or unexpected token
+console.log(null.toString()); // 报错Cannot read property 'toString' of null
+console.log(undefined.toString()); // 报错Cannot read property 'toString' of undefined
+```
+
+## js的浮点误差？
+
+```js
+var a=10.2;
+var b= 10.1;
+
+console.log(a - b === 0.1); // false
+console.log(a - 10.1 === 0.1); // false,实际是0.09999999999999964
+console.log(a - 0.1 === 10.1); // true
+```
+
+一般比较方法是判断两个浮点数的误差不大于某个极小数即可，如
+`a - b < 1e-7`
+
+或者.toFixed(10)
+在判断浮点运算结果前对计算结果进行精度缩小，因为在精度缩小的过程总会自动四舍五入: 
+这样
+
+```js
+parseFloat((1.0-0.9).toFixed(10)) === 0.1 // true
+parseFloat((1.0-0.8).toFixed(10)) === 0.2 // true
+
+(a - 10.1).toFixed(10) // 0.1000000000（自动四舍五入了）
+```
+
+不光是js，只要采用IEEE754浮点数标准(由电气电子工程师学会定义的浮点数在内存中的算法规范。)的语言都存在这个问题。
+（由美国电气电子工程师学会（IEEE）计算机学会旗下的微处理器标准委员会（Microprocessor Standards Committee, MSC）发布）
+IEEE754浮点数主要有单精度（32位）和双精度（64位），js采用双精度。
+有些浮点数比如0.1转化为二进制是无穷的，而64位的浮点数表示法尾数位只允许52位，
+超出的部分进一舍零，会造成浮点数精度丢失，两个浮点数转化二进制相加后的结果，也遵循这个原则。
+
+譬如：
+    十进制           二进制
+    0.1              0.0001 1001 1001 1001 ...
+    0.2              0.0011 0011 0011 0011 ...
+    0.3              0.0100 1100 1100 1100 ...
+    0.4              0.0110 0110 0110 0110 ...
+    0.5              0.1
+    0.6              0.1001 1001 1001 1001 ...
+    
+所以比如 1.1，其程序实际上无法真正的表示 ‘1.1'，而只能做到一定程度上的准确，这是无法避免的精度丢失：`1.09999999999999999`
