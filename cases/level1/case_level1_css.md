@@ -251,3 +251,50 @@ display:none。隐藏对象并且不保留空间，即使用后该对象会从�
 
 visibility:hidden。使得对象在网页不可见（点击事件也无法触发），但是对象在网页上所占的空间没变（变为一块空白占据原有空间）
 保留空间，不影响结构，故只产生repaint
+
+## position属性的三个值：relative，absolute，fixed的区别？
+
+- relative:
+生成相对元素，无top,left时，元素就是在正常的文档流中，
+譬如如果设置了left:20px，就会从左侧偏离20像素
+
+- absolute:
+生成绝对定位元素，相对于上级元素中第一个position属性非static的元素来定位
+使用left,right,top,bottom来定位
+
+- fixed:
+生成绝对定位元素，相对于浏览器视窗来定位
+使用left,right,top,bottom定位
+
+- position的其它值:
+static:默认值，没有定位，元素出现在正常流中
+忽略top,bottom,left,right或者z-index声明
+
+一般情况下，对于一些动画元素会采用absolute来单独布局，因为这样可以脱离普通文档流，减少回流影响的单位数量
+
+## 对line-height是如何理解的？
+
+指定了一行字的高度，定义是同一个元素中（比如同一个p）两个文本行基线之间的距离
+如果div没有高度，但是里面有文字，那么它会被文字的line-height默认撑开
+
+line-height只影响行内元素，并不能直接应用与块级元素
+具有可继承性，块级元素的子元素会继承该特性，并在行内元素上生效
+
+譬如，简单的把height设置和行高一样的话，可以实现单行文本居中
+
+## 设置元素浮动后，该元素的display值是什么?
+
+浮动后的display值自动变为了display:block
+
+## 怎么让chrome支持小于12px的文字？
+
+使用小于12px的字体，非chrome可以不考虑兼容，chrome中加上
+
+```js
+-webkit-text-size-adjust: none
+```
+
+有一个后果，就是如果放大了网页，字体不会随着一起放大（所以不建议全局使用，而是特定需要兼容的使用）
+
+其他障眼法
+如用图片替代文字

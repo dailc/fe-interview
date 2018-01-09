@@ -40,6 +40,10 @@ https://zhuanlan.zhihu.com/p/27048192
 
 https://www.cnblogs.com/dll-ft/p/5810639.html
 
+### webkit-font-smoothing
+
+https://segmentfault.com/q/1010000000467910
+
 ### inline-block之间的间距
 
 http://www.zhangxinxu.com/wordpress/2012/04/inline-block-space-remove-%E5%8E%BB%E9%99%A4%E9%97%B4%E8%B7%9D/?_t_t_t=0.9321090382856176

@@ -215,3 +215,44 @@ BFC的约束规则分解如下:
 4.BFC的区域不会与float的元素区域重叠
 5.计算BFC的高度时，浮动子元素也参与计算
 6. BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面元素，反之亦然
+
+## 如何修改chrome记住密码后自动填充表单的黄色背景？
+
+```css
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    background-color: rgb(250, 255, 189); /* #FAFFBD; */
+    background-image: none;
+    color: rgb(0, 0, 0);
+}
+```
+
+主要是 -webkit-autofill 样式
+
+## webkit-font-smoothing的作用？
+
+```js
+-webkit-font-smoothing: antialiased
+```
+
+加上抗锯齿渲染（非标准），可以让页面中的文字更清晰
+
+另外有人总结过只在macOS 的webkit中有效
+
+## font-style属性可以让它赋值为"oblique"，什么意思？
+
+倾斜的字体样式
+
+和italic的区别：
+italic是斜体
+oblique是倾斜的文字排版（模仿的斜体，但不是斜体）
+
+### display:inline-block什么时候会显示间隙？
+
+换行或空格会占据一定的位置，从而产生间隙
+
+解决方法：
+去除空格
+使用margin负值
+使用font-size：0（本质也是去除了空格的占位）
+letter-spacing,word-spacing
+譬如letter-spaceing:-4px
