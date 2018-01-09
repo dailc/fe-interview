@@ -240,3 +240,30 @@ function MyDate() {
 
 - 有一个缺点是无法覆盖date原有方法（不过看起来并不是缺点，因为本来就不应该覆盖）
 ```
+
+## innerHtml设置脚本会有什么效果？
+
+除了IE8及更早版本，现代浏览器中通过innerHTML插入的脚本元素并不会执行。（dom对象已经插入了，但是不会执行这个脚本）
+
+```html
+1. div.innerHTML = "<script defer> alert('hello!');<\/script>";
+
+2. div.innerHTML = "_<script defer> alert('hello!');<\/script>";
+
+3. div.innerHTML = "<div></div><script defer> alert('hello!');<\/script>";
+
+4. div.innerHTML = "<div>&nbsp;</div><script defer> alert('hello!');<\/script>";
+
+5. div.innerHTML = "<input type=\"hidden\"/><script defer> alert('hello!');<\/script>";
+```
+
+譬如上述的一系列设置都不会执行（chrome等一系列现代浏览器中的效果）
+
+IE8中则是只要脚本加上了defer属性，并且前面有一个“有作用域元素”，就可以正常执行。（这里不过度描述ie8）
+
+'无作用域的元素'(NoScope element):
+
+如`style`，`script`元素或注释类似。
+有作用域则相反
+
+
