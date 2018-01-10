@@ -337,3 +337,9 @@ Object.defineProperty(obj, Symbol.toStringTag, {
 
 console.log(Object.prototype.toString.call(obj)) // "[object newClass]"
 ```
+
+## children与childNodes的区别？
+
+children只包含元素中同样还是元素的子节点（不包含普通文本节点）
+
+childNodes会包含空白符和文本节点

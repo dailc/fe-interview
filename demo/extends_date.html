@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>extends date</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+            
+            /**
+             * class的继承
+             */
+            class MyDate extends Date {
+                constructor() {
+                    super();
+                    this.abc = 1;
+                }
+                getTest() {
+                    return this.getTime();
+                }
+            }
+            
+            /**
+             * 经典的js组合寄生继承
+             */
+            function MyDate2() {
+                this.abc = 1;
+
+                Date.apply(this, arguments);
+            }
+
+            function extendsObj(subClass, superClass) {
+                function Inner() {}
+
+                Inner.prototype = superClass.prototype;
+                subClass.prototype = new Inner();
+                subClass.prototype.constructor = subClass;
+                // 这个加上没影响，也不会改变什么
+                // subClass.__proto__ = superClass;
+            }
+
+            extendsObj(MyDate2, Date);
+
+            MyDate2.prototype.getTest = function getTest() {
+                return this.getTime();
+            };
+            
+            /**
+             * 用了点技巧的继承，实际上返回的是Date对象
+             */
+            function MyDate3() {
+                // bind属于Function.prototype，接收的参数是：object, param1, params2...
+                var dateInst = new(Function.prototype.bind.apply(
+                    Date, [Date].concat(Array.prototype.slice.call(arguments))
+                ))();
+
+                // 更改原型指向，否则无法调用MyDate原型上的方法
+                Object.setPrototypeOf(dateInst, MyDate3.prototype);
+
+                dateInst.abc = 1;
+
+                return dateInst;
+            }
+
+            // 原型重新指回Date，否则根本无法算是继承
+            Object.setPrototypeOf(MyDate3.prototype, Date.prototype);
+
+            MyDate3.prototype.getTest = function getTest() {
+                return this.getTime();
+            };
+
+            let foo = new MyDate();
+            let foo2 = new MyDate2();
+            let foo3 = new MyDate3();
+            
+            console.log(MyDate.prototype);
+            console.log(MyDate2.prototype);
+            console.log(MyDate3.prototype);
+            console.log(MyDate.__proto__);
+            console.log(MyDate2.__proto__);
+            console.log(MyDate3.__proto__);
+            
+            console.log(foo);
+            console.log(foo2);
+            console.log(foo3);
+            console.log(foo.getTest());
+            console.log(foo3.getTest());
+            // 注意，这个会报错，因为不是Date对象
+            console.log(foo2.getTest());
+        </script>
+    </body>
+
+</html>
