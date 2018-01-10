@@ -8,11 +8,15 @@
     </head>
 
     <body>
+        <script type="text/javascript" src="extends_date_babel.js"></script>
         <script>
             'use strict';
-            
+
             /**
+             * ============part1============
              * class的继承
+             * 可以尝试下babel打包下的情况，
+             * 会发现打包后会提示this is not a Date object
              */
             class MyDate extends Date {
                 constructor() {
@@ -23,8 +27,9 @@
                     return this.getTime();
                 }
             }
-            
+
             /**
+             * ============part2============
              * 经典的js组合寄生继承
              */
             function MyDate2() {
@@ -39,8 +44,6 @@
                 Inner.prototype = superClass.prototype;
                 subClass.prototype = new Inner();
                 subClass.prototype.constructor = subClass;
-                // 这个加上没影响，也不会改变什么
-                // subClass.__proto__ = superClass;
             }
 
             extendsObj(MyDate2, Date);
@@ -48,8 +51,16 @@
             MyDate2.prototype.getTest = function getTest() {
                 return this.getTime();
             };
-            
+
+            // 需要考虑polyfill情况
+            Object.setPrototypeOf = Object.setPrototypeOf || function(obj, proto) {
+                obj.__proto__ = proto;
+
+                return obj;
+            };
+
             /**
+             * ============part3============
              * 用了点技巧的继承，实际上返回的是Date对象
              */
             function MyDate3() {
@@ -59,6 +70,7 @@
                 ))();
 
                 // 更改原型指向，否则无法调用MyDate原型上的方法
+                // ES6方案中，这里就是[[prototype]]这个隐式原型对象，在没有标准以前就是__proto__
                 Object.setPrototypeOf(dateInst, MyDate3.prototype);
 
                 dateInst.abc = 1;
@@ -73,24 +85,110 @@
                 return this.getTime();
             };
 
+            /**
+             * ============part4============
+             * 从外部js中获取变量
+             */
+            var MyDateBabel = window.MyDateBabel;
+
+            /**
+             * 以下准备输出一些信息
+             */
             let foo = new MyDate();
             let foo2 = new MyDate2();
             let foo3 = new MyDate3();
-            
+            // 这个就是MyDate的babel打包形态
+            let foo4 = new MyDateBabel();
+
+            console.log('~~~~以下是prototype~~~~~~~~~');
             console.log(MyDate.prototype);
             console.log(MyDate2.prototype);
             console.log(MyDate3.prototype);
-            console.log(MyDate.__proto__);
-            console.log(MyDate2.__proto__);
-            console.log(MyDate3.__proto__);
-            
+            console.log(MyDateBabel.prototype);
+
+            console.log('~~~~以下是new出的对象~~~~~~~~~');
             console.log(foo);
             console.log(foo2);
             console.log(foo3);
-            console.log(foo.getTest());
-            console.log(foo3.getTest());
-            // 注意，这个会报错，因为不是Date对象
-            console.log(foo2.getTest());
+            console.log(foo4);
+
+            console.log('~~~~以下是new出的对象的Object.prototype.toString.call~~~~~~~~~');
+            console.log(Object.prototype.toString.call(foo));
+            console.log(Object.prototype.toString.call(foo2));
+            console.log(Object.prototype.toString.call(foo3));
+            console.log(Object.prototype.toString.call(foo4));
+
+            console.log('~~~~以下是MyDate们的__proto__~~~~~~~~~');
+            console.log(MyDate.__proto__);
+            console.log(MyDate2.__proto__);
+            console.log(MyDate3.__proto__);
+            console.log(MyDateBabel.__proto__);
+
+            console.log('~~~~以下是对象的__proto__~~~~~~~~~');
+            console.log(foo.__proto__);
+            console.log(foo2.__proto__);
+            console.log(foo3.__proto__);
+            console.log(foo4.__proto__);
+
+            console.log('~~~~以下是方法的__proto__与Function的prototype比较~~~~~~~~~');
+            // 默认的function MyDate() {}之类的构造函数是Function
+            console.log(Function.prototype === MyDate.__proto__);
+            console.log(Function.prototype === MyDate2.__proto__);
+            console.log(Function.prototype === MyDate3.__proto__);
+            console.log(Function.prototype === MyDateBabel.__proto__);
+
+            console.log('~~~~以下是方法的__proto__与Date比较~~~~~~~~~');
+            // 默认的function MyDate() {}之类的构造函数是Function
+            // class和babel模拟中，改变了隐式原型对象，指向了Date
+            console.log(Date === MyDate.__proto__);
+            console.log(Date === MyDate2.__proto__);
+            console.log(Date === MyDate3.__proto__);
+            console.log(Date === MyDateBabel.__proto__);
+
+            console.log('~~~~以下是对象的__proto__与MyDate们的prototype比较~~~~~~~~~');
+            // 正常情况下，由构造函数构造的对象，[[prototype]]指向其构造函数的prototype属性指向的对象，这里手动将其指向了进一步的父级
+            // 所以，一般不再建议手动去更改__proto__
+            console.log(MyDate.prototype === foo.__proto__);
+            console.log(MyDate2.prototype === foo2.__proto__);
+            console.log(MyDate3.prototype === foo3.__proto__);
+            console.log(MyDateBabel.prototype === foo4.__proto__);
+
+            console.log('~~~~以下是调用getTest方法~~~~~~~~~');
+            console.log('foo:' + foo.getTest());
+            console.log('foo3:' + foo3.getTest());
+            setTimeout(function() {
+                // 注意，这个会报错，因为不是Date对象
+                console.log('foo2:' + foo2.getTest());
+            });
+            setTimeout(function() {
+                // 这个也会报错
+                console.log('foo4:' + foo4.getTest());
+            });
+
+            setTimeout(function() {
+                // 尝试黑魔法
+                console.log('~~~~尝试黑魔法~~~~~~~~~');
+                Object.defineProperty(foo2, Symbol.toStringTag, {
+                    get: function() {
+                        return "Date"
+                    }
+                });
+                // 你会发现，就算改变了Object.prototype.toString.call，仍然不会被当作Date对象
+                // 原因是🈯只改变了toString的输出，但是没有改变内部的[[Class]](ES6中是internal slot)
+                console.log('Object.prototype.toString.call:' + Object.prototype.toString.call(foo2));
+                console.log('foo2:' + foo2.getTest());
+            });
+
+            // 总结，我们可以看出ES6 Class继承和 babel打包后模拟的区别
+            // ES6中，继承后的对象，内部的Object.prototype.toString.call输出已经是[object Date]了
+            // 而babel中，仍然是[object Object]
+            // 当然了，就算改变了Object.prototype.toString.call，只要[[Class]]不是Date，仍然无效
+            // 为什么？参见es6的class章节，里面规定了类继承的行为
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
+            // https://stackoverflow.com/questions/6075231/how-to-extend-the-javascript-date-object/30882416#30882416
+            // http://blog.csdn.net/github_36978270/article/details/71896444
+            // http://blog.csdn.net/pcaxb/article/details/53784309
+            // http://exploringjs.com/es6/ch_classes.html#sec_essentials-classes
         </script>
     </body>
 

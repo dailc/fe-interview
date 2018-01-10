@@ -171,7 +171,8 @@ function DateGetHours() {
 DATE_VALUE(arg) = (%_ClassOf(arg) === 'Date' ? %_ValueOf(arg) : ThrowDateTypeError());
 ```
 
-所以，其实v8并不允许让Date被继承。
+所以，其实v8并不允许让Date被继承。另外，进一步，你会发现，
+就算改变`Object.prototype.toString.call`的值，仍然无效。这是因为它依赖于内部属性`[[Class]]`的缘故，这个属性不是`Date`，就无效
 
 当然，经典的继承无法使用，并不代表真的没有方法，譬如以下一些：
 

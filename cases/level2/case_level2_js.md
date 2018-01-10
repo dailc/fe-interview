@@ -936,3 +936,142 @@ IEEE754浮点数主要有单精度（32位）和双精度（64位），js采用�
     
 所以比如 1.1，其程序实际上无法真正的表示 ‘1.1'，而只能做到一定程度上的准确，这是无法避免的精度丢失：`1.09999999999999999`
 
+## getComputedStyle
+
+DOM2级样式中增强了`document.defaultView`，提供了getComputedStyle方法。
+
+接收两个参数：要取得计算样式的元素，和一个伪元素字符串（如:after，可以为null）
+
+返回一个CSSStyleDeclaration对象（与Style属性的类型相同）
+
+譬如
+
+```js
+var computedStyle = document.defaultView.getComputedStyle(myDiv, null);
+
+computedStyle.width; // 100px
+computedStyle.color; // red
+...
+```
+
+作用是用来动态计算，因为默认的style对象获取的信息不包括那些从其它样式表层叠而来并影响到当前元素的样式信息。
+
+老版本IE不支持这个方法，它可以通过`myDiv.currentStyle`来达到类似效果
+
+另外，计算样式是只读的。无法通过修改带来影响
+
+另外，不同浏览器的表现可能会有差异，需要多测试，譬如有的浏览器`visibility`为`visible`，有的为`inherit`，因为任何具有默认值的css属性都会表现在计算后的样式中。
+
+## 考察promise与settimeout的时机，以下代码的执行顺序？
+
+```js
+setTimeout(function() {
+  console.log(1)
+}, 0);
+new Promise(function executor(resolve) {
+  console.log(2);
+  for( var i=0 ; i<10000 ; i++ ) {
+    i == 9999 && resolve();
+  }
+  console.log(3);
+}).then(function() {
+  console.log(4);
+});
+console.log(5);
+```
+
+- 答案是： `23541`
+
+理由：
+
+`new Promise(executor);`
+
+中是立即执行函数，会立即执行，所以最先是:`2,3`
+注意，这里执行resolve时，需要等到下一轮A类循环（先于settimeout）才会去执行then
+
+所以接下来先是 5，然后是4，最后才是1
+
+主要观察的是执行顺序
+
+## 函数节流与防抖？
+
+- 节流throttle：触发->(触发时间-上次动作执行时间>大于限制时间)->允许执行动作，记录执行时间
+
+我们不是要在每完成等待某个时间后去执行某函数，而是要每间隔某个时间去执行某函数，避免函数的过多执行
+频率控制 返回函数连续调用时，action 执行频率限定为 次 / delay
+
+譬如，如果有一个update函数每帧都会触发，那么里面加上节流的作用就是，可以防止代码连续触发（设一个间隔），可以中间休息（避免无意义的过渡损耗）
+
+```js
+var throttle = function(delay, action){
+  var last = 0
+  return function(){
+    var curr = +new Date()
+    if (curr - last > delay){
+      action.apply(this, arguments)
+      last = curr 
+    }
+  }
+}
+```
+
+- 防抖debounce：触发-> 清除以前定时->设置定时：若干时间后执行
+
+就是让某个函数在上一次执行后，满足等待某个时间内不再触发此函数后再执行，而在这个等待时间内再次触发此函数，等待时间会重新计算。
+空闲控制 返回函数连续调用时，空闲时间必须大于或等于 idle，action 才会执行
+
+相当于防抖的作用是确保最后一次的有效动作完成后被执行，而不是在完成过程中一直执行
+
+```js
+var debounce = function(idle, action){
+  var last
+  return function(){
+    var ctx = this, args = arguments
+    clearTimeout(last)
+    last = setTimeout(function(){
+        action.apply(ctx, args)
+    }, idle)
+  }
+}
+```
+
+throttle和debounce均是通过减少实际逻辑处理过程的执行来提高事件处理函数运行性能的手段，
+并没有实质上减少事件的触发次数。两者在概念理解上确实比较容易令人混淆，结合各js库的具体实现进行理解效果将会更好。
+
+## 下述代码的区别？考察指针指向
+
+```js
+function foo() {
+    console.log(this.a);
+}
+
+function active(fn) {
+    // 真实调用者，为独立调用
+    fn();
+}
+
+var a = 20;
+var obj = {
+    a: 10,
+    getA: foo
+};
+
+// 20-相当于foo();
+active(obj.getA);
+```
+
+```js
+var a = 20;
+
+function getA() {
+    return this.a;
+}
+var foo = {
+    a: 10,
+    getA: getA
+};
+
+// 10
+console.log(foo.getA());
+```
+

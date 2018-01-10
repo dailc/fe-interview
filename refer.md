@@ -22,6 +22,16 @@ https://www.zhihu.com/question/35130316/answer/91006638
 
 https://segmentfault.com/q/1010000011456305?sort=created
 
+### viewport
+
+http://viewportsizes.com/
+
+http://www.css88.com/archives/5975
+
+### meta viewport minimum-scale无效
+
+https://www.2cto.com/kf/201607/528515.html
+
 ## css
 
 ### skew属性
@@ -51,6 +61,10 @@ http://www.zhangxinxu.com/wordpress/2012/04/inline-block-space-remove-%E5%8E%BB%
 ### 对BFC规范（块级格式化上下文：block formatting context）的理解？
 
 http://www.cnblogs.com/lhb25/p/inside-block-formatting-ontext.html
+
+### 元素竖向的百分比设定是相对于容器的高度吗？
+
+http://www.webhek.com/post/vertical-percentages-are-relative-to-container-width-not-height.html
 
 ### overflow:hidden的作用是什么
 
@@ -120,3 +134,7 @@ https://segmentfault.com/q/1010000003872816?_ea=403162
 ### Object.prototype.toString知多少
 
 https://segmentfault.com/a/1190000009407558
+
+### 函数节流与防抖
+
+http://www.cnblogs.com/fsjohnhuang/p/4147810.html

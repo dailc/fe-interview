@@ -256,3 +256,26 @@ oblique是倾斜的文字排版（模仿的斜体，但不是斜体）
 使用font-size：0（本质也是去除了空格的占位）
 letter-spacing,word-spacing
 譬如letter-spaceing:-4px
+
+## style访问是转为驼峰
+
+```js
+background-image
+color
+font-size
+float
+```
+
+转为驼峰后分别是？
+
+```js
+backgroundImage
+color
+fontSize
+cssFloat
+```
+
+注意，`float`是一个不能直接转换的属性，因为它是JS中的保留字，因此不能作为属性名.
+
+DOM2级样式规定样式对象上相应的属性名应该是`cssFloat`（不过老版IE中支持的则是`styleFloat`）
+

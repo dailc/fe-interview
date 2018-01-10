@@ -343,3 +343,24 @@ console.log(Object.prototype.toString.call(obj)) // "[object newClass]"
 children只包含元素中同样还是元素的子节点（不包含普通文本节点）
 
 childNodes会包含空白符和文本节点
+
+## .call()和.apply()的区别？
+
+这两个方法都可以替换`context`
+
+区别是
+
+```js
+.call(context, param1, param2, ...)
+.apply(context, [param1, param2, ...])
+```
+
+一个是传数组，一个是传多个参数
+
+## 如何判断当前脚本运行在浏览器还是node环境？
+
+```js
+this === window ? 'browser' : 'node';
+```
+
+ 通过判断Global对象是否为window，如果不为window，当前脚本没有运行在浏览器中

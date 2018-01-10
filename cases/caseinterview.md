@@ -83,73 +83,8 @@ SASS, LESS, Stylus等，原理都是最终会编译打包成正式css运行
 - 支持嵌套，复杂的父子级关系时更为清晰
 ```
 
-### css优化，提升性能的方法
 
-```js
-过滤掉无关规则（这样系统不会浪费时间去匹配它们）
 
-减少层级（层级过多会影响效率）
-
-提取项目共有样式，增加复用性（可维护）
-
-使用预处理器或构建工具（如gulp对css进行语法检查，自动补全前缀，打包压缩，自动优雅降级等）
-```
-
-### 在网页中应该使用奇数还是偶数字体？为什么？
-
-```js
-偶数字体
-
-1.（重要）偶数字号相对更容易和web设计的其他部分构成比例关系（譬如16 * 0.5 = 8）
-
-2.一些字体点阵（点阵字体也叫位图字体）只提供偶数字体（如早期windows自带中易宋体-新宋体等），而奇数13时用的是小一号的点阵（每个字的占据空间大了1px，但点阵没变）
-据说早起的windows字体点阵中，有2，14，15，16，唯独少13
-
-3.后续偶数更多的是一种习惯
-
-另外，12显示英文很好，但是中文太小，14对中英文都太大，13比较合适（譬如知乎是13）
-```
-
-### margin和padding分别适用什么场景使用？
-
-```js
-margin隔开元素与元素直接的间距（用于布局分开元素，使得元素直接互不相关）
-padding隔开元素与内容的间距（让内容与包裹之间有一段空）
-```
-
-### 抽离样式模块怎么写，说出思路。
-
-```js
-这种说法应该指的是：css的初始化，消除不同浏览器下标签的样式差异
-
-一般采用的是一段经典的cssreset写法
-
-包括  body,h1,h2...等标签的margin和padding置0
-一些标签的通用字体设置
-table的边框同设等
-```
-
-### 元素竖向的百分比设定是相对于容器的高度吗？
-
-```js
-元素的竖向百分比设定是基于容器的宽度而不是高度
-
-可以自行测试一旦修改容器宽度，发现竖向百分比对于的值也增加了
-http://www.webhek.com/post/vertical-percentages-are-relative-to-container-width-not-height.html
-```
-
-### 全屏滚动的原理是什么？用到了css的哪些属性？
-
-```js
-多个页面，每一个页面分别占据页面的100%高度，每次切换页面时全屏滚动
-
-它的原理和图片轮播一样，都是基于css的transform属性
-每一个页面初始化时的y值不同(间隔一个屏幕高度)
-然后页面切换时，切换到不同的y值
-
-一般会使用transform,transition等属性，分别用来设置坐标，设置过渡时间等
-有时候还可以用其它过渡效果，如透明度，颜色渐变等
-```
 
 ### 什么是响应式设计？响应式设计的原理是什么？如何兼容低版本的IE
 
@@ -180,97 +115,7 @@ ie肯定只是pc端展示，因此更多的是pc端兼容问题，而不是不�
 
 ```
 
-### viewport的理解？
 
-```js
-layout viewport（布局视口）
-移动设备浏览器一般都会默认设置一个viewport标签
-它的作用是定义一个虚拟的layout viewport，用于解决早起的页面在手机显示问题
-
-譬如默认情况下iOS,android中将这个视口分辨率设置为980px
-所以，pc端网页基本能在手机上展示，只不过元素看起来很小（默认可以通过手指缩放）
-
-当然也可以自己设定一个宽-一般会取device-width
-
-visual viewport（视觉视口）和物理像素
-visual viewport（视觉视口）为物理屏幕的可视区域
-屏幕显示器的物理像素，同样尺寸的屏幕，像素密度大的设备，硬件像素会更多
-例如iPhone的物理像素：
-    iPhone5 ：640 * 1136
-    iPhone6：750 * 1334
-    iPhone6 Plus：1242 * 2208
-
-ideal viewport（理想视口）和 dip （设备逻辑像素）
-ideal viewport（理想视口）通常是我们说的屏幕分辨率。
-dip （设备逻辑像素）跟设备的硬件像素无关的。一个 dip 在任意像素密度的设备屏幕上都占据相同的空间。
-
-比如MacBook Pro的 Retina （视网膜）屏显示器硬件像素是：2880 * 1800。
-当你设置屏幕分辨率为 1920 * 1200 的时候，ideal viewport（理想视口）的宽度值是1920像素，
-那么 dip 的宽度值就是1920。设备像素比是1.5（2880/1920）。
-设备的逻辑像素宽度和物理像素宽度（像素分辨率）的关系满足如下公式：
-    逻辑像素宽度*倍率 = 物理像素宽度
-
-而移动端手机屏幕通常不可以设置分辨率，一般都是设备厂家默认设置的固定值
-，换句话说 dip 的值就是 ideal viewport（理想视口）（也就是分辨率）的值
-譬如，iPhone的屏幕分辨率：
-    iPhone5 ：分辨率 320 * 568，物理像素 640 * 1136，@2x
-    iPhone6：分辨率 375 * 667，物理像素 750 * 1334，@2x
-    iPhone6 Plus ：分辨率 414 *  736，物理像素1242 * 2208，@3x，（
-    注意，实际显示图像等比降低至1080×1920，具体原因查看：http://www.css88.com/archives/5972）
-    
-更多设备的 ideal viewport（理想视口）可以查看http://viewportsizes.com/
-
-css像素
-CSS像素（px）用于页面布局的单位。样式的像素尺寸（例如 width: 100px）是以CSS像素为单位指定的。
-CSS像素与 dip 的比例即为网页的缩放比例，如果网页没有缩放，那么一个CSS像素就对应一个 dip（设备逻辑像素）    
-（譬如为device-width时，css像素与逻辑像素一样）
-
-使用viewport元标签控制布局
-```
-
-```html
-<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1; user-scalable=no;">
-```
-
-```js
-width属性被用来控制layout viewport（布局视口）的宽度，layout viewport（布局视口）宽度默认值是设备厂家指定的。
-iOS, Android基本都将这个视口分辨率设置为 980px。
-我们可以 width=320 这样设为确切的像素数，也可以设为device-width这一特殊值
-一般为了自适应布局，普遍的做法是将width设置为device-width
-
-width=device-width 也就是将layout viewport（布局视口）的宽度设置 ideal viewport（理想视口）的宽度。
-网页缩放比例为100%时，一个CSS像素就对应一个 dip（设备逻辑像素）
-，而layout viewport（布局视口）的宽度，ideal viewport（理想视口）的宽度（通常说的分辨率），
-dip 的宽度值是相等的。
-
-height与width类似，但实际上却不常用。
-
-initial-scale用于指定页面的初始缩放比例：
-initial-scale=1 表示将layout viewport（布局视口）的宽度设置为 ideal viewport（理想视口）的宽度，
-initial-scale=1.5 表示将layout viewport（布局视口）的宽度设置为 ideal viewport（理想视口）的宽度的1.5倍。
-
-maximum-scale用于指定用户能够放大的最大比例，例如
-
-minimum-scale是用来指定页面缩小比例的。通常情况下，不会定义该属性的值，页面太小将难以阅读。
-
-user-scalable来控制用户是否可以通过手势对页面进行缩放。该属性的默认值为yes，可被缩放，你也可以将该值设置为no，表示不允许用户缩放网页。
-
-http://www.css88.com/archives/5975
-```
-
-### meta viewport minimum-scale无效？
-
-```html
-<meta name="viewport" content="width=device-width, minimum-scale=0.5, initial-scale=1.0, maximum-scale=3.0">
-```
-
-```js
-这样声明时会发现页面只能放大不能缩小
-https://www.2cto.com/kf/201607/528515.html
-
-可能与兼容性有关，譬如有一种说法是：
-Android WebKit内核和IE浏览器的layout viewport永不会小于320px。
-```
 
 ### 视差滚动效果，如何给每页做不同动画？（回到顶部，向下滑动要再次出现，和只出现一次分别怎么做？）
 
@@ -920,12 +765,7 @@ as lazy as possible
 推荐每一个模块职责单一
 ```
 
-### documen.write和 innerHTML的区别
 
-```js
-document.write只能重绘整个页面
-innerHtml可以重绘页面的一部分
-```
 
 ### requireJS的核心原理是什么？（如何动态加载的，如何避免多次加载，如何缓存？）
 
@@ -1006,15 +846,7 @@ getElementById()
 document.querySelector()
 ```
 
-### .call()和.apply()的区别？
 
-```js
-这两个方法都可以替换context
-
-区别是
-.call(context, param1, param2, ...)
-.apply(context, [param1, param2, ...])
-```
 
 ### 数组和对象有哪些原生方法，列举一下?
 
@@ -1164,12 +996,7 @@ dom子字元素持有引用不置空也容易造成
 同时它的可拓展性也是它的突出优点
 ```
 
-### 如何判断当前脚本运行在浏览器还是node环境？
 
-```js
-this === window ? 'browser' : 'node';
- 通过判断Global对象是否为window，如果不为window，当前脚本没有运行在浏览器中
-```
 
 ### 移动端最小触控区域是多大？
 
@@ -1185,16 +1012,7 @@ Android的最小点击区域尺寸是48x48dp，
 这就意味着在xhdpi的设备上，按钮尺寸至少是96x96px。而在xxhdpi设备上，则是144x144px。
 ```
 
-### 把 Script 标签 放在页面的最底部的body封闭之前 和封闭之后有什么区别？浏览器会如何解析它们？
 
-```js
-标准规定应该是放在body封闭之前
-
-但实际上浏览器也是能正常解析的
-但是这时候的解析规则是：
-“body标签闭合之后”后再出现script或任何元素的开始标签，
-都是parse error，浏览器会忽略之前的</body>，即视作仍旧在body内。所以实际效果和写在“body标签闭合之前”之前是没有区别的。
-```
 
 ### Node.js的适用场景？
 
@@ -2173,108 +1991,4 @@ webview.getSettings().setTextSize(WebSetting.TextSize.LARGEST);
 https://www.cnblogs.com/axl234/p/7753187.html
 ```
 
-### 函数节流与防抖？
-
-```js
-http://www.cnblogs.com/fsjohnhuang/p/4147810.html
-
-节流throttle：触发-上次动作执行时间〉大于限制时间->执行动作，记录执行时间
-我们不是要在每完成等待某个时间后去执行某函数，而是要每间隔某个时间去执行某函数，避免函数的过多执行
-频率控制 返回函数连续调用时，action 执行频率限定为 次 / delay
-
-譬如，如果有一个update函数每帧都会触发，那么里面加上节流的作用就是，可以防止代码连续触发（设一个间隔），可以中间休息（避免无意义的过渡损耗）
-
-var throttle = function(delay, action){
-  var last = 0
-  return function(){
-    var curr = +new Date()
-    if (curr - last > delay){
-      action.apply(this, arguments)
-      last = curr 
-    }
-  }
-}
-
-
-防抖debounce：触发-记录触发时间-上次动作触发时间〉大于限制时间-执行动作
-就是让某个函数在上一次执行后，满足等待某个时间内不再触发此函数后再执行，而在这个等待时间内再次触发此函数，等待时间会重新计算。
-空闲控制 返回函数连续调用时，空闲时间必须大于或等于 idle，action 才会执行
-
-var debounce = function(idle, action){
-  var last
-  return function(){
-    var ctx = this, args = arguments
-    clearTimeout(last)
-    last = setTimeout(function(){
-        action.apply(ctx, args)
-    }, idle)
-  }
-}
-
-throttle和debounce均是通过减少实际逻辑处理过程的执行来提高事件处理函数运行性能的手段，
-并没有实质上减少事件的触发次数。两者在概念理解上确实比较容易令人混淆，结合各js库的具体实现进行理解效果将会更好。
-```
-
-### 考察promise与settimeout的时机，一下代码的执行顺序？
-
-```js
-setTimeout(function() {
-  console.log(1)
-}, 0);
-new Promise(function executor(resolve) {
-  console.log(2);
-  for( var i=0 ; i<10000 ; i++ ) {
-    i == 9999 && resolve();
-  }
-  console.log(3);
-}).then(function() {
-  console.log(4);
-});
-console.log(5);
-```
-
-```js
-答案是： 23541
-
-理由：
-new Promise(executor);
-中是立即执行函数，会立即执行，所以最先是:2,3
-注意，这里执行resolve时，需要等到下一轮A类循环（先于settimeout）才会去执行then
-
-所以接下来先是 5，然后是4，最后才是1
-
-主要观察的是执行顺序
-```
-
-### 下述代码的区别？考察指针指向
-
-```js
-function foo() {
-    console.log(this.a)
-}
-
-function active(fn) {
-    fn(); // 真实调用者，为独立调用
-}
-
-var a = 20;
-var obj = {
-    a: 10,
-    getA: foo
-}
-active(obj.getA); // 20-相当于foo();
-```
-
-```js
-var a = 20;
-function getA() {
-    return this.a;
-}
-var foo = {
-    a: 10,
-    getA: getA
-}
-console.log(foo.getA());  // 10
-
-```
 
