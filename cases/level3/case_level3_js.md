@@ -267,4 +267,38 @@ IE8中则是只要脚本加上了defer属性，并且前面有一个“有作用
 如`style`，`script`元素或注释类似。
 有作用域则相反
 
+## 范围选择range和selection了解么？
 
+JavaScript提到过的知识点，比较冷门，常用有`contentEditable`的可编辑DOM中，譬如下述代码是让某个可编辑的DOM自动聚焦
+
+```js
+    function RichEditor(options) {
+        options = options || {};
+        this.editor = Util.selector(options.container);
+    }
+
+    RichEditor.prototype.focus = function() {
+        // 创建一个range对象
+        var range = document.createRange();
+        
+        // 将于range对象起点指定为该节点中的所有内容的起点，将range对象终点指定为该节点中的所有内容的终点
+        // 使range对象代表的区域中包含该节点所有内容。
+        // 类似的还有selectNode，这个是作用于某节点，而不是某节点的内容
+        range.selectNodeContents(RE.editor);
+        // 向边界点折叠该 Range
+        // 折叠后的 Range 为空，不包含节点内容，
+        // true折叠到 Range 的 start 节点，false 折叠到 end 节点。如果省略，则默认为 false .
+        range.collapse(false);
+        
+        // 返回一个Selection对象，表示用户选择的文本范围或光标的当前位置。
+        // 如果想要将 selection 转换为字符串，可通过连接一个空字符串（""）或使用 String.toString() 方法
+        var selection = window.getSelection();
+        
+        // 会从当前selection对象中移除所有的range对象,取消所有的选择只 留下anchorNode 和focusNode属性并将其设置为null。
+        selection.removeAllRanges();
+        // 向选区（Selection）中添加一个区域（Range）
+        // 结合上面的collapse，这样做就是相当于内容最末处加入了选区，方便后续focus
+        selection.addRange(range);
+        this.editor.focus();
+    };
+```

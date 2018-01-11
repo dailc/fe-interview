@@ -548,3 +548,33 @@ active-将样式添加到被激活的元素
 元素的竖向百分比设定是基于容器的宽度而不是高度
 
 可以自行测试一旦修改容器宽度，发现竖向百分比对于的值也增加了
+
+## style标签写在body后和body前有什么区别?
+
+HTML标准一直是规定style不应该出现在body中
+
+但网页也有容错：
+
+如果style出现在body中(或者body后更是)，效果仍然和style中一样，
+但是可能会引起fouc(Flash of Unstyled Content-无内容闪烁)，重绘或重新布局
+
+## position:fixed在手机上无效怎么处理？
+
+fixed是基于整个页面固定，而某些场景下滑动的是整个viewport,
+网页并没有滑动，所以fixed看起来跟没有固定一样(实际上它并没有动，只是不是相对手机屏幕的固定而已)
+
+一般是没有加viewport声明的缘故，加上即可
+
+```html
+meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
+```
+
+另外，iOS下自带的回弹也可能造成问题
+或者iOS下fixed被输入框弹出(原理是body被滚动，改成absolute，或者监听focus时临时改)
+
+还有人的做法是使得fixed布局的父元素(body)不出现滚动，将滚动内容移到其他div内部
+这样弹出后，页面本身不会滚动，不会有这个问题
+
+还有一种是页面上同时添加了滑动事件，如：`overflow：auto/scroll`等，就会出现这样的BUG：
+当滑动页面时，input框（fixed）就会掉下来，fixed属性失效。
+解决是使用iscroll等插件（不使用overflow：auto/scroll，iScroll内部是自己用的translate动画-低版本也是js模拟动态修改top）

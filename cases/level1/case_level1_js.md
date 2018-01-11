@@ -364,3 +364,137 @@ this === window ? 'browser' : 'node';
 ```
 
  通过判断Global对象是否为window，如果不为window，当前脚本没有运行在浏览器中
+ 
+## Javascript创建对象的几种方式？
+
+1. 隐式创建
+
+```js
+var obj = {};
+```
+
+2. new Object
+
+```js
+var a = {};
+// b === a
+// 注意，指向的对象完全相等，浅复制
+var b = new Object(a);
+```
+
+3. 构造或工厂
+
+```js
+// 构造
+new XXX();
+
+// 工厂等产生
+var obj = xxx();
+```
+
+4.Object.Create
+
+```js
+// 此时b.__proto__=== a.prototype
+// 创建了一个新的对象，只不过[[prototype]]指向了传入的a.prototype
+var b = Object.create(a.prototype);
+```
+
+## Javascript作用链域?
+
+全局函数无法查看局部函数的内部细节
+局部函数可以查看上层的函数细节，直至全局细节
+
+当需要从局部函数查找某一属性或方法时，
+如果当前作用域没有找到，就会上溯到上层作用域查找
+直至全局函数- 作用域链
+
+## 谈谈this对象的简单理解。
+
+this总指向函数的直接调用者(而非间接调用者)
+譬如 
+
+```js
+var ajax = Util.ajax();
+ajax();
+```
+
+此时this指向window，而不是util
+
+如果有new关键字，this指向new出来的那个对象
+
+在事件中，this指向触发这个事件的对象
+特殊（ie中的attachevent的this总是指向全局对象window）
+
+- ES5非严格模式中，函数调用如果未指定，默认this指向window
+
+- 严格模式中则为undefined
+
+## eval是做什么的？
+
+- 作用是把对应的字符串解析成js代码并运行
+
+- 尽量避免使用eval，不安全而且耗性能
+
+- 一次解析成js语句，一次执行
+
+在以前，常有人用
+
+```js
+var obj =eval('('+ str +')');
+```
+
+来将json字符串解析成json，但是h5中可以用`JSON.stringify`
+
+## 如何判断一个对象是否属于某个类？
+
+一般常用的两种：
+
+1. instanceof
+
+```js
+a instanceof Date;
+```
+
+可以判断`Date.prototype`是否有出现在`a`的原型链上
+
+2. Object.prototype.toString
+
+```js
+const getClassName = (object) => Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
+
+getClassName('sss') === 'String'; // true
+```
+
+可以直接输出内部隐藏的`[[Class]]`对象，内置对象可以直接识别（`String`），普通的对象都是`Object`
+
+当然了，es6中，可以通过`Symbol.toStringTag`修改
+
+```js
+Object.defineProperty(a, Symbol.toStringTag, {
+    get: function() {
+        return "Date"
+    }
+});
+
+Object.prototype.toString.call(a); // [object Date]
+```
+
+## 立即执行函数，不暴露私有成员
+
+```js
+var module1 = (function() {
+    var count = 1;
+    
+    function change() {
+        count++;
+    }
+    
+    return {
+        change: change,
+    };
+)();
+```
+
+上面是一个立即执行函数，而且，一旦外部引用了change，会导致count无法被释放，形成闭包。
+（正常没有被引用，函数执行完后会被销毁）

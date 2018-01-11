@@ -332,3 +332,23 @@ myDiv.style.width = '100px';
 
 一般会使用transform,transition等属性，分别用来设置坐标，设置过渡时间等
 有时候还可以用其它过渡效果，如透明度，颜色渐变等
+
+## 什么是FOUC？如何避免？
+
+Flash Of Unstyled Cotent
+
+大概就是样式加载前浏览器用默认样式渲染文档，
+样式加载后重新渲染文档，造成页面闪烁
+
+解决方案是：
+
+样式放在head中，这样在加载文档前样式已经有了，或者其它的优化css加载时间的方案
+
+## overflow:scroll不能平滑滚动的问题
+
+特别是iOS下
+
+1.需要-webkit-overflow-scrolling： touch开启硬件加速
+(底层用了一个原生控件来显示的)
+
+2.或者类似于iScroll一样，自己内部用translate动画模拟

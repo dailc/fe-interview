@@ -41,6 +41,30 @@ typeof 返回string
 instanceof String 为true
 可以按照约定规则转为布尔
 
+## null，undefined 的区别？
+
+- null表示一个“为空”的值，typeof null 为 object
+
+- undefined表示一个变量声明了但是没有初始化（缺省值），typeof undefined 为 undefined
+
+- 原型链的尽头是null
+
+```js
+null == undefined;  // true
+null === undefined; // false
+```
+
+- null转数字时为0
+- undefined转数字时为NAN
+
+JS最初只有一个null表示无，根据c语言传统，可以自动转为0，但是js设计者觉得这样还不够（小道传闻）
+
+- null在java中被当初一个对象，但是js中分为原始型和合成类型，作者觉得无的值最好不是对象
+
+- 最初js中没有错误处理机制，发生数据类型不匹配时，往往会自动转换类型或失败，但是如果null自动转成0时，不容易找出这个错误
+
+因此又设计了一个undefined
+
 ## 基础数据类型（如string, number）为何能调用一些方法？
 
 示例：
@@ -1075,3 +1099,211 @@ var foo = {
 console.log(foo.getA());
 ```
 
+## javascript中的`"user strict";`是什么意思？使用它区别是什么？
+
+`use strict`是ECMAscript 5中的严格运行模式
+
+如严格模式是ECMAScript 5 中的一种模式，ECMAScript 5中有两种模式，一种是正常模式，一种是“严格模式(strict mode)”，
+使用这种模式使得Javascript在更严格的条件下运行。
+
+设立“严格模式”的目的主要有:
+
+1.  消除JS语法的不合理，不严谨之处，减少一些怪异行为
+譬如不能用with,不能给未声明的全局变量赋值，不能callee，不允许直接操作argument等
+
+2.  消除代码运行的不安全之处，保证代码运行的安全
+
+3.  提高编译器效率，增加运行速度
+
+4.  为新版本做铺垫，如ES6中全面使用了严格模式
+
+注意，在正常模式下可以运行的代码很有可能严格模式下运行出错。而且ES6中只允许严格模式的用法。
+
+严格模式有两种用法:
+
+1. 在脚本文件(或`<script>`脚本片段)的第一行，使用`'use strict';` 可以将整个脚本文件(片段)以严格模式运行
+(注意，如果前面是一些不产生实际运行结果的语句，可以不再第一行-如在开头注释后面,
+注意,前面有;号也会取消严格模式；但是如果前面的语句有效-如输出语句，这样则严格模式无效，整个片段会以正常模式运行)
+
+2. 在函数体的第一行使用`'use strict';`则整个函数以严格模式运行
+(这种是最常用的写法，通常会将这句话放在一个立即执行的匿名函数中)
+
+使用严格模式后，JS语法和行为与正常模式有所区别:
+
+1. 全局变量显示声明(正常模式下，如果一个变量没有声明就赋值，默认是全局变量，而在严格模式下，会报错)
+
+2. 静止使用with语句(with语句主要用于设置代码在特定对象中的作用域，严格模式下禁用with语句)
+
+3. 创设eval作用域，ES5中，正常模式下，JS语言中有两种变量作用域:全局作用域和函数作用域。
+严格模式创设了第三种作用域:eval作用域(这样,eval里面不能再生成全局变量了-正常模式中eval会生影响外部作用域)。
+
+4. 禁止this关键字指向全局对象。在正常情况下,一个普通函数内部的this会指向一个全局对象window,但是严格模式下禁止了这种用法，
+严格模式下,普通函数内部的this为undefind，注意：通过new 出来的对象除外，new 出来的会指向自身
+
+5.禁止在函数内部遍历调用栈。正常情况下函数内部可以通过caller等方法调用自身,但是严格模式下禁止了这种用法
+
+6. 禁止删除变量（严格模式下无法删除var显示声明的变量，只能删除属性）
+注意,` [object Object]`的属性只有configurable设置为true才能被删除（不过默认隐式创建的一般都是为true），否则无法删除
+
+7. 显式报错。
+正常模式下，对于一个对象的只读属性进行赋值，不会报错，只会默默失败，严格模式下，会报错
+严格模式下，对于一个使用getter方法读取的属性进行赋值，会报错
+严格模式下，对禁止拓展的对象添加新属性（Object.preventExtensions(o)），会报错
+严格模式下，删除一个不可删除的属性，或报错（如删除Object.prototype）
+严格模式下，删除一个不可删除的属性，或报错
+对象不能有重名的属性(正常模式下，如果对象有多个重名属性，最后赋值的那个属性会覆盖前面的值，严格模式下，这属于语法错误)
+函数不能有重名参数(正常模式下，如果函数有多个重名参数，可以用argument[i]读取。严格模式下，属于语法错误)
+
+8. 禁止八进制表示法
+严格模式下，整数的第一位如果是0，表示这是八进制，比如0100等于十进制的64。但是严格模式下禁止这种写法，证书第一位为0，会报错
+
+9. Arguments对象的限制。
+不允许对arguments赋值
+Arguments不再追踪参数的变化（如果形参a被改变，对应的arguments是不会改变的）
+禁止使用arguments.callee。严格模式下，无法使用caller,也就是说匿名函数内部无法调用自身了
+
+10. 函数必须声明在顶层
+严格模式下只允许在全局作用域和函数作用域的顶层声明函数。
+不允许在非函数的代码块内声明函数(ES6中会加入块级作用域概念)
+
+11. 保留字。严格模式下，新增了一些保留字:
+implements, interface, let, package, private, protected, public, static, yield
+使用这些词作为变量或参数将会报错
+另外,ES5本身也有些保留字:
+class, enum, export, extends, import, super
+以及各大浏览器自行增加的 const保留字。这些保留字都不能作为变量名或参数
+
+## new操作符具体干了什么呢？
+
+1.创建一个空对象，并且this变量引用该对象，同时继承该对象的原型
+
+2.属性和方法被加入到this引用的对象中
+
+2.新创建的对象由this引用，并且最后隐式返回this
+
+```js
+var obj = {};
+
+obj.__proto__ = Base.prototype;
+Base.call(obj);
+```
+
+### Object.create()的作用？
+
+`Object.create(proto[,propertiesObject])`是ES5中提出的一种新对象创建方式
+
+- 第一个参数是：要继承的原型，可以传null
+
+- 第二个参数是：对象的属性描述符，可选
+可选属性包括：
+数据属性-
+    包含value(值),writable(是否可任意写),
+    enumerable(是否能用for in枚举),
+    configurable(是否能被删除,修改)特性(后面三个默认为false)
+访问器属性-包含set/get特性
+
+
+注意:当满足以下任一条件时，则会引发TypeError异常:
+
+1. prototype参数不是对象而且不是null
+
+2. descriptors参数中的描述符具有value或writable特性，并且具有get或set特性(value或writable与get或set不能同时存在)
+
+3. descriptors参数中的描述符具有不为函数的get或set特性(get或set必须是函数)
+
+```js
+// 此时b.__proto__=== a.prototype
+// 创建了一个新的对象，只不过[[prototype]]指向了传入的a.prototype
+var b = Object.create(a.prototype);
+```
+
+关键点:可以创建一个继承某对象的对象
+
+## new、new Object()和Object.create(proto,[propertiseObject]之间者的异同?
+
+相同点:
+
+- new和Object.create()都可以用来创建一个新的对象。new Object()当参数为空时也是创建一个新的对象
+
+不同点:
+
+- 本质不同,new 一般配合类的构造函数使用，new的时候，是先创建一个对象，然后将对象的__proto__属性指向该类的prototype。
+(obj.__proto__ = Base.prototype)
+
+- Object.create(proto…)一般第一个参数直接传入一个对象，然后创建出来新对象就直接显示指向该对象了。
+(obj.__proto__ = Base)
+
+- new Object()当传入参数为一个object时不会创建新对象，而是直接引用传递，
+(obj === Base)
+当参数不存在时，才创建一个新的{}(此时obj为{})
+
+关键点:创建对象时 _proto_和prototype有区别
+javascript使用__proto__指向对象的原型。
+另外，需要知道__proto__([[prototype]])是隐式原型链追溯的关键
+
+## JS中有一个函数，执行时对象查找时，永远不会去查找原型，这个函数是？
+
+- `hasOwnProperty`
+
+js中hasOwnProperty函数是返回一个布尔值，
+指出一个对象是否具有指定名称的属性
+此方法无法检查该对象的原型链中是否具有该属性
+该属性必须是该对象本身的成员，不能是原型链上的
+
+使用：
+
+```js
+Object.hasOwnProperty.call(object, proName);
+```
+
+object必须是对象，proName必须是属性名称的字符串形式
+
+有则返回true,否则false
+
+
+## JavaScript中的作用域与变量声明提升?
+
+ES6之前没有块级作用域，var等声明会提前
+
+例如
+
+```js
+console.log(a); // undefined
+console.log(b); // ReferenceError
+var a = 1;
+let b = 2;
+```
+
+等同于：
+
+```js
+var a;
+console.log(a); // undefined
+console.log(b); // ReferenceError
+a = 1;
+let b = 2; 
+```
+
+另外
+
+```js
+function xxx() {}
+```
+
+函数声明也会提升，顺序是：
+
+- 先函数声明
+
+- 如果没有声明，则进行变量声明，如果有，变量声明无效
+
+- 变量赋值
+
+```js
+var myName;
+function myName () {...};
+console.log(typeof myName); // function
+
+var myName = 'hello';
+function myName () {...};
+console.log(typeof myName); // String
+```

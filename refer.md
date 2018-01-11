@@ -138,3 +138,7 @@ https://segmentfault.com/a/1190000009407558
 ### 函数节流与防抖
 
 http://www.cnblogs.com/fsjohnhuang/p/4147810.html
+
+### Javascript作用链域
+
+http://www.cnblogs.com/lhb25/archive/2011/09/06/javascript-scope-chain.html

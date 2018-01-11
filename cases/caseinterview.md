@@ -129,25 +129,7 @@ ie肯定只是pc端展示，因此更多的是pc端兼容问题，而不是不�
 ```
 
 
-### position:fixed在手机上无效怎么处理？
 
-```js
-fixed是基于整个页面固定，而某些场景下滑动的是整个viewport,
-网页并没有滑动，所以fixed看起来跟没有固定一样(实际上它并没有动，只是不是相对手机屏幕的固定而已)
-
-一般是没有加viewport声明的缘故，加上即可
-meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"
-
-另外，iOS下自带的回弹也可能造成问题
-或者iOS下fixed被输入框弹出(原理是body被滚动，改成absolute，或者监听focus时临时改)
-
-还有人的做法是使得fixed布局的父元素(body)不出现滚动，将滚动内容移到其他div内部
-这样弹出后，页面本身不会滚动，不会有这个问题
-
-还有一种是页面上同时添加了滑动事件，如：overflow：auto/scroll等，就会出现这样的BUG：
-当滑动页面时，input框（fixed）就会掉下来，fixed属性失效。
-解决是使用iscroll等插件（不使用overflow：auto/scroll，iScroll内部是自己用的translate动画-低版本也是js模拟动态修改top）
-```
 
 ### 如果需要手写动画，你认为最小间隔是多久，为什么？
 
@@ -156,16 +138,7 @@ meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-sca
 1/60*1000ms = 16.7ms
 ```
 
-### overflow:scroll不能平滑滚动的问题
 
-```js
-特别是iOS下
-
-1.需要-webkit-overflow-scrolling： touch开启硬件加速
-(底层用了一个原生控件来显示的)
-
-2.或者类似于iScroll一样，自己内部用translate动画模拟
-```
 
 ### 有一个高度自适应的div，里面有两个div，一个高度100px,希望另一个填满剩下的高度
 
@@ -232,39 +205,7 @@ chrome中基本都支持webp
 ios中还需第三方插件转换
 ```
 
-### 什么是cookie隔离？（或者说：请求资源时不要让它带cookie，怎么做）
 
-```js
-如果静态文件都放在主域名下，那么静态文件请求的时候都带有的cookie的数据提交给server
-浪费流量，不如隔离开
-
-如何隔离：
-因为cookie有跨域限制，因此跨域请求时默认不会带上cookie(当然可以手动强行打开的)
-这样降低请求头部大小，减少请求时间
-
-同时由于不会将cookie提交给server，也会减少server的解析环节，提高http解析速度
-```
-
-### style标签写在body后和body前有什么区别?
-
-```js
-HTML标准一直是规定style不应该出现在body中
-
-但网页也有容错：
-如果style出现在body中(或者body后更是)，效果仍然和style中一样，
-但是可能会引起fouc(Flash of Unstyled Content-无内容闪烁)，重绘或重新布局
-```
-
-### 什么是FOUC？如何避免？
-
-```js
-Flash Of Unstyled Cotent
-大概就是样式加载前浏览器用默认样式渲染文档，
-样式加载后重新渲染文档，造成页面闪烁
-
-解决方案是：
-样式放在head中，这样在加载文档前样式已经有了
-```
 
 ### 什么是CSS预处理器／后处理器？
 
@@ -279,110 +220,6 @@ Flash Of Unstyled Cotent
 ```
 
 ## JS
-
-
-
-### Javascript创建对象的几种方式？
-
-1. 隐式创建
-
-```js
-var obj = {};
-```
-
-2. new
-
-```js
-var obj = new Object();
-
-// 或者一个构造函数
-
-new XXX();
-```
-
-3.工厂等产生
-
-```js
-var obj = xxx();
-```
-
-### Javascript作用链域?
-
-```js
-全局函数无法查看局部函数的内部细节
-局部函数可以查看上层的函数细节，直至全局细节
-
-当需要从局部函数查找某一属性或方法时，
-如果当前作用域没有找到，就会上溯到上层作用域查找
-直至全局函数- 作用域链
-```
-
-http://www.cnblogs.com/lhb25/archive/2011/09/06/javascript-scope-chain.html
-
-### 谈谈This对象的理解。
-
-```js
-this总指向函数的直接调用者(而非间接调用者)
-譬如 
-var ajax = Util.ajax();
-ajax();
-此时this指向window，而不是util
-
-
-如果有new关键字，this指向new出来的那个对象
-
-在事件中，this指向触发这个事件的对象
-特殊（ie中的attachevent的this总是指向全局对象window）
-```
-
-### eval是做什么的？
-
-```js
-作用是把对应的字符串解析成js代码并运行
-
-尽量避免使用eval，不安全而且耗性能
-
-一次解析成js语句，一次执行
-
-在以前，常有人用
-var obj =eval('('+ str +')');
-
-来将json字符串解析成json，但是h5中可以用JSON.stringify
-```
-
-### 什么是window对象? 什么是document对象?
-
-```js
-window对象指浏览器打开的窗口
-document是当前窗口中Document对象的一个只读引用（属于window对象的一个属性）
-```
-
-### null，undefined 的区别？
-
-```js
-null表示一个“为空”的值
-undefined表示一个变量声明了但是没有初始化（缺省值）
-
-typeof null 为 object
-typeof undefined 为 undefined
-
-原型链的尽头是null
-
-null == undefined // true
-null === undefined // false
-
-null转数字时为0
-undefined转数字时为NAN
-
-JS最初只有一个null表示无，根据c语言传统，可以自动转为0
-但是js设计者觉得这样还不够
-
-- null在java中被当初一个对象，但是js中分为原始型和合成类型，作者觉得无的值最好不是对象
-
-- 最初js中没有错误处理机制，发生数据类型不匹配时，往往会自动转换类型或失败，但是如果null自动转成0时，不容易找出这个错误
-
-因此又设计了一个undefined
-```
 
 
 ### 什么是闭包(closure)，为什么要用它？
@@ -417,171 +254,8 @@ say(); // hello,world!0
 say(); // hello,world!1
 ```
 
-### javascript中的`"user strict";`是什么意思？使用它区别是什么？
-
-```js
-use strict是ECMAscript 5中的严格允许模式，这种模式下js在严格条件下运行
-
-严格模式中消除了一些语法的不合法不合理处，减少了一些怪异行为
-譬如不能用with,不能给未声明的全局变量赋值，不能callee，不允许直接操作argument等
-
-严格模式消除了一些不合理不安全之处，使得代码相对更合理，而且还可以提供编译器效率，增加运行速度
-
-最重要的是，为未来的js标准化做铺垫，未来可以认为是全部基于严格模式的（譬如es6）
-```
-
-```js
-如严格模式是ECMAScript 5 中的一种模式，ECMAScript 5中有两种模式，一种是正常模式，一种是“严格模式(strict mode)”，
-使用这种模式使得Javascript在更严格的条件下运行。
-
-设立“严格模式”的目的主要有:
-1.  消除JS语法的不合理，不严谨之处，减少一些怪异行为
-2.  消除代码运行的不安全之处，保证代码运行的安全
-3.  提高编译器效率，增加运行速度
-4.  为新版本做铺垫，如ES6中全面使用了严格模式
-
-注意，在正常模式下可以运行的代码很有可能严格模式下运行出错。而且ES6中只允许严格模式的用法。
-
-严格模式有两种用法:
-1. 在脚本文件(或<script>脚本片段)的第一行，使用“use strict”; 可以将整个脚本文件(片段)以严格模式运行
-(注意，如果前面是一些不产生实际运行结果的语句，可以不再第一行-如在开头注释后面,
-注意,前面有;号也会取消严格模式；但是如果前面的语句有效-如输出语句，这样则严格模式无效，整个片段会以正常模式运行)
-
-2. 在函数体的第一行使用”use strict”;则整个函数以严格模式运行
-(这种是最常用的写法，通常会将这句话放在一个立即执行的匿名函数中)
-```
-
-使用严格模式后，JS语法和行为与正常模式有所区别:
-
-```js
-1. 全局变量显示声明(正常模式下，如果一个变量没有声明就赋值，默认是全局变量，而在严格模式下，会报错)
-
-2. 静止使用with语句(with语句主要用于设置代码在特定对象中的作用域，严格模式下禁用with语句)
-
-3. 创设eval作用域，ES5中，正常模式下，JS语言中有两种变量作用域:全局作用域和函数作用域。
-严格模式创设了第三种作用域:eval作用域(这样,eval里面不能再生成全局变量了-正常模式中eval会生影响外部作用域)。
-
-4. 禁止this关键字指向全局对象。在正常情况下,一个普通函数内部的this会指向一个全局对象window,但是严格模式下禁止了这种用法，
-严格模式下,普通函数内部的this为undefind，注意：通过new 出来的对象除外，new 出来的会指向自身
-
-5.禁止在函数内部遍历调用栈。正常情况下函数内部可以通过caller等方法调用自身,但是严格模式下禁止了这种用法
-
-6. 禁止删除变量（严格模式下无法删除var显示声明的变量，只能删除属性）
-注意, [object Object]的属性只有configurable设置为true才能被删除，否则无法删除
-
-7. 显式报错。
-正常模式下，对于一个对象的只读属性进行赋值，不会报错，只会默默失败，严格模式下，会报错
-严格模式下，对于一个使用getter方法读取的属性进行赋值，会报错
-严格模式下，对禁止拓展的对象添加新属性（Object.preventExtensions(o)），会报错
-严格模式下，删除一个不可删除的属性，或报错（如删除Object.prototype）
-严格模式下，删除一个不可删除的属性，或报错
-对象不能有重名的属性(正常模式下，如果对象有多个重名属性，最后赋值的那个属性会覆盖前面的值，严格模式下，这属于语法错误)
-函数不能有重名参数(正常模式下，如果函数有多个重名参数，可以用argument[i]读取。严格模式下，属于语法错误)
-
-8. 禁止八进制表示法
-严格模式下，整数的第一位如果是0，表示这是八进制，比如0100等于十进制的64。但是严格模式下禁止这种写法，证书第一位为0，会报错
-
-9. Arguments对象的限制。
-不允许对arguments赋值
-Arguments不再追踪参数的变化（如果形参a被改变，对应的arguments是不会改变的）
-禁止使用arguments.callee。严格模式下，无法使用caller,也就是说匿名函数内部无法调用自身了
-
-10. 函数必须声明在顶层
-严格模式下只允许在全局作用域和函数作用域的顶层声明函数。
-不允许在非函数的代码块内声明函数(ES6中会加入块级作用域概念)
-
-11. 保留字。严格模式下，新增了一些保留字:
-implements, interface, let, package, private, protected, public, static, yield
-使用这些词作为变量或参数将会报错
-另外,ES5本身也有些保留字:
-class, enum, export, extends, import, super
-以及各大浏览器自行增加的 const保留字。这些保留字都不能作为变量名或参数
-```
-
-### 如何判断一个对象是否属于某个类？
-
-```js
-譬如
-
-a instanceof Date
-
-const getClassName = (object) => Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
-
-getClassName('sss') === 'String'; // true
-```
-
-### new操作符具体干了什么呢？
-
-```js
-1.创建一个空对象，并且this变量引用该对象，同时继承该对象的原型
-2.属性和方法被加入到this引用的对象中
-2.新创建的对象由this引用，并且最后隐式返回this
-
-var obj = {};
-obj.__proto__ = Base.prototype;
-Base.call(obj);
-```
-
-### Object.create()的作用？
-
-```js
-Object.create(proto[,propertiesObject])是ES5中提出的一种新对象创建方式
-第一个参数是：要继承的原型，可以传null
-
-第二个参数是：对象的属性描述符，可选
-可选属性包括：
-数据属性-
-包含value(值),writable(是否可任意写),
-enumerable(是否能用for in枚举),
-configurable(是否能被删除,修改)特性(后面三个默认为false)
-
-访问器属性-包含set/get特性
 
 
-注意:当满足以下任一条件时，则会引发TypeError异常:
-1. prototype参数不是对象而且不是null
-2. descriptors参数中的描述符具有value或writable特性，并且具有get或set特性(value或writable与get或set不能同时存在)
-3. descriptors参数中的描述符具有不为函数的get或set特性(get或set必须是函数)
-
-关键点:可以创建一个继承某对象的对象
-```
-
-### new、new Object()和Object.create(proto,[propertiseObject]之间者的异同?
-
-```js
-相同点:
-new和Object.create()都可以用来创建一个新的对象。new Object()当参数为空时也是创建一个新的对象
-
-不同点:
-本质不同,new 一般配合类的构造函数使用，new的时候，是先创建一个对象，然后将对象的__proto__属性指向该类的prototype。
-(obj.__proto__ = Base.prototype)
-Object.create(proto…)一般第一个参数直接传入一个对象，然后创建出来新对象就直接显示指向该对象了。
-(obj.__proto__ = Base)
-new Object()当传入参数为一个object时不会创建新对象，而是直接引用传递，
-(obj === Base)
-当参数不存在时，创建一个新的{}
-(obj为{})
-
-关键点:创建对象时 _proto_和prototype有区别
-javascript使用__proto__指向对象的原型。
-```
-
-### JS中有一个函数，执行时对象查找时，永远不会去查找原型，这个函数是？
-
-```js
-hasOwnProperty
-
-js中hasOwnProperty函数是返回一个布尔值，
-指出一个对象是否具有指定名称的属性
-此方法无法检查该对象的原型链中是否具有该属性
-该属性必须是该对象本身的成员，不能是原型链上的
-
-使用：
-Object.hasOwnProperty.call(object, proName);
-object必须是对象，proName必须，是属性名称的字符串形式
-
-有则返回true,否则false
-```
 
 ### JSON的了解？
 
@@ -731,21 +405,7 @@ b.x = {n: 2}
 另外window.postMessage也可跨域跨窗口传递消息
 ```
 
-### 立即执行函数，不暴露私有成员
 
-```js
-var module1 = (function() {
-    var count = 1;
-    
-    function change() {
-        count++;
-    }
-    
-    return {
-        change: change,
-    };
-)();
-```
 
 ### AMD(Modules/Asynchronous-Definition)、CMD(Common-Module-Definition)规范的区别?
 
@@ -889,64 +549,7 @@ call
 apply
 ```
 
-### js怎么实现一个类。怎么示例化这个类？
 
-```js
-最经典的。
-
-function ABC() {...}
-
-ABC.prototype.xxx = function() {...}
-
-new ABC();
-
-或者
-
-function createObj() {
-    var obj = new Object();
-    
-    obj.xxx = function() {...}
-    
-    return obj;
-}
-
-createObj();
-
-很多种...
-```
-
-### JavaScript中的作用域与变量声明提升?
-
-```js
-ES6之前没有块级作用域，var等声明会提前
-
-例如
-console.log(a); // undefined
-console.log(b); // ReferenceError
-var a = 1;
-let b = 2;
-等同于：
-var a;
-console.log(a); // undefined
-console.log(b); // ReferenceError
-a = 1;
-let b = 2; 
-
-另外
-function xxx() {}
-函数声明也会提升
-
-如果函数声明和变量声明一致，
-变量若没有赋值函数声明会覆盖变量声明
-变量若已经赋值，函数无法覆盖变量
-var myName;
-function myName () {...};
-console.log(typeof myName); // function
-
-var myName = 'hello';
-function myName () {...};
-console.log(typeof myName); // String
-```
 
 ### 如何编写高性能的Javascript？
 

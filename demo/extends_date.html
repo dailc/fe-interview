@@ -99,7 +99,7 @@
             let foo3 = new MyDate3();
             // 这个就是MyDate的babel打包形态
             let foo4 = new MyDateBabel();
-
+            
             console.log('~~~~以下是prototype~~~~~~~~~');
             console.log(MyDate.prototype);
             console.log(MyDate2.prototype);
@@ -152,6 +152,12 @@
             console.log(MyDate2.prototype === foo2.__proto__);
             console.log(MyDate3.prototype === foo3.__proto__);
             console.log(MyDateBabel.prototype === foo4.__proto__);
+            
+            console.log('~~~~以下是调用abc属性~~~~~~~~~');
+            console.log(foo.abc);
+            console.log(foo2.abc);
+            console.log(foo3.abc);
+            console.log(foo4.abc);
 
             console.log('~~~~以下是调用getTest方法~~~~~~~~~');
             console.log('foo:' + foo.getTest());
@@ -185,10 +191,11 @@
             // 当然了，就算改变了Object.prototype.toString.call，只要[[Class]]不是Date，仍然无效
             // 为什么？参见es6的class章节，里面规定了类继承的行为
             // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
-            // https://stackoverflow.com/questions/6075231/how-to-extend-the-javascript-date-object/30882416#30882416
+            // https://stackoverflow.com/questions/6075231/how-to-extend-the-javascript-date-object/30882416
             // http://blog.csdn.net/github_36978270/article/details/71896444
             // http://blog.csdn.net/pcaxb/article/details/53784309
             // http://exploringjs.com/es6/ch_classes.html#sec_essentials-classes
+            
         </script>
     </body>
 
