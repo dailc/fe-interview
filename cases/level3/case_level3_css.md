@@ -279,3 +279,17 @@ cssFloat
 
 DOM2级样式规定样式对象上相应的属性名应该是`cssFloat`（不过老版IE中支持的则是`styleFloat`）
 
+## 移动端最小触控区域是多大？
+
+目前基本是达成了共识（官方推荐配置）
+
+苹果推荐的(`iOS HIG`)：`44pt*44pt`
+
+「具体看 WWDC 14」
+https://developer.apple.com/ios/human-interface-guidelines/visual-design/layout/
+
+Android(`Google Material Design`)的最小点击区域尺寸是`48x48dp`，
+这就意味着在xhdpi的设备上，按钮尺寸至少是96x96px。而在xxhdpi设备上，则是144x144px。
+
+另外，近几年 Android 设备的 dp per inch 一直在下降（同为48dp物理面积越来越大），
+遵守各平台的规范能很好的适应极大部分机型。

@@ -1,5 +1,44 @@
 # 难度等级1，最常见的一些概念，初级必须了解
 
+## 谈谈对ECMAScript6的认识？
+
+ECMA：
+ 1996年11月，JavaScript的创造者Netscape公司，决定将JavaScript提交给国际标准化组织ECMA，
+ 希望这种语言能够成为国际标准。
+ 次年，ECMA发布262号标准文件（ECMA-262）的第一版，规定了浏览器脚本语言的标准
+ ，并将这种语言称为ECMAScript。这个版本就是ECMAScript 1.0版。
+
+又名ECMAScript2015，于2015年6月份发布
+是继ECMAScript5（2009年发布）后的新一代标准
+
+增加了很多特性，例如Maps,Sets,Promise,Generators等
+let,const等声明
+箭头函数等用法
+Class等语法糖
+而且等同于默认使用了严格模式
+
+像TypeScript也实现了ECMAScript6标准，它是JavaScript的超集
+
+## ECMAScript6 怎么写class么，为什么会出现class这种东西?
+
+```js
+class XXX {
+    constructor() {
+    }
+    
+    foo1() {
+    }
+    
+    static foo2() {
+    }
+}
+```
+
+本质仍然是原型链直接的继承。
+
+虽然说它的本质只是一个语法糖（并不是全新的东西），可以让有面向对象思想的人更快速上手。但是从一些细节上看，和普通的原型链继承是有区别的。
+譬如，当继承`Date`这种无法被继承的变量时，`ES6`可以，而`ES5`继承法，普通无法实现
+
 ## ECMAScript与javascript的区别？
 
 ECMAScript是标准
@@ -153,6 +192,51 @@ location.reload();
 
 // 重新加载（从服务器重新加载）
 location.reload(true);
+```
+
+## 数组和对象有哪些原生方法，列举一下?
+
+数组：
+
+```js
+push
+pop
+shift
+unshift
+splice
+slice
+reverse
+sort
+concat
+join
+toString
+indexOf
+lastIndexOf
+forEach
+map
+filter
+every
+some
+reduce
+reduceRight
+length
+```
+
+Object:
+
+```js
+hasOwnProperty
+isPrototypeOf
+provertyIsEnumerable
+toString // {}.toString()返回[object Object]
+// 主要区别，一个数组中
+// toString访问的是每一个对象的toString方法
+// toLocalString(本地环境字符串,会根据机器环境返回字符串)访问的是对象每一个元素的toLocalString
+// 两个方法都可以被重写
+toLocalString // {}.toLocalString()返回[object Object]
+valueOf // 返回的是原始值(对象本身的值)，例如{}.valueOf();返回的是{}对象
+call
+apply
 ```
 
 ## event.prventDefault()与event.stopPropagation()的区别？
@@ -498,3 +582,71 @@ var module1 = (function() {
 
 上面是一个立即执行函数，而且，一旦外部引用了change，会导致count无法被释放，形成闭包。
 （正常没有被引用，函数执行完后会被销毁）
+
+## 如何解决跨域问题？
+
+这个范围很大，包括js跨域，ifram跨域，ajax跨域等
+
+如ajax跨域一般是用jsonp(old)或者(cors)方案-需要后台进行配合配置
+
+或者用websocket等请求来进行数据交互
+
+另外window.postMessage也可跨域跨窗口传递消息
+
+## AMD(Modules/Asynchronous-Definition)、CMD(Common-Module-Definition)规范的区别?
+
+- AMD:
+异步模块定义，所有模块异步加载，模块加载不影响后续运行，所以依赖模块的语句必须写在回调函数中
+提前执行
+依赖前置
+主要应用于require.js
+一个当多个用
+
+- CMD：
+同步加载
+延迟执行
+依赖就近
+as lazy as possible
+主要应用于sea.js
+推荐每一个模块职责单一
+
+## JSON的了解？
+
+JSON(JavaScript Object Notation)是一种轻量级的数据交换方式
+
+它是基于JavaScript的一个子集。
+数据格式简单，易于读写，占用带宽小
+
+例如（注意，必须要引号）
+
+```js
+{"name": "zhangsan", "age": "18"}
+```
+
+JSON字符串转JSON对象（后者是JS中内置的对象模型）
+
+```js
+eval('(' + str + ')')
+str.parseJSON
+JSON.parse(str)
+
+JSON转字符串
+obj.toJSONString()
+JSON.stringify(obj)
+```
+
+## 用js实现千位分隔符?
+
+只考虑整数
+
+```js
+function commafy(num) {
+    return num && num
+          .toString()
+          .replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {
+              return $1 + ",";
+          });
+}
+
+console.log(commafy(1234567.90)); //1,234,567.90
+```

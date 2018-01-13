@@ -687,6 +687,47 @@ javascript内部的数值默认按IEEE-754 64位格式存储
 那么结果是NaN，
 如果对象没有valueOf()，则调用toString()并转为数值
 
+## 连等号赋值顺序
+
+注意，**不推荐使用连等赋值**
+
+```js
+var a = {n: 1}
+var b = a;
+a.x = a = {n: 2}
+console.log(a); // {n: 2}
+console.log(a.x); // undefined
+console.log(b); // {n: 1, x: {n: 2}}
+console.log(b.x) // {n: 2}
+```
+
+因为连等号这个语句中会**先确定所有遍历的指针**，然后才会去对于赋值
+
+其中
+
+```js
+a.x = a = {n: 2} 
+```
+
+- 指针确定如下
+a.x的指针已经确定了，指向了原始a的（因为原始a没有x，因此创建了一个指向null的指针）
+a指向也是原始a
+
+- 赋值如下
+a重新指向到了新的地址 {n: 2}（栈中的指针指向了堆中新的对象）
+原始a.x的指向到了 {n: 2}
+
+- 因此最后
+a指向到了新的{n: 2}
+a.x为undefined
+
+b指向原始a
+b.x = {n: 2}
+
+简单的理解，因为js中是值传递模式，所以在连等开始赋值之前，以及分别有`a.x`和`a`这两个指针的值的。
+最初时，`a`和`a.x`分别指向堆内存中的`{n: 1, x: null}`以及里面的`x`。
+然后赋值阶段，`a`重新换了一个指向，指向了`{n: 2}`，而`a.x`仍然是原始的a（也就是和另一个备份的`b`指向一样）
+
 ## 为什么说+拼接字符串效率低
 
 因为js中，字符串是原始值，创建后是无法更改的（栈内存中）
@@ -839,6 +880,35 @@ for (var i = 0; i < 5; i++) {
 }
 console.log(i); // 5 55555
 ```
+
+## 移动端的点击事件的有延迟(click的300毫秒延迟)，时间是多久，为什么会有？ 怎么解决这个延时？
+
+click 有 300ms 延迟,为了实现safari的双击事件的设计，浏览器要知道你是不是要双击操作。
+
+一般采用touch方式模拟点击可以去除延迟
+或者直接采用fastclick等第三方库
+
+移动端浏览器的默认显示宽度是980px(不同机型各异，但相差不大)，而不是屏幕的宽度(320px或其他)。
+为了对早期普通网页更好的体验，iphone设计了双击放大显示的功能--这就是300ms延迟的来源：
+如果用户一次点击后300ms内没有其他操作，则认为是个单击行为；否则为双击放大行为。
+
+解决：
+
+1.user-scalable=no。 
+不能缩放就不会有双击缩放操作，因此click事件也就没了300ms延迟，这个是Chrome首先在Android中提出的。
+2.设置显示宽度：width=device-width。
+Chrome 开发团队不久前宣布，在 Chrome 32 这一版中，
+他们将在包含 width=device-width 或者置为比 viewport 值更小的页面上禁用双击缩放。
+当然，没有双击缩放就没有 300 毫秒点击延迟。
+3.直接采用fastclick等第三方库
+简而言之，FastClick 在检测到 touchend事件的时候，
+会通过 DOM 自定义事件立即触发一个模拟click事件，并把浏览器在 300 毫秒之后真正触发的 click事件阻止掉。
+
+
+事件执行顺序：
+touchstart->-touchmove（如果有的话）>touchend
+->mousedown->mousemove（如果有的话）->mouseup
+->click->dblckick（如果有的话，IOS上不支持dblclick事件，Android支持dblclick事件）
 
 ## 什么是点透行为?
 
@@ -1307,3 +1377,68 @@ var myName = 'hello';
 function myName () {...};
 console.log(typeof myName); // String
 ```
+
+## onclick和addEventListener('click')的区别？
+
+onclick属于DOM0级的事件处理，
+譬如如果使用HTML指定事件处理程序，那么onclick属性就是一个包含着同名HTML特性中指定的代码的函数，
+（每一个元素都有自己的事件处理程序属性-包括window和document）
+
+addEventListener是DOM2级的事件处理，事件流中的监听（冒泡或捕获），而且可以阻止继续冒泡或捕获的传递
+
+## 事件中的currentTarget与target
+
+currentTarget指向绑定事件的对象
+
+target指向触发事件的对象
+
+譬如绑定到document.body中
+
+currentTarget一直都是document.body，而target可以是里面任意一个触发事件的元素（譬如只不过是最后冒泡出来而已）
+
+另外，一旦事件执行完毕，event就被销毁了
+
+## 事件中的stopImmediatePropagation与stopPropagation
+
+stopImmediatePropagation方法作用在当前节点以及事件链上的所有后续节点上，
+目的是在执行完当前事件处理程序之后，停止当前节点以及所有后续节点的事件处理程序的运行
+
+stopPropagation方法作用在后续节点上，
+目的在执行完绑定到当前元素上的所有事件处理程序之后，停止执行所有后续节点的事件处理程序
+
+## 什么是闭包(closure)，为什么要用它？
+
+**闭包是指有权访问另一个函数作用域中的变量的函数**（JavaScript高程也这样定义）
+
+创建闭包的最常用方式：在一个函数内创建另一个函数，通过另一个函数访问这个函数的局部变量
+利用闭包可以突破作用域链，将函数内部的变量和方法传递到外部
+不过也经常会容易造成内存泄漏问题（无法自动回收）
+
+特性：
+
+1.函数内再嵌套函数
+2.内部函数引用外层的参数和变量
+3.参数和变量不会被垃圾回收机制回收
+
+譬如
+
+```js
+function sayHello() {
+    // 函数内部变量
+    var word = 'hello,world!';
+    var index = 0;
+    
+    return function() {
+        console.log(word + (index++));  
+    };
+}
+
+var say = sayHello();
+
+say(); // hello,world!0
+say(); // hello,world!1
+```
+
+上面的通俗点将，那个被return的匿名函数就是一个闭包（因为它有访问另一个函数作用域（sayHello函数）中的变量的能力）。
+而且可以看到，如果匿名函数没有引用外部函数作用域的变量，正常情况下外部函数执行完后相关内存就销毁了，但是由于它引用了，
+并且被外界持有了引用`say`，所以形成了闭包，无法回收内存。

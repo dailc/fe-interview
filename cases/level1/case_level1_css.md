@@ -241,6 +241,15 @@ rotate transform
 <link href='xxx' rel='stylesheet' media='(min-width:700px)'>
 ```
 
+有一些可能比较少见的：
+
+```js
+@media print {
+}
+```
+
+代表在打印模式下的样式，而且这种模式下，单位一般是`pt`
+
 ## display:none和visibility:hidden的区别？
 
 相同点： 都能将网页上的某个元素隐藏

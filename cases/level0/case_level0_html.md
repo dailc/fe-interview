@@ -21,3 +21,14 @@
 可以防止恶意破解密码，刷票，论坛灌水等
 
 在国内，最早应该是为了防止暴力穷举密码，最主要是防止机器人
+
+## 知道什么是webkit么? 知道怎么用浏览器的各种工具来调试和debug代码么?
+
+Chrome（现在是blink）,safari浏览器的内核
+
+准确的说，chrome是基于chromium引擎，而使用webkit内核
+
+weblit是当初苹果开源的
+google在次基础上开发了chromium（现在内核变为了blink）
+
+chrome中的devtools的调试工具
