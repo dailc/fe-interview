@@ -100,7 +100,7 @@
             // 这个就是MyDate的babel打包形态
             let foo4 = new MyDateBabel();
             
-            console.log('~~~~以下是prototype~~~~~~~~~');
+            console.log('~~~~以下是MyDate们的prototype~~~~~~~~~');
             console.log(MyDate.prototype);
             console.log(MyDate2.prototype);
             console.log(MyDate3.prototype);
@@ -124,20 +124,20 @@
             console.log(MyDate3.__proto__);
             console.log(MyDateBabel.__proto__);
 
-            console.log('~~~~以下是对象的__proto__~~~~~~~~~');
+            console.log('~~~~以下是new出的对象的__proto__~~~~~~~~~');
             console.log(foo.__proto__);
             console.log(foo2.__proto__);
             console.log(foo3.__proto__);
             console.log(foo4.__proto__);
 
-            console.log('~~~~以下是方法的__proto__与Function的prototype比较~~~~~~~~~');
+            console.log('~~~~以下是MyDate们的__proto__与Function的prototype比较~~~~~~~~~');
             // 默认的function MyDate() {}之类的构造函数是Function
             console.log(Function.prototype === MyDate.__proto__);
             console.log(Function.prototype === MyDate2.__proto__);
             console.log(Function.prototype === MyDate3.__proto__);
             console.log(Function.prototype === MyDateBabel.__proto__);
 
-            console.log('~~~~以下是方法的__proto__与Date比较~~~~~~~~~');
+            console.log('~~~~以下是MyDate们的__proto__与Date比较~~~~~~~~~');
             // 默认的function MyDate() {}之类的构造函数是Function
             // class和babel模拟中，改变了隐式原型对象，指向了Date
             console.log(Date === MyDate.__proto__);

@@ -361,3 +361,133 @@ Flash Of Unstyled Cotent
 (底层用了一个原生控件来显示的)
 
 2.或者类似于iScroll一样，自己内部用translate动画模拟
+
+## 视差滚动效果，如何给每页做不同动画？（回到顶部，向下滑动要再次出现，和只出现一次分别怎么做？）
+
+视差滚动：多层背景以不同速度移动，形成立体的运动效果，带来出色的视觉体验
+
+一般会有背景层，内容层，贴图（悬浮）层，滚动时，不同速度移动
+
+一般原理是：各个页面是fixed布局，然后监听滚动（譬如滚轮），
+在滚动的不同距离以此移动对于图层的top值
+
+## 如果需要手写动画，你认为最小间隔是多久，为什么？
+
+很多显示器的频率仍然是： 60HZ，所以理论上是：
+
+`1/60 *1000ms = 16.7ms`
+
+## 什么是CSS预处理器／后处理器？
+
+- 预处理器，如less,sass,stylus
+用来预编译，一般里面会有支持变量、继承等，增加了复用性
+而且还会有函数，循环，mixn，层级，很方便进行组件化开发，提高工作效率
+
+- 后处理器，如postcss
+譬如用来补全不同浏览器下的兼容后缀，如-webkit等
+这样可以基于css规范来编写，无法写的时候关注兼容问题，更有效率,也不易出错，而且源码会更少
+
+## 有使用过css预处理器吗？喜欢哪个？
+
+SASS, LESS, Stylus等，原理都是最终会编译打包成正式css运行
+
+主要的方便之处是：
+
+- 支持变量，便于复用，特别是多套皮肤时
+
+- 支持嵌套，复杂的父子级关系时更为清晰
+
+## 有一个高度自适应的div，里面有两个div，一个高度100px,希望另一个填满剩下的高度
+
+1.box-sizing方案
+外层box-sizing:border-box;同时设置padding:100px 0 0
+内层100像素高的元素向上移动100像素，或者使用absolute布局防止占据空间
+另一个元素直接height:100%
+
+2.absolute布局
+外层position:relative
+百分百自适应元素直接position: absolute; top: 100px; bottom: 0; left: 0s
+
+3.或者纯js解法
+
+## 为什么要初始化CSS样式
+
+浏览器兼容问题，不同浏览器对有些标签的默认值不同，如果没对CSS初始化，往往会出现浏览器之家的页面显示差异
+
+最简单的初始化（非常不建议）
+
+```js
+* {padding: 0; margin: 0;}
+```
+
+或者采用常见的样式初始化方案
+
+```js
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin:0; padding:0; }
+  body, button, input, select, textarea { font:12px/1.5tahoma, arial, \5b8b\4f53; }
+  h1, h2, h3, h4, h5, h6{ font-size:100%; }
+  address, cite, dfn, em, var { font-style:normal; }
+  code, kbd, pre, samp { font-family:couriernew, courier, monospace; }
+  small{ font-size:12px; }
+  ul, ol { list-style:none; }
+  a { text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  sup { vertical-align:text-top; }
+  sub{ vertical-align:text-bottom; }
+  legend { color:#000; }
+  fieldset, img { border:0; }
+  button, input, select, textarea { font-size:100%; }
+  table { border-collapse:collapse; border-spacing:0; }
+```
+
+## 经常遇到的浏览器的兼容性有哪些？原因以及解决方法是什么？常用hack技巧？
+
+png24位的图片在IE6浏览器上出现背景，解决方案是做成png8
+
+浏览器默认的margin和padding不同。解决方案是加一个全局的
+`*{margin:0;padding:0;}`来统一
+
+IE6双边距bug: 块属性标签float后，又有横行的margin的情况，在ie6显示margin比设置的大
+浮动IE产生的双倍距离
+
+```js
+box{ float:left; width:10px; margin:0 0 0 10px;}
+```
+
+这种情况之下IE会产生20px的距离，解决方案是在float的标签样式控制中加入 ——
+`display:inline;`将其转化为行内属性。(这个符号只有ie6会识别)
+
+渐进识别，利用`\9`标记将IE浏览器分离出来
+然后，再使用'+'将IE8和IE7，IE6分离开
+
+```js
+.bb{
+    background-color:red;/*所有识别*/
+    background-color:#00deff\9; /*IE6、7、8识别*/
+    +background-color:#a200ff;/*IE6、7识别*/
+    _background-color:#1e0bd1;/*IE6识别*/
+}
+```
+
+IE下，可以获取常规属性的方法来获取自定义属性
+也可以使用getAttribute()获取自定义属性
+Firefox下，只能使用getAttribute()获取自定义属性。
+解决：统一使用getAttribute()
+
+IE下，event对象有x,y属性，但是没有pageX,pageY属性
+Firefox下，有pageX,pageY，但没有x,y
+
+Chrome中文界面默认会将小于12px的文本强制按照12px显示
+可以css中加入
+
+```js
+-webkit-text-size-adjust: none;
+```
+
+ 解决。
+
+超链接访问过后hover属性不见了，被点击访问的超链接样式不再具有hover和active了解决方法是改变CSS属性的排列顺序
+
+```js
+L-V-H-A :  a:link {} a:visited {} a:hover {} a:active {}
+```

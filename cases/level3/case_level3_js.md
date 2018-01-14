@@ -302,3 +302,36 @@ JavaScript提到过的知识点，比较冷门，常用有`contentEditable`的�
         this.editor.focus();
     };
 ```
+
+## Webview加载网页，如果用户更改了手机系统字体，网页字体会被放大，怎么解决？
+
+就算你写死的是  16px之类的固定的像素，
+但是，如果用户手动更改了系统字体大小，最终显示的网页字体仍然会被放大。
+
+如何解决呢？这里Android和iOS中有区别
+
+- ios中，通过给 body 设置 `-webkit-text-size-adjust` 属性实现的：
+
+强行将body.style的-webkit-text-size-adjust设为100%即可
+
+（如果不处理，可以看到系统字体放大是，adjust也被放大了，-body.getAttribute('style')可以看出）
+
+- android中，通过给webview设置字体的缩放来完成，`setTextZoom`（需要原生容器完成）
+
+```js
+// 新版
+webview.getSettings().setTextZoom(200);
+// 旧版
+webview.getSettings().setTextSize(WebSetting.TextSize.LARGEST);
+```
+
+可以设置文本的缩放
+
+实际上，如果不自己处理，系统字体缩放后， Android webview 放大文字的原理：
+
+- 在CSS解析之后，渲染之前，将所有的字体大小的值进行缩放，后面的排版和渲染都会直接使用缩放后的CSS值。
+
+所以看出android和iOS的不同，ios中只改变`size-adjust`，但是android中渲染时确实是实实在在的字体被改了
+
+
+
