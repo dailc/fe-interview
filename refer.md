@@ -148,3 +148,9 @@ http://www.cnblogs.com/lhb25/archive/2011/09/06/javascript-scope-chain.html
 ### Webview加载网页，如果用户更改了手机系统字体，网页字体会被放大，怎么解决
 
 https://www.cnblogs.com/axl234/p/7753187.html
+
+### SSL的握手流程
+
+http://blog.csdn.net/zxk364961978/article/details/54809008
+
+http://www.360doc.com/content/14/0514/15/1123425_377541396.shtml

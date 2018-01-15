@@ -22,6 +22,8 @@
                 constructor() {
                     super();
                     this.abc = 1;
+                    console.log('~~~new.target.name:MyDate~~~~');
+                    console.log(new.target.name);
                 }
                 getTest() {
                     return this.getTime();
@@ -33,9 +35,12 @@
              * 经典的js组合寄生继承
              */
             function MyDate2() {
-                this.abc = 1;
-
                 Date.apply(this, arguments);
+                
+                this.abc = 1;
+                
+                console.log('~~~new.target.name:MyDate2~~~~');
+                console.log(new.target.name);
             }
 
             function extendsObj(subClass, superClass) {
@@ -74,6 +79,9 @@
                 Object.setPrototypeOf(dateInst, MyDate3.prototype);
 
                 dateInst.abc = 1;
+                
+                console.log('~~~new.target.name:MyDate3~~~~');
+                console.log(new.target.name);
 
                 return dateInst;
             }
@@ -84,7 +92,7 @@
             MyDate3.prototype.getTest = function getTest() {
                 return this.getTime();
             };
-
+            
             /**
              * ============part4============
              * 从外部js中获取变量
@@ -111,7 +119,19 @@
             console.log(foo2);
             console.log(foo3);
             console.log(foo4);
-
+            
+            console.log('~~~~以下是new出的对象instanceof Date~~~~~~~~~');
+            console.log(foo instanceof Date);
+            console.log(foo2 instanceof Date);
+            console.log(foo3 instanceof Date);
+            console.log(foo4 instanceof Date);
+            
+            console.log('~~~~以下是new出的对象instanceof MyDate们~~~~~~~~~');
+            console.log(foo instanceof MyDate);
+            console.log(foo2 instanceof MyDate2);
+            console.log(foo3 instanceof MyDate3);
+            console.log(foo4 instanceof MyDateBabel);
+            
             console.log('~~~~以下是new出的对象的Object.prototype.toString.call~~~~~~~~~');
             console.log(Object.prototype.toString.call(foo));
             console.log(Object.prototype.toString.call(foo2));

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	    <script>
+Object.setPrototypeOf = Object.setPrototypeOf ||
+function(obj, proto) {
+    obj.__proto__ = proto;
+
+    return obj;
+};
+
+function MyClass() {
+    return {
+        x: 1
+    };
+}
+
+MyClass.prototype.print = function() {
+    console.log('hello');
+};
+
+
+function imtateNew(MyClass) {
+    let instance = Object.create(MyClass.prototype);
+
+    let innerConstructReturn = MyClass.call(instance);
+    let isInnerObj = typeof innerConstructReturn === 'object' || typeof innerConstructReturn === 'function';
+    
+    return isInnerObj ?  innerConstructReturn : instance;
+}
+
+var obj = imtateNew(MyClass);
+
+console.log(new MyClass());
+console.log('~~~~~');
+
+console.log(obj);
+console.log(obj.__proto__);
+console.log(obj.print());
+	    </script>
+	</body>
+</html>
