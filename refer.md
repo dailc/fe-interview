@@ -154,3 +154,19 @@ https://www.cnblogs.com/axl234/p/7753187.html
 http://blog.csdn.net/zxk364961978/article/details/54809008
 
 http://www.360doc.com/content/14/0514/15/1123425_377541396.shtml
+
+### js引擎单线程机制
+
+https://segmentfault.com/a/1190000012806637
+
+http://blog.csdn.net/u013510838/article/details/55211033
+
+http://www.qdfuns.com/notes/17659/7cb0a395fea126caceeb64909b594b0f.html
+
+http://www.ruanyifeng.com/blog/2014/10/event-loop.html
+
+http://blog.csdn.net/fivedoumi/article/details/46927855
+
+http://www.imweb.io/topic/58e3bfa845e5c13468f567d5
+
+http://book.51cto.com/art/201406/443496.htm（带图）

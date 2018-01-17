@@ -303,6 +303,25 @@ JavaScript提到过的知识点，比较冷门，常用有`contentEditable`的�
     };
 ```
 
+## HTML元素的contentEditable？
+
+常用于在某 DIV中设置，这样就能支持富文本编辑了。
+
+否则必须用iframe+设置DesignMode才能进行富文本编辑
+
+HTMLElement.contentEditable 属性用于表明元素是否是可编辑的。该枚举属性有以下几个值：
+
+- "true" 表明该元素可编辑。
+
+- "false" 表明该元素不可编辑。
+
+- "inherit" 表明该元素继承了其父元素的可编辑状态。
+
+```js
+editable = element.contentEditable
+element.contentEditable = "true"
+```
+
 ## Webview加载网页，如果用户更改了手机系统字体，网页字体会被放大，怎么解决？
 
 就算你写死的是  16px之类的固定的像素，

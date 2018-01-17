@@ -404,7 +404,7 @@ Object.prototype.toString可以识别5种简单类型，以及全部内置类型
 这也是它为什么能获取内置对象的类别
 
 在ES6里，之前的 [[Class]] 不再使用，取而代之的是一系列的 internal slot ，有一个比较完整的解释：
-Internal slots 对应于与对象相关联并由各种ECMAScript规范算法使用的内部状态，它们没有对象属性，也不能被继承，
+Internal slot 对应于与对象相关联并由各种ECMAScript规范算法使用的内部状态，它们没有对象属性，也不能被继承，
 根据具体的 Internal slot 规范，这种状态可以由任何ECMAScript语言类型或特定ECMAScript规范类型值的值组成。
 
 此外，通过对 Object.prototype.toString 在ES6的实现步骤分析，
