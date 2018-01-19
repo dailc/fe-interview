@@ -361,3 +361,26 @@ Web Worker（Dedicated Worker）只属于某个页面，不会和其他页面的
 SharedWorker是浏览器所有页面共享的，不能采用与Worker同样的方式实现，因为它不隶属于某个Render进程，可以为多个Render进程共享使用，
 所以Chrome浏览器为SharedWorker单独创建一个进程来运行JavaScript程序，在浏览器中每个相同的JavaScript只存在一个SharedWorker进程，不管它被创建多少次。
 
+## 箭头函数与bind this的区别？
+
+```js
+setTimeout(function() {
+    console.log("id:", this.id);
+}.bind(this),100);
+   
+setTimeout( () => {
+    console.log("id:", this.id);
+},100); 
+```
+
+这两者是有区别的：
+
+- 箭头函数没有自己的this（所以在里面找就是相当于在外部作用域的this找）
+
+- 普通函数中自己本来是有this的，bind this只不过是把自己的this替换成了传入this的作用域的this而已
+
+另外，不仅仅是this
+
+```js
+箭头函数并不绑定 this，arguments，super(ES6)，抑或 new.target(ES6)。
+```
