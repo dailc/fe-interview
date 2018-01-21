@@ -293,3 +293,7 @@ Android(`Google Material Design`)的最小点击区域尺寸是`48x48dp`，
 
 另外，近几年 Android 设备的 dp per inch 一直在下降（同为48dp物理面积越来越大），
 遵守各平台的规范能很好的适应极大部分机型。
+
+## outline
+
+是绘制于元素周围的一条线，位于边框边缘的外围，可起到突出元素的作用。

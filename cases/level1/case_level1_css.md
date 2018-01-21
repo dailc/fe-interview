@@ -261,6 +261,11 @@ display:none。隐藏对象并且不保留空间，即使用后该对象会从�
 visibility:hidden。使得对象在网页不可见（点击事件也无法触发），但是对象在网页上所占的空间没变（变为一块空白占据原有空间）
 保留空间，不影响结构，故只产生repaint
 
+在渲染时，visibility:hidden被渲染成了空盒子，仍然在render树中，
+而display:none的元素是将节点从整个render tree中移除，所以不是布局中的一部分
+
+所以，很多时候visibility:hidden更方便
+
 ## position属性的三个值：relative，absolute，fixed的区别？
 
 - relative:

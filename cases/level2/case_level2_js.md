@@ -1873,3 +1873,36 @@ fetch 是全局量 window 的一个方法，它的主要特点有：
 - same-origin值使得fetch处理Cookie与XMLHttpRequest类似。 否则，Cookie将不会被发送，导致这些请求不保留认证会话。
 
 对于CORS请求，使用include值允许将凭据发送到其他域：
+
+## JSON.stringify
+
+接收三个参数：（后两个可以不传）
+
+- 第1个参数是需要转化的对象
+
+- 第2个参数可以是数组或者函数-过滤器
+
+- 第3个参数表示是否在json字符串中保留缩紧
+
+    - 如果是数字，则代表每一层级的缩进空格数
+    
+    - 如果是字符串，则会用这个字符串替代原有的空格缩进
+    （每一层级，原有的多个空格缩进不再用，用这个字符串替代）
+
+```js
+JSON.stringify(json, ["title", "name"], 4);
+
+JSON.stringify(json, function(key, value) {
+    if (key === 'title') {
+        return key + '-hello';
+    }
+    
+    return value;
+}, 4);
+```
+
+## JSON.parse
+
+除了第一个是字符串，同样接收第2个参数
+
+该参数是一个函数（还原函数），同样用来过滤（接收key-value）

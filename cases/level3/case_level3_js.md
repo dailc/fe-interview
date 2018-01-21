@@ -384,3 +384,17 @@ setTimeout( () => {
 ```js
 箭头函数并不绑定 this，arguments，super(ES6)，抑或 new.target(ES6)。
 ```
+
+## JS复合事件
+
+DOM3级别中的一类事件，譬如
+
+IME: Input Method Editor
+
+```js
+compositionstart（IME文本复合系统打开时触发）
+compositionupdate（在向输入字段中插入新字符时触发）
+compositionend（IME文本复合系统关闭时触发，表示返回正常键盘输入状态）
+```
+
+常用于筛选输入，在现代浏览器中，都支持的不错（而且IE9居然是率先支持的）
