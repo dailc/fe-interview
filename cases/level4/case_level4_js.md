@@ -250,3 +250,34 @@ activeExecutionContext = {
 
 - 这样依次执行（最终都会回到全局执行上下文）
 
+## 浏览器构建DOM树的大致步骤
+
+1. 转码（Bytes -> Characters）
+
+    - 读取接收到的 HTML 二进制数据，按指定编码格式将字节转换为 HTML 字符串
+   
+2. Tokens 化（Characters -> Tokens）
+
+    - 解析 HTML，将 HTML 字符串转换为结构清晰的 Tokens，每个 Token 都有特殊的含义同时有自己的一套规则
+
+3. 构建 Nodes（Tokens -> Nodes）
+
+    - 每个 Node 都添加特定的属性（或属性访问器），通过指针能够确定 Node 的父、子、兄弟关系和所属 treeScope
+    （例如：iframe 的 treeScope 与外层页面的 treeScope 不同）
+    
+4. 构建 DOM 树（Nodes -> DOM Tree）
+
+    - 最重要的工作是建立起每个结点的父子兄弟关系
+    
+在 Chrome 开发者工具下 Timeline 面板的 Parse HTML 阶段对应着 DOM 树的构建。
+
+浏览器构建CSSOM树的大致步骤也和构建 DOM 树一样需要这几步，不过最终的 CSSOM 树其实是用户代理样式（浏览器本来样式）与页面所有样式的重新计算
+
+然后DOM 树与 CSSOM 树融合成渲染树
+
+注意：渲染树只包括渲染页面需要的节点
+
+- 排除 <script> <meta> 等功能化、非视觉节点
+
+- 排除 display: none 的节点
+

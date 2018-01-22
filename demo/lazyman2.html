@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>lazyman2</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            (function() {
+                function LazyMan(name) {
+                    this.taskQueue = [];
+                    this.subscribe('lazyman', name);
+                }
+
+                LazyMan.prototype.eat = function(param) {
+                    this.subscribe('eat', param);
+
+                    return this;
+                };
+
+                LazyMan.prototype.sleep = function(param) {
+                    this.subscribe('sleep', param);
+
+                    return this;
+                };
+
+                LazyMan.prototype.sleepFirst = function(param) {
+                    this.subscribe('sleepFirst', param);
+
+                    return this;
+                };
+
+                LazyMan.prototype.subscribe = function() {
+                    if (arguments[0] === 'sleepFirst') {
+                        this.taskQueue.unshift({
+                            type: arguments[0],
+                            params: arguments[1]
+                        });
+                    } else {
+                        this.taskQueue.push({
+                            type: arguments[0],
+                            params: arguments[1]
+                        });
+                    }
+
+                };
+
+                LazyMan.prototype.publish = function() {
+                    const task = this.taskQueue.shift();
+
+                    task && this.run(task);
+                };
+
+                LazyMan.prototype.run = function(task) {
+                    const type = task.type;
+                    const params = task.params;
+
+                    switch (type) {
+                        case 'sleepFirst':
+                            sleepFirst.call(this, params);
+                            break;
+                        case 'lazyman':
+                            lazyman.call(this, params);
+                            break;
+                        case 'eat':
+                            eat.call(this, params);
+                            break;
+                        case 'sleep':
+                            sleep.call(this, params);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+                function lazyman(name) {
+                    log('Hi!This is ' + name + '!');
+                    this.publish();
+                }
+
+                function eat() {
+                    log('eat ' + arguments[0]);
+                    this.publish();
+                }
+
+                function sleep(num) {
+                    var self = this;
+
+                    num = num || 0;
+
+                    setTimeout(function() {
+                        log('Wake up after ' + num);
+                        self.publish();
+                    }, num * 1000);
+                }
+
+                function sleepFirst(num) {
+                    var self = this;
+
+                    num = num || 0;
+
+                    setTimeout(function() {
+                        log('sleep first ' + num);
+                        self.publish();
+                    }, num * 1000);
+                }
+
+                function log(msg) {
+                    console.log(msg);
+                }
+
+                window.LazyMan = function(name) {
+                    const lazyMan = new LazyMan(name);
+
+                    setTimeout(function() {
+                        lazyMan.publish();
+                    }, 0);
+
+                    return lazyMan;
+                };
+            })();
+
+            LazyMan("Hank").sleep(1).sleepFirst(1).sleep(1).sleep(1).eat("dinner");
+        </script>
+    </body>
+
+</html>

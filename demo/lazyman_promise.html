@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>lazyman_promise</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            (function() {
+                // 关键原理是promise是micro task（或者就算是macro task），也比普通执行语句晚
+                function log(msg) {
+                    console.log(msg);
+                }
+
+                function lazyMan(name) {
+                    // 定义顺序promise对象
+                    this.orderPromise = this.newPromise();
+                    // 定义插入promise对象
+                    this.insertPromise = this.newPromise();
+                    this.order(function(resolve) {
+                        log('I am ' + name);
+                        resolve();
+                    });
+                }
+
+                lazyMan.prototype.newPromise = function() {
+                    return new Promise(function(resolve, reject) {
+                        resolve();
+                    });
+                };
+
+                lazyMan.prototype.order = function(fn) {
+                    const self = this;
+
+                    this.orderPromise = this.orderPromise.then(function() {
+                        return new Promise(function(resolve, reject) {
+                            // 如果有insertPromise，阻塞orderPromise.
+                            self.fir ? self.insertPromise.then(function() {
+                                fn(resolve)
+                            }) : fn(resolve);
+                        })
+                    });
+                };
+
+                lazyMan.prototype.insert = function(fn) {
+                    const self = this;
+
+                    this.fir = true;
+                    this.insertPromise = this.insertPromise.then(function() {
+                        return new Promise(function(resolve, reject) {
+                            fn(resolve);
+                            self.fir = false;
+                        })
+                    });
+                };
+
+                lazyMan.prototype.sleepFirst = function(time) {
+                    this.insert(function(resolve) {
+                        setTimeout(function() {
+                            log('wait ' + time + ' s, other logic');
+                            resolve();
+                        }, time * 1000)
+                    });
+
+                    return this;
+                };
+
+                lazyMan.prototype.sleep = function(time) {
+                    this.order(function(resolve) {
+                        setTimeout(function() {
+                            log('sleep ' + time + ' s');
+                            resolve();
+                        }, time * 1000)
+                    });
+
+                    return this;
+                };
+
+                lazyMan.prototype.eat = function(something) {
+                    this.order(function(resolve) {
+                        log(something + '~~');
+                        resolve();
+                    });　　　　
+                    
+                    return this;
+                };
+
+                window.LazyMan = function(name) {
+                    return new lazyMan(name);
+                };
+            })();
+
+            LazyMan("Hank").sleep(1).sleep(1).sleepFirst(1).sleep(1).sleep(1).eat("dinner");
+        </script>
+    </body>
+
+</html>

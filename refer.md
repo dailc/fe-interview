@@ -169,9 +169,9 @@ http://blog.csdn.net/fivedoumi/article/details/46927855
 
 http://www.imweb.io/topic/58e3bfa845e5c13468f567d5
 
-http://book.51cto.com/art/201406/443496.htm（带图）
+### 浏览器构建DOM的大致步骤
 
-https://www.2cto.com/kf/201705/636846.html
+https://www.cnblogs.com/ys-wuhan/p/6985624.html
 
 ### 箭头函数与bind this的区别？
 
