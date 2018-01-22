@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>extend</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+            
+            // 防jq的定义，指一个参数是否是一个纯粹的对象（必须通过{}或new Object创建）
+            // 如FormData就不是纯粹对象
+            // 所有的自定义类与函数都不会复合要求
+            function isPlainObject(obj) {
+                return typeof obj === 'object' &&
+                    obj !== window &&
+                    Object.getPrototypeOf(obj) === Object.prototype;
+            }
+
+            // isDeep,target,source1,source2,...            
+            function extend() {
+                const args = [].slice.call(arguments);
+                const len = args.length;
+                let isDeep = false;
+                let target = args[0];
+                // source的开始范围
+                let index = 1;
+
+                if (typeof target === 'boolean') {
+                    // 如果第一个参数是深复制
+                    isDeep = target;
+                    target = args[1];
+                    index++;
+                }
+
+                if (typeof target !== "object") {
+                    // 简单点，如果target都不符合要求，强行变为一个object
+                    target = {};
+                }
+
+                for (let i = index; i < len; i++) {
+                    const source = args[i];
+                    
+                    if (!source) {
+                        continue;
+                    }
+                    
+                    for (let name in source) {
+                        if (!Object.prototype.hasOwnProperty.call(source, name)) {
+                            continue;
+                        }
+                        const src = target[name];
+                        const copy = source[name];
+                        
+                        if (copy === target) {
+                            // 防止环形引用
+                            continue;
+                        }
+                        // 这里未考虑plain object，如果是FormData之流的，也会复合要求，可能会有误差
+                        const copyIsPlainObject = isPlainObject(copy);
+                        let copyIsArray = Array.isArray(copy);
+                        
+                        if (isDeep && copy && (copyIsPlainObject || copyIsArray)) {
+                            let clone;
+                            
+                            if (copyIsArray) {
+                                copyIsArray = false;
+                                clone = (src && Array.isArray(src)) ? src : [];
+                            } else {
+                                clone = (src && isPlainObject(src)) ? src : {};
+                            }
+                            
+                            target[name] = extend(isDeep, clone, copy);
+                        } else if (copy !== undefined) {
+                            // 普通浅复制
+                            target[name] = copy;
+                        }
+                    }
+                }
+                
+                return target;
+            }
+
+            let obj1 = {
+                company: 'epoint',
+                product: {
+                    ejs: 'ejs混合开发方案',
+                },
+            };
+
+            let obj2 = {
+                company: 'epoint2',
+                city: 'suzhou',
+                product: {
+                    m7: 'm7移动框架',
+                },
+            };
+
+            let obj3 = {
+                name: 'zhangsan',
+                product: {
+                    group: 'mobile',
+                    m7: 'm7移动框架2',
+                },
+            };
+
+            console.log(extend({}, obj1, obj2));
+            console.log(extend({}, obj1, obj2, obj3));
+            console.log(extend(true, {}, obj1, obj2, obj3));
+            console.log(extend(1, obj1, obj2, obj3));
+            
+        </script>
+    </body>
+
+</html>
