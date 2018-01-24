@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>高级技巧-柯里化、节流、防抖</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            (function() {
+                // 柯里化，可以累加计算
+                function plus() {
+                    let args = [].slice.call(arguments);
+
+                    return function plusInner() {
+
+                        if (arguments.length === 0) {
+                            return args.reduce(function(total, cur) {
+                                return total + cur;
+                            });
+                        }
+
+                        args = args.concat([].slice.call(arguments))
+
+                        return plusInner;
+                    };
+                }
+
+                console.log(plus(1, 2)(4)());
+            })();
+            
+            (function() {
+                // 节流
+                function throttle(idle, fn) {
+                    let timer;
+                    
+                    return function() {
+                        const ctx = this;
+                        const args = arguments;
+                        
+                        clearTimeout(timer);
+                        
+                        timer = setTimeout(function() {
+                            fn.apply(ctx, args);
+                        }, idle);
+                    };
+                }
+            })();
+            
+            (function() {
+                // 防抖
+                function debounce(delay, fn) {
+                    var last = 0;
+                    
+                    return function() {
+                        const cur = +(new Date());
+                        
+                        if (cur - last > delay) {
+                            fn.apply(this, arguments);
+                            last = cur;
+                        }
+                    };
+                }
+            })();
+        </script>
+    </body>
+
+</html>
