@@ -1,0 +1,94 @@
+<!--
+	https://segmentfault.com/a/1190000009809466
+-->
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>简单版本的promise</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            (function() {
+                const PENDING = 0;
+                const RESOLVED = 1;
+                const REJECTED = 2;
+
+                function MyPromise(resolver) {
+                    let state = PENDING;
+                    let value = null;
+                    let handlers = [];
+
+                    function resolve(newValue) {
+                        if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+                            let then = newValue.then
+                            
+                            if (typeof then === 'function') {
+                                return then.call(newValue, resolve)
+                            }
+                        }
+
+                        value = newValue;
+                        state = RESOLVED;
+
+                        setTimeout(function() {
+                            handlers.forEach(function(handler) {
+                                handle(handler);
+                            });
+                        }, 0);
+
+                    }
+
+                    function reject(err) {
+                        value = err;
+                        state = REJECTED;
+                    }
+
+                    // 类似于发布订阅模式
+                    function handle(handler) {
+                        if (state === PENDING) {
+                            // pending状态会推入栈中，等待执行
+                            handlers.push(handler);
+
+                            return;
+                        }
+                        handler.resolve(handler.onFullFill(value));
+                    }
+
+                    this.then = function(onFullFill, onReject) {
+                        return new MyPromise(function(resolve, reject) {
+                            handle({
+                                resolve: resolve,
+                                onFullFill: onFullFill
+                            });
+                        });
+                    };
+
+                    resolver(resolve, reject);
+                }
+
+                window.MyPromise = MyPromise;
+            })();
+
+            const promise = new MyPromise(function(resolve) {
+                console.log('resolver');
+                setTimeout(function() {
+                    resolve(20)
+                }, 300);
+            });
+
+            promise.then(function(msg) {
+                console.log('then msg');
+                return msg;
+            }).then(function(data) {
+                console.log(data);
+            });
+        </script>
+    </body>
+
+</html>

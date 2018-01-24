@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>复合图层示例</title>
+        <style>
+            ..absolute {
+                position: absolute;
+                left: 0;
+                top: 200px;
+            }
+            
+            .fixed {
+                position: fixed;
+                left: 0;
+                bottom: 100px;
+            }
+            
+            .speedup {
+                transform: translateZ(0);
+            }
+            
+            .willchange {
+                line-height: 10px;
+            }
+            
+            .willchange:hover {
+                will-change: opacity;
+                line-height: 11px;
+            }
+            
+            .opacity {
+                opacity: .9;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="test">
+            <p>最原始的普通文档流</p>
+
+            <div class="absolute">
+                absolute声明的，脱离里普通文档流，但是仍然属于默认复合层
+            </div>
+
+            <div class="speedup">
+                硬件加速后的，直接一个新的复合层
+            </div>
+
+            <br />
+            <div class="willchange">
+                willchange后的，直接一个新的复合层
+            </div>
+            <br />
+            <div class="opacity">
+                opacity后的，直接一个新的复合层
+            </div>
+
+            <div class="fixed">
+                fixed声明的，脱离里普通文档流，但是仍然属于默认复合层
+            </div>
+        </div>
+    </body>
+
+</html>

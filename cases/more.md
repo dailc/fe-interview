@@ -207,6 +207,27 @@ react引入第三方库：
 https://www.v2ex.com/t/237501
 ```
 
+## pwa
+
+增强式web应用，依赖于：Service Worker
+
+一个 service worker 是一段运行在浏览器后台进程里的脚本，它独立于当前页面，提供了那些不需要与web页面交互的功能在网页背后悄悄执行的能力。
+
+在将来，基于它可以实现消息推送，静默更新以及地理围栏等服务，但是目前它首先要具备的功能是拦截和处理网络请求，包括可编程的响应缓存管理。
+
+service worker：
+
+- 它是JavaScript Worker，所以它不能直接操作DOM
+
+- 但是service worker可以通过postMessage与页面之间通信，把消息通知给页面，如果需要的话，让页面自己去操作DOM。
+
+- Service worker是一个可编程的网络代理，允许开发者控制页面上处理的网络请求。
+
+- 在不被使用的时候，它会自己终止，而当它再次被用到的时候，会被重新激活，所以你不能依赖于service worker的onfecth和onmessage的处理函数中的全局状态
+（如果你想要保存一些持久化的信息，你可以在service worker里使用IndexedDB API）
+
+- Service worker大量使用promise
+
 ## 公钥与私钥
 
 ```js

@@ -1906,3 +1906,49 @@ JSON.stringify(json, function(key, value) {
 除了第一个是字符串，同样接收第2个参数
 
 该参数是一个函数（还原函数），同样用来过滤（接收key-value）
+
+## http 200 From cache和200 ok
+
+三种状态码：
+
+- 200 ok
+
+    - 正常的网络请求
+
+- 200 OK (from cache)
+
+    - 指的是浏览器都没和服务器确认，直接用了浏览器缓存。
+
+- 304 (Not Modified)
+
+    - 比 200 OK (from cache) 慢，指的是浏览器还向服务器确认了下 "If-Not-Modified"，才用的缓存。
+    
+
+所以 Chrome 里面，长时间缓存有时候显示为 200 OK（from cache），有时候显示为 304 Not Modified。
+
+前者是直接按回车访问时发生，后者是按了 F5 刷新、或是 Entity Tag 没有正确禁用的情况。
+
+涉及到的头部
+
+- `If-Modified-Since/Last-modified`: 
+
+服务器程序检查请求头(`request header`)里面的(`If-modified-Since`)，
+如果最后修改时间相同(例如静态文件的Modified time 通过shell `ls -l`可以查看)则返回304，
+否则给返回头(`response header`)添加`last-Modified`并且返回数据(response body)。
+    
+- `If-None-Match/Etag`：
+
+服务器程序检查检查请求头(`request header`)里面的`if-none-match`的值与当前文件的内容通过hash算法
+（`例如 nodejs: cryto.createHash('sha1')`）生成的内容摘要字符对比，相同则直接返回`304`，
+否则给返回头(`response header`)添加`etag`属性为当前的内容摘要字符，并且返回内容。
+
+- 强缓存（也就是上述的from cache）
+
+如果设置了`Expires`(XX时间过期)或者`Cache-Control（http1.0不支持）`(经历XX时间后过期)且没有过期，命中`cache`的情况下，
+`from cache`不去发出请求。如果强刷（如ctrl+r）会发起请求，但是如果没有修改会返回`304`内容未修改，如果已经改变则返回新内容。
+
+expires/cache-control 虽然是强缓存，
+但用户主动触发的刷新行为，还是会采用缓存协商的策略，主动触发的刷新行为包括点击刷新按钮、右键刷新、f5刷新、ctrl+f5刷新等。
+
+如果在控制台里面选中了`disable cahce`则无论如何都会请求最新内容(304协商缓存、强缓存都无效)
+因为此时不会检查本地是否有缓存；请求头信息(request header)既没有If-Modified-Since也没有If-None-Match来让服务端判断。

@@ -176,3 +176,11 @@ https://www.cnblogs.com/ys-wuhan/p/6985624.html
 ### 箭头函数与bind this的区别？
 
 https://www.cnblogs.com/vajoy/p/4902935.html
+
+### http 200 From cache和200 ok
+
+https://www.zhihu.com/question/28725359
+
+### get和post的区别
+
+https://mp.weixin.qq.com/s?__biz=MzI3NzIzMzg3Mw==&amp;mid=100000054&amp;idx=1&amp;sn=71f6c214f3833d9ca20b9f7dcd9d33e4#rd
