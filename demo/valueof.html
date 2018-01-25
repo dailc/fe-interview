@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>高级技巧-valueOf的一些使用</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            const obj = {};
+            
+            // 注意，重写了valueOf后，转换会优先valueOf
+            // 只有重写了toString并且没有重写valueOf时才会去调用toString
+            // 当然，上述指的是隐式转换，否则如果显示String的话仍然是调用toString
+            
+            // 如果不重写，对象的valueOf就是它自己
+            obj.valueOf = function() {
+                return 12;
+            };
+            
+            obj.toString = function() {
+                return 'haha';
+            };
+            
+            console.log(+obj);
+            console.log(+obj);
+            console.log(obj + '');
+            console.log(String(obj));
+        </script>
+    </body>
+
+</html>

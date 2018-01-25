@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>mvvm简单demo</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            function Observer(data) {
+                this.walk(data);
+            }
+            
+            Observer.prototype.walk = function(data) {
+                Object.keys(data).forEach();
+            };
+            
+            function defineReactive(data, key, val) {
+                Object.defineProperty(data, key, {
+                    configurable: false,
+                    get: function() {
+                        
+                    },
+                    set: function(newValue) {
+                        if (newValue === val) {
+                            return;
+                        }
+                        console.log(key + '属性改变成了：' + newValue);
+                        val = newValue;
+                    }
+                });
+            }
+            
+            const data = {
+                a: 11,
+                b: 22,
+                c: {
+                    c1: 31,
+                    c2: 32
+                }
+            };
+            
+            new Observer(data);
+            
+            data.a = 111;
+            data.c.c1 = 311;
+        </script>
+    </body>
+
+</html>

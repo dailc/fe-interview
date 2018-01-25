@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>index</title>
+    </head>
+
+    <body>
+        <script>
+            const html = '<span>hello</span><img border="0" src="http://221.226.253.51:5073/frame/ewebeditor/uploadfile/20171228103403528.png"/>';
+            const reg = /<img\s+[^>]*>/;
+            
+            console.log(html.match(reg));
+        </script>
+    </body>
+
+</html>

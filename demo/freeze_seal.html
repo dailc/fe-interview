@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>高级技巧-拓展、冻结、密封三大特性</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            setTimeout(function() {
+                console.log('------可拓展性------');
+                // 可拓展性
+                const obj = {
+                    a: 1,
+                    aa: 11,
+                };
+
+                console.log('初始化是否可拓展：' + Object.isExtensible(obj));
+
+                console.log('---阻止该对象拓展---');
+                Object.preventExtensions(obj);
+
+                console.log('变化后是否可拓展：' + Object.isExtensible(obj));
+
+                setTimeout(function() {
+                    console.log('---尝试重写该对象属性a:222---');
+                    obj.a = '222';
+                    console.log(obj);
+                });
+
+                setTimeout(function() {
+                    console.log('---尝试删除该对象属性a---');
+                    delete obj.a;
+
+                    console.log(obj);
+                });
+
+                setTimeout(function() {
+                    console.log('---尝试拓展该对象b:ss---');
+                    obj.b = 'ss';
+                    console.log(obj);
+                });
+                
+                // 无法修改已有属性的configurable，writable，enumerable
+                setTimeout(function() {
+                    console.log('---尝试define该对象aa---');
+                    Object.defineProperty(obj, "aa", {
+                        configurable: true,
+                    });
+                    console.log(obj);
+                });
+
+            });
+
+            setTimeout(function() {
+                console.log('\n\n\n------密封性------');
+                // 可密封性
+                // 那些不可拓展，并且自身属性都不可配置，不可删除的对象
+                const obj = {
+                    a: 1,
+                    aa: 11
+                };
+
+                console.log('初始化是否密封：' + Object.isSealed(obj));
+
+                console.log('---密封该对象---');
+                Object.seal(obj);
+
+                console.log('变化后是否密封：' + Object.isSealed(obj));
+
+                setTimeout(function() {
+                    console.log('---尝试重写该对象属性a:222---');
+                    obj.a = '222';
+                    console.log(obj);
+                });
+
+                setTimeout(function() {
+                    console.log('---尝试删除该对象属性a---');
+                    delete obj.a;
+
+                    console.log(obj);
+                });
+
+                setTimeout(function() {
+                    console.log('---尝试拓展该对象b:ss---');
+                    obj.b = 'ss';
+                    console.log(obj);
+                });
+                
+                // 无法修改已有属性的configurable，writable，enumerable
+                setTimeout(function() {
+                    console.log('---尝试define该对象aa---');
+                    Object.defineProperty(obj, "aa", {
+                        configurable: true,
+                    });
+                    console.log(obj);
+                });
+
+            }, 500);
+            
+            setTimeout(function() {
+                console.log('\n\n\n------冻结性------');
+                // 可冻结性
+                // 那些不可拓展，并且自身属性都不可配置，不可删除的对象，并且所有数据都不可写（不可修改-指的是没有set，get的那些属性）
+                const obj = {
+                    a: 1,
+                    aa: 11
+                };
+
+                console.log('初始化是否冻结：' + Object.isFrozen(obj));
+
+                console.log('---密封该对象---');
+                Object.freeze(obj);
+
+                console.log('变化后是否冻结：' + Object.isFrozen(obj));
+
+                setTimeout(function() {
+                    console.log('---尝试重写该对象属性a:222---');
+                    obj.a = '222';
+                    console.log(obj);
+                });
+
+                setTimeout(function() {
+                    console.log('---尝试删除该对象属性a---');
+                    delete obj.a;
+
+                    console.log(obj);
+                });
+
+                setTimeout(function() {
+                    console.log('---尝试拓展该对象b:ss---');
+                    obj.b = 'ss';
+                    console.log(obj);
+                });
+                
+                // 无法修改已有属性的configurable，writable，enumerable
+                setTimeout(function() {
+                    console.log('---尝试define该对象aa---');
+                    Object.defineProperty(obj, "aa", {
+                        configurable: true,
+                    });
+                    console.log(obj);
+                });
+
+            }, 1000);
+        </script>
+    </body>
+
+</html>

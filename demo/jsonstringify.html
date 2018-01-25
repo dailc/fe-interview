@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>JSON.stringify</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            setTimeout(function() {
+                console.log('------cycleDetector检查------');
+
+                const obj = {
+                    name: 'foo',
+                    child: {
+                        name: 'haha',
+                        // 后续将来判断是否是环
+                        child: null
+                    }
+                };
+
+                // 有环则返回true，否则false
+                // 初尝深度遍历
+                function cycleDetector(obj, parents) {
+                    if (!obj || typeof obj !== 'object') {
+                        return false;
+                    }
+                    let isCycle = false;
+
+                    parents = parents || [];
+                    parents.push(obj);
+                    // 只要有一个是环，那么就是环
+                    isCycle = Object.keys(obj).some(function(name) {
+                        const child = obj[name];
+                        // 因为需要引用完全相等，所以可以用indexOf-内部是===比较
+                        return parents.indexOf(child) !== -1 || cycleDetector(child, parents.slice(0));
+                    });
+
+                    return isCycle;
+                }
+
+                console.log('初始化时是否是环：' + cycleDetector(obj));
+
+                console.log('主动生成一个环');
+                obj.child.child = obj.child;
+
+                console.log('后来是否是环：' + cycleDetector(obj));
+
+                const obj2 = {
+                    a: {
+                        c: 1
+                    },
+                    b: {
+                        d: null
+                    }
+                };
+                obj2.b.d = obj2.a;
+                
+                console.log('判断叔叔节点引用是否是环：' + cycleDetector(obj2));
+            }, 100);
+        </script>
+    </body>
+
+</html>
