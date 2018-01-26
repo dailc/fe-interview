@@ -507,4 +507,66 @@ __PS:1.1与1.0__
 
 另外，cookie应该是1.0的
 
+## MutationObserver
 
+HTML5中的新API，
+用来监视DOM变动的接口。他能监听一个DOM对象上发生的子节点删除、属性修改、文本内容修改等等
+
+使用大概是：
+
+```js
+const mo = new MutationObserver(callback);
+```
+
+而这个回调会添加到微任务队列（优先级小于promise，小于Object.observe-这个已经废弃）
+
+__MutationObserver模拟微任务__
+
+原理是创建一个空节点，要 nextTick 的时候去改一下这个节点的文本内容
+
+```js
+var counter = 1
+var observer = new MutationObserver(nextTickHandler)
+var textNode = document.createTextNode(String(counter))
+
+observer.observe(textNode, {
+    characterData: true
+})
+timerFunc = () => {
+    counter = (counter + 1) % 2
+    textNode.data = String(counter)
+}
+```
+
+在以前（2.4及以前），如vue中都是基于MutationObserver的微任务队列模拟nextTick的，
+
+不过后来（2.5+），都改成用MessageChannel模拟了(默认是Promise，不支持才兼容成MessageChannel)
+（原因好像是因为MutationObserver的兼容性问题）
+
+MessageChannel属于宏任务，优先级是：`setImmediate->MessageChannel->setTimeout`
+
+## setTimeout传参
+
+setTimeout 的第一个参数使用字符串而非函数的话，会引发内存泄漏。
+ （此时的效果是报错-不管是严格还是非严格下，
+ 因为相当于window[对应字符串]引用错误，
+ 传数字、布尔、undefined、null的话估计被忽略了，
+ 传对象的话报Unexpected identifier，
+ 只有传函数才是正常执行，
+ setTimeout还可以传第3，4，...多个参数-依次作为回调的参数）
+
+ 
+最后，注意
+
+```js
+function start(param) {
+    console.log(param);
+}
+
+// 会打印-123（实际上传字符串时相当于eval了那个字符串语句）
+setTimeout('start("123")', 1);
+
+
+// 没有任何效果，但也不会报错（因为确实存在window['start']这个引用）
+setTimeout('start', 1);
+```

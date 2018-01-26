@@ -229,7 +229,7 @@ activeExecutionContext = {
     
 5. 接下来就是其它的正常语句执行，变量赋值
 
-关于函数声明和变量声明的先后参考来源：在《你不知道的JavaScript（上卷）》一书的第40页中写到：**函数会首先被提升，然后才是变量。**
+关于函数声明和变量声明的先后参考来源：在《你不知道的JavaScript（上卷）》一书的第4章节中写到：**函数会首先被提升，然后才是变量。**
 
 简单理解：函数提升优先级比变量提升要高，且不会被变量声明覆盖，但是会被变量赋值覆盖
 
@@ -281,3 +281,25 @@ activeExecutionContext = {
 
 - 排除 display: none 的节点
 
+
+## 全面考察js基础
+
+```js
+function Foo() {
+    getName = function () { alert (1); };
+    return this;
+}
+Foo.getName = function () { alert (2);};
+Foo.prototype.getName = function () { alert (3);};
+var getName = function () { alert (4);};
+function getName() { alert (5);}
+
+// 答案：
+Foo.getName();//2
+getName();//4
+Foo().getName();//1，补充，严格模式下报错，因为严格模式下函数默认的this为undefined
+getName();//1
+new Foo.getName();//2
+new Foo().getName();//3
+new new Foo().getName();//3
+```

@@ -1,3 +1,7 @@
+<!--
+	mvvm的hello world级别的demo
+	实现了双向绑定
+-->
 <!DOCTYPE html>
 <html>
 
@@ -8,22 +12,68 @@
     </head>
 
     <body>
+        <div id="app">
+            <input type="text" v-model="text" />
+            {{text}}
+        </div>
         <script>
             'use strict';
+
+            /**
+             * 先了解，双向绑定的意思一般是：
+             * 数据变化 -> 展示DOM1更新、输入DOM2更新
+             * 输入DOM2变化 -> 数据更新、展示DOM1更新
+             * 
+             * 数据 -> 视图的单向绑定流程为：
+             * 1.监听数据（每一个数据属性都有一个dep，管理者自己的观察者）
+             * 
+             * 2.每一个对应需要绑定数据的节点添加一个watcher，
+             * 此时恰好，初始化时会有一个Dep.target，而且会触发监听数据的get，
+             * 于是对应的数据属性的get内会用dep会把这个watcher添加到观察者队列，
+             * 至此，单向绑定已经OK
+             * 
+             * 3.之后如果数据有变更，在它的set内会触发dep的notify，通知它所有的观察者更新（展示DOM1更新、输入DOM2更新）
+             * 
+             * 视图 -> 数据的单向绑定流程为：
+             * 
+             * 1.先compile，将跟节点el转换成文档碎片fragment进行解析编译操作，解析完成，再将fragment添加回原来的真实dom节点中
+             * 
+             * 2.解析指令（v-model），监听存在对应指令的输入DOM2的input change事件，
+             * 触发这个事件中意味着视图变了，因此直接更新对应的数据，
+             * 此时，由于Watcher的存在，会同步更新展示DOM1的视图
+             * 另外记得解析完毕后移除这个（v-model）属性
+             */
 
             function Observer(data) {
                 this.walk(data);
             }
-            
+
+            // 暂时不考虑数组
             Observer.prototype.walk = function(data) {
-                Object.keys(data).forEach();
+                Object.keys(data).forEach(function(name) {
+                    if (typeof data[name] === 'object') {
+                        new Observer(data[name]);
+                    } else {
+                        this.defineReactive(data, name, data[name]);
+                    }
+                }.bind(this));
             };
-            
-            function defineReactive(data, key, val) {
+
+            Observer.prototype.defineReactive = function(data, key, val) {
+                const dep = new Dep();
+
                 Object.defineProperty(data, key, {
                     configurable: false,
                     get: function() {
+                        console.log('尝试读取：' + key + ', 值为：' + val);
+                        if (Dep.target) {
+                            // 如果有观察者，添加观察者
+                            // 这一步只会在初始化对应watcher时才会走到
+                            // 其余时候这个key对应的target是null
+                            dep.addWatcher(Dep.target);
+                        }
                         
+                        return val;
                     },
                     set: function(newValue) {
                         if (newValue === val) {
@@ -31,23 +81,135 @@
                         }
                         console.log(key + '属性改变成了：' + newValue);
                         val = newValue;
+                        // 通知这个属性的所有观察者
+                        dep.notify();
                     }
                 });
             }
-            
-            const data = {
-                a: 11,
-                b: 22,
-                c: {
-                    c1: 31,
-                    c2: 32
+
+            function Dep() {
+                this.watchers = [];
+            }
+
+            Dep.prototype.addWatcher = function(watcher) {
+                this.watchers.push(watcher);
+            };
+
+            Dep.prototype.notify = function() {
+                this.watchers.forEach(function(watcher) {
+                    watcher.update();
+                });
+            };
+
+            // 用来定位当前的目标
+            Dep.target = null;
+
+            function Watcher(vm, node, name) {
+                Dep.target = this;
+                this.vm = vm;
+                this.node = node;
+                this.name = name;
+                this.update();
+                Dep.target = null;
+            }
+
+            Watcher.prototype.update = function() {
+                this.get();
+                // 目前只考虑了文本与输入框节点的值更新
+                if (this.node.nodeType === 1 && this.node.tagName.toLowerCase() === 'input') {
+                    this.node.value = this.value || '';
+                } else {
+                    this.node.nodeValue = this.value || '';
+                }
+                
+            };
+
+            Watcher.prototype.get = function() {
+                // 调用对应数据的get，获取最新值
+                // 如果是初始化时，此时target刚好为这个watcher，则会被添加到数据的watcher里
+                this.value = this.vm.data[this.name];
+            };
+
+            function Compile(node, vm) {
+                this.vm = vm;
+                this.node = node;
+
+                const frag = this.nodeToFragment(this.node, this.vm);
+
+                // 上面所有的节点都已经被劫持到frag中了，所以这里再重新添加回DOM
+                this.node.appendChild(frag);
+            }
+
+            Compile.prototype.nodeToFragment = function(node, vm) {
+                const frag = document.createDocumentFragment();
+                let child;
+
+                while (child = node.firstChild) {
+                    // 编译，目前只识别{{}}展示DOM和input输入DOM
+                    this.compile(child, vm);
+                    frag.appendChild(child);
+                }
+
+                return frag;
+            };
+
+            Compile.prototype.compile = function(node, vm) {
+                const textReg = /[{]{2}(.*)[}]{2}/;
+
+                if (node.nodeType === 1) {
+                    // 节点类型为元素
+                    // 需要解析属性，看看有没有指令
+                    const attr = node.attributes;
+                    const len = attr.length;
+
+                    for (let i = 0; i < len; i++) {
+                        if (attr[i].nodeName === 'v-model') {
+                            // 获取v-model绑定的属性名
+                            const name = attr[i].nodeValue;
+
+                            node.addEventListener('input', function(e) {
+                                // 监听到视图更新，然后同步更新数据，这样也会带动展示视图的更新
+                                vm.data[name] = e.target.value;
+                            });
+                            // 将data的值赋给该node
+                            node.value = vm.data[name] || '';
+                            // 移除已经解析完毕的指令
+                            node.removeAttribute('v-model');
+                            // 让这个更新DOM跟随数据更新的
+                            name && new Watcher(vm, node, name);
+                        }
+                    }
+                }
+
+                if (node.nodeType === 3) {
+                    // 节点类型为text
+                    // 需要识别textReg
+                    if (textReg.test(node.nodeValue)) {
+                        // 获取正则刚刚匹配的捕获组
+                        const name = RegExp.$1;
+
+                        // 将对应的ata赋值给该node
+                        node.nodeValue = vm.data[name] || '';
+                        // 添加一个Watcher，因为展示节点需要跟随数据的更新而更新
+                        name && new Watcher(vm, node, name);
+                    }
                 }
             };
-            
-            new Observer(data);
-            
-            data.a = 111;
-            data.c.c1 = 311;
+
+            function MVVM(options) {
+                this.el = document.getElementById(options.el);
+                this.data = options.data;
+
+                new Observer(this.data);
+                new Compile(this.el, this);
+            }
+
+            const vm = new MVVM({
+                el: 'app',
+                data: {
+                    text: 'hello world!'
+                }
+            });
         </script>
     </body>
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>css三栏布局，中间自适应宽</title>
+        <style>
+            .parent {
+                border: 1px solid #000;
+                overflow: hidden;
+            }
+            
+            .left {
+                float: left;
+                background: red;
+                width: 100px;
+                height: 50px;
+            }
+            
+            .right {
+                float: right;
+                background: blue;
+                width: 100px;
+                height: 50px;
+            }
+            
+            .medium {
+                height: 50px;
+                background: green;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="parent">
+            <div class="left">
+
+            </div>
+            <div class="right">
+
+            </div>
+            <div class="medium">
+
+            </div>
+        </div>
+    </body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>js经典继承</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            function inherit(subClass, superClass) {
+                function F() {}
+                
+                F.prototype = superClass.prototype;
+                subClass.prototype = new F();
+            }
+            
+            function Super() {
+                this.foo11 = 'foo11';
+            }
+            
+            Super.prototype.foo1 = function() {
+              console.log('foo1');  
+            };
+            
+            function Sub() {
+                this.foo22 = 'foo22';
+                Super.apply(this, arguments);
+            }
+            
+            Super.prototype.foo2 = function() {
+              console.log('foo2');  
+            };
+            
+            inherit(Sub, Super);
+            
+            const sub = new Sub();
+            
+            console.log(sub);
+            console.log(sub.__proto__);
+        </script>
+    </body>
+
+</html>

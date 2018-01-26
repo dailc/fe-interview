@@ -1,5 +1,9 @@
 # 更多
 
+## 一道常被人轻视的前端JS面试题
+
+http://www.cnblogs.com/xxcanghai/p/5189353.html
+
 ## requireJS的核心原理是什么？（如何动态加载的，如何避免多次加载，如何缓存？）
 
 ```js
