@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>kmp算法</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            function kmp(haystack, needle) {
+                const lenH = haystack.length;
+                const lenN = needle.length;
+                // 计算字串的共同后缀
+                const lps = kmpprocess(needle);
+
+                for (let i = 0, j = 0; i < lenH; i) {
+                    if (haystack.charAt(i) == needle.charAt(j)) {
+                        i++;
+                        j++;
+                    }
+                    if (j == lenN) {
+                        return i - j;
+                    }
+                    if (i < lenH && haystack.charAt(i) != needle.charAt(j)) {
+                        if (j) {
+                            // 关键的，回到前面相同长度的前缀地方那去，从而重写从后匹配
+                            j = lps[j - 1];
+                        } else {
+                            // j中没有重复前缀，i往后挪移
+                            i++;
+                        }
+                    }
+                }
+
+                return -1;
+            }
+
+            function kmpprocess(needle) {
+                const len = needle.length;
+                const lps = [];
+
+                lps[0] = 0;
+                for (let i = 1, count = 0; i < len;) {
+                    if (needle.charAt(i) === needle.charAt(count)) {
+                        lps[i++] = ++count;
+                    } else if (count) {
+                        // 往后回溯，减少共同前后缀的匹配范围，直至最后回溯到0
+                        count = lps[count - 1];
+                    } else {
+                        // 此时前后缀共同长度为0
+                        lps[i++] = 0;
+                    }
+                }
+                return lps;
+            }
+
+            console.log(kmp('BBC ABCDAB ABCDABCDABDE', 'ABCDABD'));
+            
+            // https://www.zhihu.com/question/21474082
+        </script>
+    </body>
+
+</html>

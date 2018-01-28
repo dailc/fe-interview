@@ -23,13 +23,16 @@
             };
             
             obj.toString = function() {
-                return 'haha';
+                return '23';
             };
             
+            console.log(obj);
             console.log(+obj);
-            console.log(+obj);
+            // 注意隐式转换与显式转换的不同-隐式会优先寻找valueOf
+            // 隐式时，就算toString返回的是数字，也会去优先找valueOf
             console.log(obj + '');
             console.log(String(obj));
+            console.log(Number(obj));
         </script>
     </body>
 

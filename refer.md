@@ -185,3 +185,6 @@ https://www.zhihu.com/question/28725359
 
 https://mp.weixin.qq.com/s?__biz=MzI3NzIzMzg3Mw==&amp;mid=100000054&amp;idx=1&amp;sn=71f6c214f3833d9ca20b9f7dcd9d33e4#rd
 
+### 什么是E-tag、last-modified、max-age、Expires
+
+http://blog.csdn.net/eroswang/article/details/8302191

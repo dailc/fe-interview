@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>洗牌算法</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 给定n张扑克牌，设计一个洗牌算法，打乱
+             * 核心思路是，从后往前，随机交换，这样可以确保一定随机
+             */
+            function shuffle(arr) {
+                const len = arr.length;
+                
+                for (let i = len - 1; i >= 0; i--) {
+                    // 每次的随机数是[0, i)之间的一个
+                    const rand = ~~((i + 1) * Math.random());
+                    
+                    [arr[i], arr[rand]] = [arr[rand], arr[i]];
+                }
+            }
+            
+            const colors = ['♠', '️♥', '♣', '♦'];
+            const cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const allCards = [];
+            
+            cards.forEach((card) => {
+                allCards.push(colors[0] + card);
+                allCards.push(colors[1] + card);
+                allCards.push(colors[2] + card);
+                allCards.push(colors[3] + card);
+            });
+            
+            shuffle(allCards);
+            
+            console.log(allCards);
+        </script>
+    </body>
+
+</html>

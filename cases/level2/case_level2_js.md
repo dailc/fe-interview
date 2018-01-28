@@ -1817,6 +1817,59 @@ WWW-Authenticate：表明客户端请求实体应该使用的授权方案,如Bas
 X-UA-Compatible：页面的UA兼容情况(一般响应页面时asp是会有这个设置)
 ```
 
+## 什么是E-tag、last-modified、max-age、Expires
+
+http1.1加入的
+
+它的作用大概是：当前请求资源的hash值（类似于资源指纹）。
+额，里面还有强ETAG和弱ETAG的区别
+
+它的作用其实与last-modified雷同（这个是http1.0的，一般不建议同时使用），不过更精确。
+last-modified精度在s内，而E-tag只要改变，指纹就会变更
+
+一般的流程是：
+
+- 客户端使用`If-None-Match`字段查询（里面的内容就是ETAG的内容）
+
+- 服务端的HttpReponse Header中包含Etag
+
+- 如果两者匹配，服务端会直接返回304(Not Modified) Response
+
+
+还有其它的：max-age与Expires
+
+
+Expires（http1.0）=时间（缓存的载止时间，服务端时间）
+可以结合Last-Modified与E-tag使用。
+用于控制请求文件的有效时间，当请求数据在有效期内时客户端浏览器从缓存请求数据而不是服务器端.
+当缓存中数据失效或过期，才决定从服务器更新数据。
+
+max-age（http1.1）=秒（资源在本地缓存多少秒）
+的作用和Expires类似，
+如果max-age和Expires同时存在，则被Cache-Control的max-age覆盖。
+
+为什么要加max-age？
+
+因为Expires 的一个缺点就是，返回的到期时间是服务器端的时间，
+这样存在一个问题，如果客户端的时间与服务器的时间相差很大，那么误差就很大，
+所以在HTTP 1.1版开始，使用Cache-Control: max-age=秒替代。
+
+同时使用last-modified与E-tag（可以被允许同时支持）
+
+Last-Modified和ETags请求的http报头一起使用，服务器首先产生Last-Modified/Etag标记，
+服务器可在稍后使用它来判断页面是否已经被修改，来决定文件是否继续缓存
+
+- 客户端请求一个页面（A）。
+
+- 服务器返回页面A，并在给A加上一个Last-Modified/ETag。
+
+- 客户端展现该页面，并将页面连同Last-Modified/ETag一起缓存。
+
+- 客户再次请求页面A，并将上次请求时服务器返回的Last-Modified/ETag一起传递给服务器。
+
+- 服务器检查该Last-Modified或ETag，并判断出该页面自上次客户端请求之后还未被修改，
+直接返回响应304和一个空的响应体。
+
 ## SSL的握手流程
 
 1. 客户端请求建立SSL链接，并向服务端发送一个随机数–Client random和客户端支持的加密方法，比如RSA公钥加密，此时是明文传输。 

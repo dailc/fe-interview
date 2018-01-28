@@ -190,7 +190,7 @@ W3C CSS2.1规范中的一个概念，它是一个独立容器，决定了元素�
 也就是说BFC内部的元素和外部的元素互不影响
 
 触发BFC的条件:
-float的值不为none
+float的值不为none（所以，浮动元素其实也是一个BFC）
 overflow的值不为visible
 display的值为inline-block,table-cell,table-caption
 position的值不为static或者releative中的任何一个
