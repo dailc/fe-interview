@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>topK算法</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+            
+            function MinHeap(count) {
+                // 升序排列的优先队列
+                this.priorityQueue = new PriorityQueue(true);
+                this.count = count;
+            }
+            
+            MinHeap.prototype.update = function(val) {
+                if (this.priorityQueue.size() < this.count) {
+                    this.priorityQueue.push(val);
+                } else {
+                    // 必须小于堆顶才push
+                    if (val < this.priorityQueue.top()) {
+                        this.priorityQueue.push(val);
+                        // 先添加，然后把顶部最大的pop
+                        this.priorityQueue.pop();
+                    }
+                }
+            };
+            
+            MinHeap.prototype.tops = function(val) {
+                return this.priorityQueue.slice(0);
+            };
+
+            /**
+             * 使用优先级队列实现一个最小堆
+             * 以此解决topK问题
+             */
+            function PriorityQueue(isAsc) {
+                this.isAsc = isAsc;
+                this.queue = [];
+            }
+            PriorityQueue.prototype.push = function(val) {
+                const len = this.queue.length;
+
+                if (this.isAsc) {
+                    // 升序，小->大
+                    // 原计划的插入顺序
+                    let index = 0;
+
+                    for (let i = len; i >= 1; i--) {
+                        if (val >= this.queue[i - 1]) {
+                            // 插入，splice，相当于原先的第i与i-1之间插入
+                            index = i;
+
+                            break;
+                        }
+                    }
+
+                    this.queue.splice(index, 0, val);
+                } else {
+                    // 降序，大->小
+                    // 原计划的插入顺序
+                    let index = len;
+
+                    for (let i = 0; i < len; i++) {
+                        if (val >= this.queue[i]) {
+                            // 插入，splice，相当于原先的第i与i-1之间插入
+                            index = i;
+
+                            break;
+                        }
+                    }
+
+                    this.queue.splice(index, 0, val);
+                }
+
+                return len + 1;
+            };
+            PriorityQueue.prototype.pop = function() {
+                return this.queue.pop();
+            };
+            PriorityQueue.prototype.top = function() {
+                return this.queue[this.queue.length - 1];
+            };
+            PriorityQueue.prototype.size = function() {
+                return this.queue.length;
+            };
+            PriorityQueue.prototype.empty = function() {
+                return this.queue.length === 0;
+            };
+            PriorityQueue.prototype.slice = function() {
+                return [].slice.apply(this.queue, arguments);
+            };
+            
+            const minHeap = new MinHeap(10);
+            const arr = [];
+            
+            for (let i = 0; i < 100; i++) {
+                const rand = ~~(Math.random() * 100);
+                
+                minHeap.update(rand);
+                arr.push(rand);
+            }
+            
+            console.log(minHeap.tops());
+            console.log(minHeap.priorityQueue.size());
+            console.log(arr);
+        </script>
+    </body>
+
+</html>
