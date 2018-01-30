@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>剑指offer第51题-数组中重复的数字</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 长度为n的数组中的数字都在0-(n-1)的范围内，
+             * 某些数字是重复的，但不知道几个数字重复，
+             * 请找出数组中任意一个重复的数字，譬如：
+             * [2, 3, 1, 0, 2, 5, 3]，输出2或3即可
+             * 
+             * 哈希表的话过于简单，所以不是最优，这里不考虑
+             * O(1)的做法是：0-(n-1)分别和下标对应
+             */
+            function duplicate(arr) {
+                const len = arr.length;
+                
+                for (let i = 0; i < len; i++) {
+                    if (arr[i] > len - 1 || arr[i] < 0) {
+                        // 返回错误状态
+                        return -2;
+                    }
+                    while (arr[i] !== i) {
+                        if (arr[i] === arr[arr[i]]) {
+                            // 这个就是重复数
+                            return arr[i];
+                        }
+                        // 交换对应的位置
+                        const tmp = arr[i];
+                        
+                        arr[i] = arr[tmp];
+                        arr[tmp] = tmp;
+                    }
+                }
+                
+                return -1;
+            }
+            
+            const arr = [2, 3, 1, 0, 4, 5, 9];
+            
+            console.log(duplicate(arr));
+            
+        </script>
+    </body>
+
+</html>
