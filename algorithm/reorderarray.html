@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>旋转数组的最小数字</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输出旋转数组中的最小元素（原来是递增序列）
+             * 
+             * 譬如【3，4，5，1，2】中最小为1
+             * 
+             * 思路，二分查找，需要考虑有重复值的情况
+             * 【1，1，1，1，1】
+             * 【1，2，3，1，1】
+             */
+            function searchInRotateArr(arr) {
+                if (!arr) {
+                    return;
+                }
+                const len = arr.length;
+                let left = 0;
+                let right = len - 1;
+
+                while (left < right) {
+                    if (arr[left] < arr[right]) {
+                        // 符合要求，直接返回
+                        return arr[left];
+                    }
+                    const mid = ~~((left + right) / 2);
+
+                    if (arr[mid] > arr[right]) {
+                        // 这才是旋转数组的特征
+                        left = mid + 1;
+                    } else {
+                        right = mid;
+                    }
+
+                }
+
+                return arr[left];
+            }
+
+            const arr1 = [3, 4, 5, 1, 2];
+            const arr2 = [1, 1, 1, 1, 1];
+            const arr3 = [1, 1, 2, 1, 1];
+
+            console.log(searchInRotateArr(arr1));
+            console.log(searchInRotateArr(arr2));
+            console.log(searchInRotateArr(arr3));
+        </script>
+    </body>
+
+</html>

@@ -1089,15 +1089,22 @@ console.log(5);
 
 ## 函数节流与防抖？
 
-- 防抖debounce：触发->(触发时间-上次动作执行时间>大于限制时间)->允许执行动作，记录执行时间
+这里高级程序设计里好像有误，按这个概念来：
+
+- 节流：一段时间才允许执行一次
+
+- 防抖：最后一次执行才有效（一段时间内）
+
+
+- 节流throttle：触发->(触发时间-上次动作执行时间>大于限制时间)->允许执行动作，记录执行时间
 
 我们不是要在每完成等待某个时间后去执行某函数，而是要每间隔某个时间去执行某函数，避免函数的过多执行
 频率控制 返回函数连续调用时，action 执行频率限定为 次 / delay
 
-譬如，如果有一个update函数每帧都会触发，那么里面加上防抖的作用就是，可以防止代码连续触发（设一个间隔），可以中间休息（避免无意义的过渡损耗）
+譬如，如果有一个update函数每帧都会触发，那么里面加上节流的作用就是，可以防止代码连续触发（设一个间隔），可以中间休息（避免无意义的过渡损耗）
 
 ```js
-var debounce = function(delay, action){
+var throttle = function(delay, action){
   var last = 0
   return function(){
     var curr = +new Date()
@@ -1109,15 +1116,15 @@ var debounce = function(delay, action){
 }
 ```
 
-- 节流throttle：触发-> 清除以前定时->设置定时：若干时间后执行
+- 防抖debounce：触发-> 清除以前定时->设置定时：若干时间后执行
 
 就是让某个函数在上一次执行后，满足等待某个时间内不再触发此函数后再执行，而在这个等待时间内再次触发此函数，等待时间会重新计算。
 空闲控制 返回函数连续调用时，空闲时间必须大于或等于 idle，action 才会执行
 
-相当于节流的作用是确保最后一次的有效动作完成后被执行，而不是在完成过程中一直执行
+相当于防抖的作用是确保最后一次的有效动作完成后被执行，而不是在完成过程中一直执行
 
 ```js
-var throttle = function(idle, action){
+var debounce = function(idle, action){
   var last
   return function(){
     var ctx = this, args = arguments

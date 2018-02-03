@@ -39,6 +39,26 @@ px所有浏览器都支持
 
 5. `!important`拥有最高优先级（据说是`100w`）
 
+口诀：
+
+从0开始，一个行内样式+1000，一个id+100，一个属性选择器/class或者伪类+10，一个元素名，或者伪元素+1
+
+譬如：
+
+```js
+body #content .data img:hover
+```
+
+最终的权重值是0122；#content是一个id选择器加了100，.data是一个class类选择器加了10，：hover伪类选择器加了10， body和img是元素加了1
+
+```js
+.parent span.hello
+
+.parent .hello
+```
+
+上面的权重分别是：`21`与`11`（会计算所有的生效选择符号）
+
 ## css的 !important属性作用是什么
 
 忽略ie下的bug,`!important`的css定义可以让对于属性拥有最高的优先级(据说权重为`100W`)

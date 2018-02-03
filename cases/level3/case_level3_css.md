@@ -216,6 +216,37 @@ BFC的约束规则分解如下:
 5.计算BFC的高度时，浮动子元素也参与计算
 6. BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面元素，反之亦然
 
+## BFC与IFC
+
+本质都是渲染规则，这里由一点展开解释：display：inline-block到底是BFC还是IFC？
+
+先这样理解：IFC的line box（线框）高度由其包含行内元素中最高的实际高度计算而来
+（不受到竖直方向的padding/margin影响)
+
+所以我们可以理解为什么：inline表现的元素设置padding/margin无效
+（准确的说是，竖直方向的，水平方向最终是可以生效的-最终是IFC盒子上的水平间距生效了，和其他盒子隔开）
+
+垂直无法生效的主要原因是:
+
+padding的值是根据目标元素的width计算出来的，而inline， non-replace元素的width是不确定的。
+
+那么display：inline-block呢？可以理解为，它的外面有了一个BFC盒子（但内部仍然是IFC渲染规则）
+
+再进一步理解：
+
+譬如一个盒子中有，`span`，`sss（文本）`，那么`span`就是一个IFC，
+`sss（文本）`也会在外部产生一个匿名IFC包裹着
+
+再进一步：IFC有一些布局规则，譬如
+
+- text-align：center规则可以让内部的IFC居中
+
+- vertical-align：middle规则可以让内部的IFC垂直居中
+
+然后IFC的line-height规则可以影响IFC本身的高度计算等
+
+说到底，本质就是因为css是盒子模型，所以需要这些FC来进行计算
+
 ## 如何修改chrome记住密码后自动填充表单的黄色背景？
 
 ```css

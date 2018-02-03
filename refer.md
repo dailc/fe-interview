@@ -188,3 +188,15 @@ https://mp.weixin.qq.com/s?__biz=MzI3NzIzMzg3Mw==&amp;mid=100000054&amp;idx=1&am
 ### 什么是E-tag、last-modified、max-age、Expires
 
 http://blog.csdn.net/eroswang/article/details/8302191
+
+### 尾递归优化
+
+http://es6.ruanyifeng.com/#docs/function#%E5%B0%BE%E8%B0%83%E7%94%A8%E4%BC%98%E5%8C%96
+
+### BFC与IFC
+
+https://www.jianshu.com/p/e75f351e11f8
+
+https://segmentfault.com/a/1190000009545742
+
+https://segmentfault.com/q/1010000000694623

@@ -213,7 +213,7 @@ https://www.v2ex.com/t/237501
 
 ## pwa
 
-增强式web应用，依赖于：Service Worker
+增强式web应用，依赖于：Service Worker（应该是属于tab页进程的）
 
 一个 service worker 是一段运行在浏览器后台进程里的脚本，它独立于当前页面，提供了那些不需要与web页面交互的功能在网页背后悄悄执行的能力。
 

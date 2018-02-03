@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>二进制中1的个数</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输出一个整数，输出该数二进制表示中1的个数，其中负数用补码表示。
+             * 0101010101
+             * 
+             * 思路：采用移位算法（无符号右移）>>>
+             */
+            function NumberOf1(num) {
+                let count = 0;
+                
+                while (num) {
+                    
+                    if (num & 1) {
+                        count++;
+                    }
+                    
+                    num >>>= 1
+                }
+                
+                return count;
+            }
+            
+            // 更快速，都无需遍历完毕
+            function NumberOf2(num) {
+                let count = 0;
+                
+                while (num) {
+                    // 这里会刚好少一位
+                    num = num & (num - 1);
+                    count++;
+                }
+                
+                return count;
+            }
+            
+            console.log(NumberOf2(1));
+            console.log(NumberOf2(2));
+            console.log(NumberOf2(3));
+        </script>
+    </body>
+
+</html>
