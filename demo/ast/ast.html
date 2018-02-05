@@ -1,0 +1,98 @@
+<!--
+	https://github.com/berwin/Blog/issues/18
+-->
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>词法解析与抽象语法树（AST）</title>
+    </head>
+
+    <body>
+        <div id="test" data-a="ss">
+            <p>{{name}}</p>
+        </div>
+        <script type="text/javascript" src="util.js" ></script>
+        <script type="text/javascript" src="html-parser.js" ></script>
+        <script>
+            'use strict';
+
+            /**
+             * 词法解析主要通过正则表达式
+             * (?:x)代表不捕获分组
+             * 
+             * 源码中有三大步骤：
+             * 1. parse解析html，生成ast树
+             * 主要是基于正则表达式进行解析
+             * 
+             * 2. 对ast进行静态节点标记，主要用来做虚拟DOM的渲染优化
+             * 优化的目标：
+             * 生成模板AST树，检测不需要进行DOM改变的静态子树。
+             * 然后patch的过程中直接跳过静态子树。
+             * 
+             * 3. 根据ast树生成所需的code（代码生成器）
+             * 内部包含render与staticRenderFns,
+             * 将AST语法树转化成render funtion字符串，最终返回一个VNode（虚拟DOM）
+             * 
+             * 简单的说：
+             * render函数会返回一个新的Vnode节点，传入update中与旧的VNode对象进行对比，
+             * 经过一个patch的过程得到两个VNode节点的差异，最后将这些差异渲染到真实环境形成视图
+             * 
+             * 虚拟dom:
+             * 1. 基于真实节点生成vdom，
+             * 并且每一个vdom都有一个属性elm对应真实dom
+             * 
+             * 2. 更新时，先在虚拟dom中更新，
+             * 然后利用patch算法匹配（O(N)），
+             * 只更新需要更新的真实dom
+             */
+
+            // 生成ast树
+            function createASTElement(tag, attrs, parent) {
+                return {
+                    type: 1,
+                    tag,
+                    attrsList: attrs,
+                    attrsMap: makeAttrsMap(attrs),
+                    parent,
+                    children: []
+                };
+            }
+
+            function makeAttrsMap(attrs) {
+                const map = {};
+                const len = attrs.length;
+
+                for (let i = 0; i < len; i++) {
+                    map[attrs[i].name] = attrs[i].value;
+                }
+
+                return map;
+            }
+
+            
+
+            parseHTML(document.getElementById('test').outerHTML, {
+                start: function(tag, attrs, unary) {
+                    console.log('~~~~~start~~~~~~');
+                    console.log(tag);
+                    console.log(attrs);
+                    console.log(unary);
+                },
+                chars: function(text) {
+                    console.log('~~~~~chars~~~~~~');
+                    console.log(text);
+                },
+                end: function(tagName, start, end) {
+                    console.log('~~~~~end~~~~~~');
+                    console.log(tagName);
+                    console.log(start);
+                    console.log(end);
+                }
+            });
+        </script>
+    </body>
+
+</html>

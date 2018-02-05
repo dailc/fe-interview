@@ -16,6 +16,8 @@
                 
                 F.prototype = superClass.prototype;
                 subClass.prototype = new F();
+                // 手动指定constructor，避免找不到
+                subClass.prototype.constructor = subClass;
             }
             
             function Super() {
@@ -41,6 +43,8 @@
             
             console.log(sub);
             console.log(sub.__proto__);
+            console.log(sub.constructor === Sub);
+            console.log(Sub.prototype.constructor === Sub);
         </script>
     </body>
 

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>替换空格</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 请实现一个函数，将一个字符串中的空格替换成“%20”。
+             * 例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。
+             * 
+             * 如果考虑到在同一个字符串上替换，需要用到双指针
+             */
+            function replaceSpace(str) {
+                if (!str) {
+                    return str;
+                }
+                const len = str.length;
+                const res = [];
+                
+                for (let i = 0; i < len; i++) {
+                    if (/\s/.test(str.charAt(i))) {
+                        res.push('%20');
+                    } else {
+                        res.push(str.charAt(i));
+                    }
+                }
+                
+                return res.join('');
+            }
+            
+            function replaceSpace2(str) {
+                if (!str) {
+                    return str;
+                }
+                const oldLen = str.length;
+                let spaceNum = 0;
+                
+                for (let i = 0; i < oldLen; i++) {
+                    if (/\s/.test(str.charAt(i))) {
+                        spaceNum++;
+                    }
+                }
+                
+                // 每一个空格需要多两位
+                const newLen = spaceNum * 2 + oldLen;
+                const sArr = str.split('');
+                let p1 = oldLen - 1;
+                let p2 = newLen - 1;
+                
+                while (p1) {
+                    if (/\s/.test(str.charAt(p1))) {
+                        sArr[p2--] = '0';
+                        sArr[p2--] = '2';
+                        sArr[p2--] = '%';
+                    } else {
+                        // 普通字符串
+                        sArr[p2--] = str.charAt(p1);
+                    }
+                    
+                    p1--;
+                }
+                
+                return sArr.join('');
+            }
+            
+            function replaceSpace3(str) {
+                return str.replace(/\s/g, '%20');
+            }
+            
+            console.log(replaceSpace('We Are Happy'));
+            console.log(replaceSpace2('We Are Happy'));
+            console.log(replaceSpace3('We Are Happy'));
+        </script>
+    </body>
+
+</html>

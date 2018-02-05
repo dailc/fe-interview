@@ -210,7 +210,7 @@ sort
 concat
 join
 toString
-indexOf
+indexOf（可以识别obj的位置-只能判断引用，如果是引用不同而内容相同是无法判断的）
 lastIndexOf
 forEach
 map
