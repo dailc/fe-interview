@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>包含min函数的栈</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 定义栈的数据结构，请在该类型中实现一个能够得到栈最小元素的min函数
+             * 
+             * 需要用的最小栈。
+             */
+            const stack = [];
+            const minStack = [];
+
+            function push(node) {
+                // write code here
+                stack.push(node);
+
+                if (minStack.length === 0 || minStack[minStack.length - 1] > node) {
+                    minStack.push(node);
+                }
+            }
+
+            function pop() {
+                // write code here
+                const node = stack.pop();
+
+                if (minStack[minStack.length - 1] === node) {
+                    minStack.pop();
+                }
+                
+                return node;
+            }
+            
+            // 因为top是保留字，所以用top2
+            function top2() {
+                // write code here
+                return stack[stack.length - 1];
+            }
+
+            function min() {
+                // write code here
+                // Math.min.apply(this, stack)就不考虑了
+                return minStack[minStack.length - 1];
+            }
+
+            push(2);
+            push(3);
+            push(1);
+
+            console.log(top2());
+            console.log(min());
+            pop();
+            console.log(top2());
+            console.log(min());
+            pop();
+            console.log(top2());
+            console.log(min());
+            pop();
+
+            console.log(top2());
+            console.log(min());
+        </script>
+    </body>
+
+</html>

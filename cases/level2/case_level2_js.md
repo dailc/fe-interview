@@ -443,6 +443,7 @@ __推荐使用requestAnimationFrame替代setTimeout__
 ## 对象到字符串的转换步骤
 
 1.如果对象有toString()方法，javascript调用它。如果返回一个原始值（primitive value如：string number boolean）,将这个值转换为字符串作为结果
+如果tostring返回{}，算有效
 
 2.如果对象没有toString()方法或者返回值不是原始值，javascript寻找对象的valueOf()方法，如果存在就调用它，返回结果是原始值则转为字符串作为结果
 
@@ -1826,7 +1827,7 @@ X-UA-Compatible：页面的UA兼容情况(一般响应页面时asp是会有这�
 
 ## 什么是E-tag、last-modified、max-age、Expires
 
-http1.1加入的
+E-tag是http1.1加入的
 
 它的作用大概是：当前请求资源的hash值（类似于资源指纹）。
 额，里面还有强ETAG和弱ETAG的区别

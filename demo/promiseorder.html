@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>Promise输出顺序</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            var p = new Promise(function(resolve, reject) {
+                console.log('1');
+                setTimeout(resolve, 1000);
+            }).then(function(value) {
+                console.log('2' + value);
+                return new Promise(function(resolve, reject) {
+                    setTimeout(resolve, 1000, 22);
+                });
+            }).then(function(value) {
+                console.log('3' + value);
+                setTimeout(value, 1000);
+            }).then(function() {
+                console.log('4');
+                setTimeout(function() {
+                    console.log('11');
+                }, 1000);
+            });
+        </script>
+    </body>
+
+</html>

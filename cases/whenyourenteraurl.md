@@ -4,6 +4,16 @@
 
 [http://www.cnblogs.com/iovec/p/7904416.html](http://www.cnblogs.com/iovec/p/7904416.html)
 
+[http://fex.baidu.com/blog/2014/05/what-happen/](http://fex.baidu.com/blog/2014/05/what-happen/)
+
+[https://zhuanlan.zhihu.com/p/23155051](https://zhuanlan.zhihu.com/p/23155051)
+
+遇到这个问题，首先，你得明白一点：仅靠背题目是没用的，要有一个自己的完整知识架构才能有较好的认识。
+
+然后，这个问题包含的面非常广，不一定能马上将所有知识点都想起来（对，就算你知道也不一定能马上想起）
+
+说明：既然本文是前端向，那么就偏前端领域的回答了（像一开始的键盘输入等就暂时不提。。。）
+
 ## 简洁题型版
 
 注：这题胜在区分度高，知识点覆盖广，再不懂的人，也能答出几句，
