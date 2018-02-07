@@ -211,6 +211,15 @@ react引入第三方库：
 https://www.v2ex.com/t/237501
 ```
 
+## gulp和webpack的区别
+
+gulp是构建工具，webapck是模块依赖解决方案
+
+Gulp类似于一个产品流水线，对配置文件gulpfile.js中的task配置路径下所有文件进行相关的操作。
+
+webpack对于一切文件视为模块，根据配置文件webpack.config.js中的entry入口文件的依赖文件层层递归并静态分析，运用相对应的规则转换为静态资源。
+
+
 ## pwa
 
 增强式web应用，依赖于：Service Worker（应该是属于tab页进程的）

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>实现bind的polyfill</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 实现bind的polyfill
+             * 
+             */
+            Function.prototype.bind2 = function(context) {
+                const self = this;
+                
+                return function() {
+                    return self.apply(context, arguments);
+                };
+            };
+            
+            function hello(msg) {
+                console.log(msg + this.a);
+            }
+            
+            const obj = {
+                a: 222
+            };
+            
+            const a = 'sss';
+            
+            const fn = hello.bind2(obj);
+            
+            fn('hello:');
+            
+            /**
+             * 实现call
+             * 
+             *  关键在于eval() -函数可计算某个字符串，并执行其中的的 JavaScript 代码。
+             * 
+             * 它的作用相当于是用js引擎解析这段字符串，类似于script标签引入的效果
+             * 
+             * 然后'context.fn(' + args +')'其实会进行隐式转换，
+             * 会转换成
+             * context.fn(arguments[1], arguments[2], ...)之类的
+             * 
+             * https://segmentfault.com/q/1010000009688328
+             * 
+             * 隐式转换再次示例：
+             * 'jawil'+[1,2]+[3,4]+3
+             * 等于"jawil1,23,43"
+             */
+            Function.prototype.call2 = function() {
+                const context = arguments[0] || this;
+                const args = [];
+                
+                context.fn = this;
+                
+                // 得自己构建arguments然后eval
+                
+                for (let i = 1, len = arguments.length; i < len; i++) {
+                    args.push('arguments[' + i + ']');
+                }
+                
+                eval('context.fn(' + args +')');
+                
+                delete context.fn;
+                
+                const res = 'context.fn(' + args +')';
+                
+                console.log(res);
+            };
+            
+            hello.call2(obj, 'hello2:');
+            
+            console.log('jawil'+[1,2]+[3,4]+3);
+        </script>
+    </body>
+
+</html>

@@ -770,6 +770,17 @@ Object.is 应被认为有其特殊的用途，而不能用它认为它比其它�
 addEventListener(name, func, useCapture);
 ```
 
+同时，第二个参数可以传入一个对象（会自动调用对象的handleEvent方法）
+
+```js
+document.body.addEventListener('click',
+    {
+        handleEvent: function() {
+            alert('body clicked');
+        }
+    }, false);
+```
+
 第三个参数是是否冒泡
 
 冒泡意味着从下到上
@@ -1825,7 +1836,7 @@ WWW-Authenticate：表明客户端请求实体应该使用的授权方案,如Bas
 X-UA-Compatible：页面的UA兼容情况(一般响应页面时asp是会有这个设置)
 ```
 
-## 什么是E-tag、last-modified、max-age、Expires
+## 什么是E-tag、last-modified、max-age、Expires、Cache-Control
 
 E-tag是http1.1加入的
 
@@ -1852,9 +1863,21 @@ Expires（http1.0）=时间（缓存的载止时间，服务端时间）
 用于控制请求文件的有效时间，当请求数据在有效期内时客户端浏览器从缓存请求数据而不是服务器端.
 当缓存中数据失效或过期，才决定从服务器更新数据。
 
-max-age（http1.1）=秒（资源在本地缓存多少秒）
+譬如：
+
+```js
+Expires: Fri, 30 Oct 1998 14:19:41
+```
+
+max-age（http1.1，Cache-Control头部中的一个属性）=秒（资源在本地缓存多少秒）
 的作用和Expires类似，
 如果max-age和Expires同时存在，则被Cache-Control的max-age覆盖。
+
+譬如：
+
+```js
+Cache-Control: max-age=3600, must-revalidate
+```
 
 为什么要加max-age？
 
@@ -1877,6 +1900,20 @@ Last-Modified和ETags请求的http报头一起使用，服务器首先产生Last
 
 - 服务器检查该Last-Modified或ETag，并判断出该页面自上次客户端请求之后还未被修改，
 直接返回响应304和一个空的响应体。
+
+总结下：
+
+- 浏览器端：If-Modified-Since，If-None-Match分别代表最后一次改动以及etag
+
+- 服务端响应：Last-Modified，ETag分别代表最后的变动时间以及当前文件的etag
+
+如果不符合，缓存就会失效
+
+还有Pragma头域 ，在HTTP/1.1协议中，它的含义和Cache- Control:no-cache相同。
+
+```html
+<MMETA HTTP-EQUIV="Pragma" CONTENT="no-cache">
+```
 
 ## SSL的握手流程
 
@@ -2013,3 +2050,9 @@ expires/cache-control 虽然是强缓存，
 
 如果在控制台里面选中了`disable cahce`则无论如何都会请求最新内容(304协商缓存、强缓存都无效)
 因为此时不会检查本地是否有缓存；请求头信息(request header)既没有If-Modified-Since也没有If-None-Match来让服务端判断。
+
+```html
+<meta http-equiv="Cache-Control"content="max-age=0"/>
+```
+
+这行代码的作用是不让页面缓存，每次访问必须到服务器读取

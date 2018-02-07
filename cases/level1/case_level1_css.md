@@ -445,6 +445,24 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
   table { border-collapse:collapse; border-spacing:0; }
 ```
 
+## input与textarea的区别
+
+input单行
+
+textarea多行
+
+input自闭合
+
+textarea结对
+
+input有value属性可以设置
+
+textarea直接在标签间的文本设置（但是可以获取value）
+
+textarea有一些row、col指定大小
+
+input有Maxlength之类的
+
 ## 经常遇到的浏览器的兼容性有哪些？原因以及解决方法是什么？常用hack技巧？
 
 png24位的图片在IE6浏览器上出现背景，解决方案是做成png8

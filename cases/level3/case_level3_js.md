@@ -570,3 +570,16 @@ setTimeout('start("123")', 1);
 // 没有任何效果，但也不会报错（因为确实存在window['start']这个引用）
 setTimeout('start', 1);
 ```
+
+## es5如何实现super关键字
+
+首先了解super的一些关键点：
+
+- super关键字只能在class内部使用，外部直接调用就会出错（原因是根本不知道父类的构造函数是哪个）
+
+- super本质上就是借用构造函数的一种表现形式
+
+
+构造函数中的`super()`本质是一个语法糖。作用是借用父类的构造函数。
+
+`siper.xx()`的作用是通过`[[prototype]]`回溯到父类的原型方法（或静态方法），然后用`parent.fun.apply(this, argument)`调用之类的
