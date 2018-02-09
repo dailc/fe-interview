@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>最小的k个数</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入n个整数，找出其中最小的K个数。
+             * 
+             * 例如输入4,5,1,6,2,7,3,8这8个数字，则最小的4个数字是1,2,3,4
+             * 
+             * 思路：
+             * 1.快排思想，找到第k个位置（前面是比k位置小的，后面是比k位置大的）
+             * 2.堆排（最大堆）
+             * 
+             * 注意，如果要求输出有序的话，堆排不适合
+             * 
+             * http://blog.csdn.net/liuguangqiang/article/details/52210239
+             */
+            function GetLeastNumbers_Solution(input, k) {
+                const len = k;
+                const maxHeap = new Array(len);
+
+                // 初始化堆
+                for (let i = 0; i < len; i++) {
+                    maxHeap[i] = input[i];
+                }
+                // 将初始化的堆调整为最大堆
+                for (let i = ~~((len - 1) / 2); i >= 0; i--) {
+                    adjustHeap(maxHeap, i);
+                }
+
+                // 遍历初始数组不断调整最大堆
+                const lenInput = input.length;
+
+                for (let i = k; i < lenInput; i++) {
+                    if (maxHeap[0] > input[i]) {
+                        maxHeap[0] = input[i];
+                        adjustHeap(maxHeap, 0);
+                    }
+                }
+
+                const res = [];
+
+                for (let i = 0; i < len; i++) {
+                    res.push(maxHeap[i]);
+                }
+
+                return res;
+            }
+
+            function adjustHeap(maxHeap, i) {
+                const len = maxHeap.length;
+                // i的左孩子节点序号 
+                const lchild = 2 * i + 1;
+                // i的右孩子节点序号
+                const rchild = 2 * i + 1;
+                let index = i;
+
+                if (index <= ~~((len - 1) / 2)) {
+                    // 寻找子节点中最大的节点
+                    if (lchild < len && maxHeap[index] < maxHeap[lchild]) {
+                        index = lchild;
+                    }
+                    if (rchild < len && maxHeap[index] < maxHeap[rchild]) {
+                        index = rchild;
+                    }
+
+                    if (i !== index) {
+                        // 将节点与最大的子节点交换
+                        const tmp = maxHeap[index];
+
+                        maxHeap[index] = maxHeap[i];
+                        maxHeap[i] = tmp;
+
+                        // 交换后，子树可能不满足最大推，递归调整。
+                        adjustHeap(maxHeap, index);
+                    }
+                }
+            }
+
+            function GetLeastNumbers_Solution2(input, k) {
+                let start = 0;
+                let end = input.length - 1;
+                let index = partition(input, start, end);
+
+                // 一直循环直到找到第k个位置正确的数。
+                while (index !== k - 1) {
+                    if (index > k - 1) {
+                        end = index - 1;
+                        index = partition(input, start, end);
+                    } else {
+                        start = index + 1;
+                        index = partition(input, start, end);
+                    }
+                }
+
+                const res = [];
+
+                for (let i = 0; i < k; i++) {
+                    res.push(input[i]);
+                }
+
+                return res;
+            }
+            
+            // 这个分区算法可以确保前start数量是已经排序的
+            function partition(input, start, end) {
+                const tmp = input[start];
+
+                while (start < end) {
+                    while (start < end && input[end] >= tmp) {
+                        end--;
+                    }
+                    input[start] = input[end];
+                    while (start < end && tmp >= input[start]) {
+                        start++;
+                    }
+                    input[end] = input[start];
+                }
+
+                input[start] = tmp;
+
+                return start;
+            }
+
+            function GetLeastNumbers_Solution3(input, k) {
+                const res = quickSort(input);
+
+                return res.length >= k ? res.slice(0, k) : [];
+            }
+
+            function quickSort(arr) {
+                if (!arr || !arr.length) {
+                    return [];
+                }
+
+                const len = arr.length;
+                const midIndex = ~~(len / 2);
+                const mid = arr[midIndex];
+                const left = [];
+                const right = [];
+
+                for (let i = 0; i < len; i++) {
+                    if (i === midIndex) {
+                        continue;
+                    }
+                    if (arr[i] > mid) {
+                        right.push(arr[i]);
+                    } else {
+                        left.push(arr[i]);
+                    }
+                }
+
+                return quickSort(left).concat([mid]).concat(quickSort(right));
+            }
+
+            const arr = [4, 5, 1, 6, 2, 7, 3, 8];
+
+            console.log(GetLeastNumbers_Solution3(arr, 1));
+            console.log(GetLeastNumbers_Solution3(arr, 3));
+            console.log(GetLeastNumbers_Solution3(arr, 5));
+
+            console.log('打印arr看看是否有序：');
+            console.log(arr);
+        </script>
+    </body>
+
+</html>

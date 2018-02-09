@@ -583,3 +583,89 @@ setTimeout('start', 1);
 构造函数中的`super()`本质是一个语法糖。作用是借用父类的构造函数。
 
 `siper.xx()`的作用是通过`[[prototype]]`回溯到父类的原型方法（或静态方法），然后用`parent.fun.apply(this, argument)`调用之类的
+
+## es6的proxy与reflect
+
+- proxy对目标对象的属性读取、设置，亦或函数调用等操作进行拦截（处理）
+
+它的操作包括（get、set、propKey in proxy（has）、deleteProperty、defineProperty、for（enumerate）、
+construct、getOwnPropertyDescriptor、getPrototypeOf、isExtensible、ownKeys、preventExtensions、setPrototypeOf）等
+
+使用：
+
+```js
+let proxy = new Proxy(target,handle)
+```
+
+每次target有变动都会通知handle，这里注意，handle内部必须实现若干对应的方法才能接收到拦截，
+而且返回的proxy相当于是target的浅拷贝
+
+```js
+let target = { _prop: 'foo', prop: 'foo' };
+let proxy = new Proxy(target, handler);
+
+proxy._prop = 'bar';
+target._attr = 'new'
+console.log(target._prop) // 'bar'
+console.log(proxy._attr) //'new'
+```
+
+```js
+let handler = {
+    get(target, key) {
+        return target[key]
+    },
+    set(target, key, value) {
+        if (key === 'age') {
+            // 这样就只有age改变时才会生效
+            target[key] = value > 0 && value < 100 ? value: 0
+        }
+        
+        console.log(target[key]);
+        return true; //必须有返回值
+    }
+};
+
+let target = {};
+let proxy = new Proxy(target, handler);
+proxy.age = 22; //22
+```
+
+- Reflect与ES5的Object有点类似，包含了对象语言内部的方法
+
+Proxy相当于去修改设置对象的属性行为，而Reflect则是获取对象的这些行为。
+
+和proxy类似，也有若干静态方法，譬如
+
+```js
+Reflect.apply
+Reflect.construct
+Reflect.defineProperty
+Reflect.deleteProperty
+Reflect.enumerate // 废弃的
+Reflect.get
+Reflect.getOwnPropertyDescriptor
+Reflect.getPrototypeOf
+Reflect.has
+Reflect.isExtensible
+Reflect.ownKeys
+Reflect.preventExtensions
+Reflect.set
+Reflect.setPrototypeOf
+```
+
+注意，`Reflect.call`是不存在的，目前只有上述几种方法（20180208）
+
+譬如，可以这样用：
+
+```js
+Reflect.apply(fn, obj, [])
+```
+
+这个的作用等价于
+
+```js
+fn.apply(obj, []);
+// 或
+Function.prototype.apply.call(fn, obj, []);
+```

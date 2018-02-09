@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>实现事件监听代理</title>
+        <style>
+            .grandfather {
+                width: 100%;
+                height: 300px;
+                background: #7FFF00;
+            }
+            .parent {
+                width: 60%;
+                height: 200px;
+                background: #38ADFF;
+            }
+            .child {
+                width: 50px;
+                height: 50px;
+                background: red;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="grandfather">
+            	<div class="parent">
+                   <div class="child2 child ">
+                    hello world!
+                   </div>
+            </div>
+        </div>
+        
+        <script>
+            'use strict';
+            
+            /**
+             * 绑定某个dom的事件，可以选择孩子节点的特定选择器
+             * 核心原理是冒泡机制
+             * 
+             * 注意：
+             * e.currentTarget指向绑定的dom，但是如果log打印e，currentTarget会显示null（快照的关系）
+             * e.path可以快速判断层级
+             */
+            
+            function delegate(dom, eventName, selector, callback) {
+                if (!eventName || !callback) {
+                    return;
+                }
+                if (typeof dom === 'string') {
+                    dom = document.querySelector(dom);
+                }
+                let selectorPath;
+                
+                
+                dom.addEventListener(eventName, function(e) {
+                    if (selector) {
+                        // 如果有selector，要进行分析，以空格分开
+                        // 譬如：['.parent', '.child.child2']
+                        selectorPath = selector.split(' ');
+                    }
+                    
+                    if (!selectorPath) {
+                        // 没有选择器，代表帮到了自身，直接回调
+                        callback && callback.apply(this, arguments);
+                    } else {
+                        // 进行选择器过滤
+                        const pathArr = e.path.map((dom) => {
+                            return {
+                                className: dom.className,
+                                tag: dom.tagName
+                            };
+                        });
+                        
+                        const len = pathArr.length;
+                        let lastSelector = selectorPath.pop();
+                        
+                        for (let i = 0; i < len; i++) {
+                            // 暂时只进行一个class selector的判断
+                            if (lastSelector && pathArr[i].className && pathArr[i].className.indexOf(lastSelector.substr(1)) !== -1) {
+                                lastSelector = selectorPath.pop();
+                                continue;
+                            }
+                        }
+                        
+                        if (!lastSelector && !selectorPath.length) {
+                            // 选择器过滤完毕
+                            callback && callback.apply(this, arguments);
+                        }
+                    }
+                });
+            }
+            
+            delegate('.grandfather', 'click', '.parent .child', function() {
+                console.log('.parent .child：捕获到点击：' + this.innerHTML);
+            });
+            
+        </script>
+    </body>
+
+</html>

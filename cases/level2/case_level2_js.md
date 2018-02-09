@@ -2056,3 +2056,100 @@ expires/cache-control 虽然是强缓存，
 ```
 
 这行代码的作用是不让页面缓存，每次访问必须到服务器读取
+
+## 隐式转换
+
+隐式转换是按ECMAScript规范定义来进行的，但是规则很多，不好记，最好从实践出发，
+如果下述示例都知道，应该掌握的差不多了（参考了github文章，在refer的参考来源）
+
+```js
+// []的tostring会调用元素的tostring然后拼接，空元素默认为空字符串
+[].toString(); // 空字符串
+
+// 转为字符串然后拼接
+[1, 2].toString(); // 1,2
+
+// 子元素转为字符串然后拼接
+[{}, {}].toString(); // [object Object],[object Object]
+
+// 默认返回它本身
+[].valueOf(); // []
+
+// valueof如果不是原始值就会去找tostring，然后转为数字，所以是0
++[]; // 0
+
+// valueof不为原始值，转为字符串为1，然后转数字
++[1]; // 1
+
+// valueof不为原始值，转为字符串为1,2，然后转数字NaN
++[1, 2]; // NaN
+
+// 默认返回它本身
+{}.valueOf(); // {}
+
+// 分别是原始值转字符串让拼接
+{}+{}; // [object Object][object Object]
+
+// 隐式转换时[]转成了字符串
+{}+[]; // [object Object]
+
+// 隐式转换时[]转成了字符串
+[]+{}; // [object Object]
+
+// 隐式转换时{}转成了字符串
+{}+1; // [object Object]1
+
+// 隐式转换时{}转成了字符串
+({}+1); // [object Object]1
+
+// 隐式转换时{}转成了字符串
+1+{}; // 1[object Object]
+
+// 隐式转换时[]valueof不为原始值，所以转成了字符串，然后再转数字，为0
+[]+1; // 1
+
+// 隐式转换时[]valueof不为原始值，所以转成了字符串，然后再转数字，为0
+1+[]; // 1
+
+// 隐式转换时[]valueof不为原始值，所以转成了字符串，然后再转数字，为0
+1-[]; // 1
+
+// {}会调用valueof，valueof不为原始值后再调用tostring，然后由于无法转换成数字（[object Object]），所以NAN
++{}; // NAN
+
+//先接以上（因为-号会先尽量转为数字），NAN，然后NAN和任何数都是NAN
+1-{}; // NaN
+
+// !{}为false，然后转为数字计算
+1-!{}; // 1
+
+// !{}为false，然后转为数字计算
+1+!{}; // 1
+
+// 字符串拼接
+1+"2"+"2"; // 122
+
+// +"2"的优先级高，然后数字的1+2为3，然后再字符串拼接
+1+ +"2"+"2"; // 32
+
+1++"2"+"2"; // 会报错：Invalid left-hand side expression in postfix operation
+
+// 先计算![]为false，然后[]和false比，隐式转换成数字比较，因此相等（都是0）
+[]==![]; // true
+
+// 因为类型不匹配，所以直接就是false
+[]===![]; // false
+
+const obj = [];
+
+obj.valueOf = function() {
+    return 22;
+};
+
+obj.toString = function() {
+    return '11';
+};
+
+// 转为数字时，会优先valueOf，所以是22
+console.log(+obj); // 22
+```

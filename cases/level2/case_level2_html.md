@@ -183,7 +183,7 @@ html5离线缓存是基于.appcache文件的缓存机制（不是存储技术）
 http://yanhaijing.com/html/2014/12/28/html5-manifest/
 ```
 
-很少有使用这个，因为不好用。
+为什么很少有使用这个？因为不好用。
 
 它的优点：
 
