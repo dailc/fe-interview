@@ -2040,6 +2040,8 @@ JSON.stringify(json, function(key, value) {
 （`例如 nodejs: cryto.createHash('sha1')`）生成的内容摘要字符对比，相同则直接返回`304`，
 否则给返回头(`response header`)添加`etag`属性为当前的内容摘要字符，并且返回内容。
 
+ETag的值是服务端对文件的索引节，大小和最后修改时间进行Hash后得到的。
+
 - 强缓存（也就是上述的from cache）
 
 如果设置了`Expires`(XX时间过期)或者`Cache-Control（http1.0不支持）`(经历XX时间后过期)且没有过期，命中`cache`的情况下，

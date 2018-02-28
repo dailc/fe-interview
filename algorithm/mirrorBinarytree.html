@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>二叉树的镜像</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 操作给定的二叉树，将其变换为源二叉树的镜像。
+             * 
+             * 思路：递归
+             */
+            function mirrorBinary(root) {
+                if (!root) {
+                    return root;
+                }
+                [root.left, root.right] = [root.right, root.left];
+                
+                mirrorBinary(root.left);
+                mirrorBinary(root.right);
+            }
+
+            function TreeNode(x) {
+                this.val = x;
+                this.left = null;
+                this.right = null;
+            }
+            
+            const tree = new TreeNode(1);
+            
+            tree.left = new TreeNode(2);
+            tree.right = new TreeNode(3);
+            
+            mirrorBinary(tree)
+
+            console.log(tree);
+        </script>
+    </body>
+
+</html>
