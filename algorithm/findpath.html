@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>二叉树中和为某一值的路径</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。
+             * 路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
+             * 
+             *      1
+             *   2     3
+             * 6  7  5  6
+             * 
+             * 思路：深度遍历
+             */
+            function FindPath(root, expectNumber) {
+                if (!root) {
+                    return [];
+                }
+                const res = [];
+                
+                dfs(root, expectNumber, res, []);
+                
+                return res;
+            }
+            function dfs(root, expectNumber, res, path) {
+                if (!root) {
+                    return;
+                }
+                path.push(root.val);
+                
+                if (!root.left && !root.right) {
+                    if (expectNumber === root.val) {
+                        // 如果有路径
+                        res.push(path.slice(0));
+                    }
+                }
+                
+                expectNumber -= root.val;
+                
+                dfs(root.left, expectNumber, res, path);
+                dfs(root.right, expectNumber, res, path);
+                
+                path.pop();
+            }
+
+            function TreeNode(x) {
+                this.val = x;
+                this.left = null;
+                this.right = null;
+            }
+            
+            const tree = new TreeNode(1);
+            
+            const treeLeft = new TreeNode(2);
+            const treeRight = new TreeNode(3);
+            
+            tree.left = treeLeft;
+            tree.right = treeRight;
+            treeLeft.left = new TreeNode(6);
+            treeLeft.right = new TreeNode(7);
+            treeRight.left = new TreeNode(5);
+            treeRight.right = new TreeNode(6);
+            
+            
+
+            console.log(FindPath(tree, 9));
+        </script>
+    </body>
+
+</html>

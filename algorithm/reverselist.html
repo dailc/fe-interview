@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>反转链表</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一个链表，反转链表后，输出链表的所有元素。
+             * 
+             * 一次遍历即可
+             */
+            function ReverseList(pHead) {
+                let prev = null;
+                let tmp = pHead;
+                
+                while (tmp) {
+                    const next = tmp.next;
+                    
+                    tmp.next = prev;
+                    prev = tmp;
+                    tmp = next;
+                }
+                
+                // 确保最后一个prev就是头结点
+                return prev;
+            }
+            
+            function ListNode(x) {
+                this.val = x;
+                this.next = null;
+            }
+            
+            const list = new ListNode(1);
+            const list2 = new ListNode(2);
+            const list3 = new ListNode(3);
+            const list4 = new ListNode(4);
+            const list5 = new ListNode(5);
+            const list6 = new ListNode(6);
+            
+            list.next = list2;
+            list2.next = list3;
+            list3.next = list4;
+            list4.next = list5;
+            list5.next = list6;
+            
+            console.log(ReverseList(list));
+        </script>
+    </body>
+
+</html>

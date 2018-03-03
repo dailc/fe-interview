@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>两个栈实现队列</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。
+             * 
+             * 栈：先进后出
+             * 队列：先进先出
+             * 
+             * 思路：
+             * stack2专门负责pop
+             * 如果stack2没有内容，
+             * 则将stack1中的内容依次pop出，push进stack2中，然后再pop
+             * 这样可以确保顺序正确
+             */
+            
+            const stack1 = [];
+            const stack2 = [];
+            
+            function push(node) {
+                stack1.push(node);
+            }
+            function pop() {
+                if (stack2.length) {
+                    return stack2.pop();
+                }
+                if (!stack1.length) {
+                    return null;
+                }
+                
+                while (stack1.length) {
+                    stack2.push(stack1.pop());
+                }
+                
+                return stack2.pop();
+            }
+        </script>
+    </body>
+
+</html>

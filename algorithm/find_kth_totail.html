@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>链表中倒数第k个节点</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一个链表，输出该链表中倒数第k个结点。
+             * 
+             * 1->2->3->4->5->6
+             * 
+             * 思路：
+             * 双指针p和q
+             * p指针先跑k-1个节点
+             * 然后p和q指针同时跑（跑len - (k - 1)）
+             * 
+             * 当p指针跑到最后时，q指针就是倒数的第k个节点
+             * 譬如6个节点，倒数第3，正数第4
+             * 
+             * 或者利用辅助栈，添加所有的，然后pop
+             */
+            function FindKthToTail2(head, k) {
+                if (!head || k < 0) {
+                    return null;
+                }
+                
+                let p = head;
+                let q = head;
+                // 记录节点的个数
+                let count = 0;
+                // 剩余的步数
+                let step = k;
+                
+                // p指针先跑，并且记录节点数，当p指针跑了k-1个节点后，p和q指针开始同时跑
+                // 当p指针跑到最后时，q所指指针就是倒数第k个节点
+                while (p) {
+                    p = p.next;
+                    count++;
+                    if (step < 1) {
+                        // p和q同时跑
+                        q = q.next;
+                    }
+                    step--;
+                }
+                
+                // 如果节点个数小于所求的倒数第k个节点，则返回空
+                if (count < k) {
+                    return null;
+                }
+                
+                return q;
+            }
+            
+            function FindKthToTail(head, k) {
+                if (!head || k < 0) {
+                    return null;
+                }
+                
+                const stack = [];
+                
+                while (head) {
+                    stack.push(head);
+                    head = head.next;
+                }
+                
+                return stack[stack.length - k];
+            }
+
+            function ListNode(x) {
+                this.val = x;
+                this.next = null;
+            }
+            
+            const list = new ListNode(1);
+            const list2 = new ListNode(2);
+            const list3 = new ListNode(3);
+            const list4 = new ListNode(4);
+            const list5 = new ListNode(5);
+            const list6 = new ListNode(6);
+            
+            list.next = list2;
+            list2.next = list3;
+            list3.next = list4;
+            list4.next = list5;
+            list5.next = list6;
+            
+            console.log(FindKthToTail2(list, 2));
+        </script>
+    </body>
+
+</html>
