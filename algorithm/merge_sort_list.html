@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>合并两个排序的列表</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入两个单调递增的链表，输出两个链表合成后的链表，当然我们需要合成后的链表满足单调不减规则。
+             * 
+             * 思路：
+             * 1.循环遍历
+             * 2.递归
+             */
+            function Merge(pHead1, pHead2) {
+                if (!pHead1) {
+                    return pHead2;
+                }
+                if (!pHead2) {
+                    return pHead1;
+                }
+                let newHead;
+                let curr;
+                
+                if (pHead1.val < pHead2.val) {
+                    newHead = pHead1;
+                    pHead1 = pHead1.next;
+                } else {
+                    newHead = pHead2;
+                    pHead2 = pHead2.next;
+                }
+                
+                curr = newHead;
+                
+                while (pHead1 && pHead2) {
+                    if (pHead1.val < pHead2.val) {
+                        curr.next = pHead1;
+                        pHead1 = pHead1.next;
+                    } else {
+                        curr.next = pHead2;
+                        pHead2 = pHead2.next;
+                    }
+                    
+                    curr = curr.next;
+               }
+                
+                if (pHead1) {
+                    curr.next = pHead1;
+                }
+                
+                if (pHead2) {
+                    curr.next = pHead2;
+                }
+                
+                return newHead;i
+            }
+            
+            function Merge2(pHead1, pHead2) {
+                if (!pHead1) {
+                    return pHead2;
+                }
+                if (!pHead2) {
+                    return pHead1;
+                }
+                let newHead;
+                
+                if (pHead1.val < pHead2.val) {
+                    newHead = pHead1;
+                    newHead.next = Merge2(pHead1.next, pHead2);
+                } else {
+                    newHead = pHead2;
+                    newHead.next = Merge2(pHead1, pHead2.next);
+                }
+                
+                return newHead;
+            }
+            
+            function ListNode(x) {
+                this.val = x;
+                this.next = null;
+            }
+            
+            const list = new ListNode(1);
+            const list2 = new ListNode(2);
+            const list3 = new ListNode(3);
+            const list4 = new ListNode(4);
+            const list5 = new ListNode(5);
+            const list6 = new ListNode(6);
+            
+            list.next = list3;
+            list3.next = list5;
+            
+            list2.next = list4;
+            list4.next = list6;
+            
+            console.log(Merge(list, list2));
+        </script>
+    </body>
+
+</html>

@@ -698,3 +698,15 @@ dom子字元素持有引用不置空也容易造成
 ## for-of
 
 for-of里可以break，但是不能return;
+
+## getBoundingClientRect与offset的区别
+
+getBoundingClientRect()是用来获取页面元素的位置的方法.
+这个方法最终返回的是一个矩形对象,
+包括四个属性:left top right bottom
+
+**譬如top指的是距离可视区域顶部的距离**
+
+而后者offsetTop则包括滚动条卷起的部分
+
+**注意，是相对其祖先元素，如果要计算绝对的坐标，需要将祖先元素的offert也计算出**
