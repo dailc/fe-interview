@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>丛上往下打印二叉树</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 从上往下打印出二叉树的每个节点，同层节点从左至右打印。
+             * 
+             * 如：
+             *     1
+             *   2   3
+             *  4 5 6 7
+             * 打印出为：
+             * 1234567
+             * 
+             * 思路：
+             * 利用队列实现
+             */
+            function PrintFromTopToBottom(root) {
+                if (!root) {
+                    return [];
+                }
+                const stack = [];
+                const res = [];
+                
+                stack.unshift(root);
+                
+                while (stack.length) {
+                    const node = stack.pop();
+                    
+                    res.push(node.val);
+                    
+                    if (node.left) {
+                        stack.unshift(node.left);
+                    }
+                    
+                    if (node.right) {
+                        stack.unshift(node.right);
+                    }
+                }
+                
+                return res;
+            }
+            
+            function TreeNode(x) {
+                this.val = x;
+                this.left = null;
+                this.right = null;
+            }
+            
+            const tree = new TreeNode(1);
+            
+            const left = new TreeNode(2);
+            const right = new TreeNode(3);
+            
+            tree.left = left;
+            tree.right = right;
+            
+            left.left = new TreeNode(4);
+            left.right = new TreeNode(5);
+            right.left = new TreeNode(6);
+            right.right = new TreeNode(7);
+
+            console.log(PrintFromTopToBottom(tree));
+        </script>
+    </body>
+
+</html>

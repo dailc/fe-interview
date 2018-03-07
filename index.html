@@ -11,17 +11,7 @@
     <body>
 
         <script>
-var baz = 200;
-var bar = {
-    baz: 100,
-    foo: function() {
-        console.log(this.baz);
-    }
-};
-var foo = bar.foo;
 
-foo(); // 200，严格模式中会报错，Cannot read property 'baz' of undefined
-bar.foo(); // 100
         </script>
     </body>
 
