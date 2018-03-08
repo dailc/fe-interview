@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>二叉搜索树转双向链表</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+             * 
+             * 二叉搜索树：
+             * 若它的左子树不空，则左子树上所有结点的值均小于它的根结点的值；
+             * 若它的右子树不空，则右子树上所有结点的值均大于它的根结点的值
+             * 
+             * 思路：
+             * 先中序遍历，然后依次修改引用
+             */
+            function Convert(pRootOfTree) {
+                if (!pRootOfTree) {
+                    return null;
+                }
+                // 中序遍历
+                const inorderStack = inorderTraversal(pRootOfTree);
+                const len = inorderStack.length;
+                
+                // 然后依次从左到右双向赋值
+                inorderStack[0].left = null;
+                inorderStack[len - 1].right = null;
+                
+                for (let i = 1; i < len; i++) {
+                    inorderStack[i - 1].right = inorderStack[i];
+                    inorderStack[i].left = inorderStack[i - 1];
+                }
+                
+                return inorderStack[0];
+            }
+            
+            function inorderTraversal (root) {
+                if (!root) {
+                    return [];
+                }
+                const stack = [];
+                const res = [];
+                let node = root;
+                
+                while (node || stack.length) {
+                    while (node) {
+                        stack.push(node);
+                        node = node.left;
+                    }
+                    node = stack.pop();
+                    res.push(node);
+                    
+                    if (node) {
+                        node = node.right;
+                    }
+                }
+                
+                return res;
+            }
+
+            function TreeNode(x) {
+                this.val = x;
+                this.left = null;
+                this.right = null;
+            }
+            
+            const tree = new TreeNode(4);
+            const treeLeft = new TreeNode(2);
+            const treeRight = new TreeNode(6);
+            
+            tree.left = treeLeft;
+            tree.right = treeRight;
+            treeLeft.left = new TreeNode(1);
+            treeLeft.right = new TreeNode(3);
+            treeRight.left = new TreeNode(5);
+            treeRight.right = new TreeNode(7);
+
+            console.log(Convert(tree));
+        </script>
+    </body>
+
+</html>

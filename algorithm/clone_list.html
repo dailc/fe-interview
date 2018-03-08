@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>复杂链表的复制</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针指向任意一个节点），
+             * 返回结果为复制后复杂链表的head。
+             * （注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）
+             * 
+             * 节点值是否可以相同？默认为不相同
+             * 
+             * 思路：
+             * 
+             */
+            function Clone(pHead) {
+                if (!pHead) {
+                    return null;
+                }
+                const nodeMap = {};
+                const prev = {};
+                let tmp = prev;
+                
+                while (pHead && tmp) {
+                    let node;
+                    
+                    node = cloneNode(pHead, nodeMap);
+                    node.next = cloneNode(pHead.next, nodeMap);
+                    node.random = cloneNode(pHead.random, nodeMap);
+                    
+                    tmp.next = node;
+                    tmp = tmp.next;
+                    pHead = pHead.next;
+                }
+                
+                return prev.next;
+            }
+            
+            function cloneNode(node, nodeMap) {
+                if (!node) {
+                    return null;
+                }
+                const label = node.label;
+                
+                if (!nodeMap[label]) {
+                    nodeMap[label] = new RandomListNode(label);
+                }
+                
+                return nodeMap[label];
+            }
+
+            function RandomListNode(x) {
+                this.label = x;
+                this.next = null;
+                this.random = null;
+            }
+
+            const list = new RandomListNode(1);
+            const list2 = new RandomListNode(2);
+            const list3 = new RandomListNode(3);
+            const list4 = new RandomListNode(4);
+            const list5 = new RandomListNode(5);
+            const list6 = new RandomListNode(6);
+
+            list.next = list2;
+            list2.next = list3;
+            list3.next = list4;
+            list4.next = list5;
+            list5.next = list6;
+            
+            list.random = list3;
+            list2.random = list4;
+            list3.random = list6;
+
+            console.log(Clone(list));
+        </script>
+    </body>
+
+</html>
