@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-        <title>二维数组中的查找</title>
+        <title>连续子数组的最大和</title>
     </head>
 
     <body>
@@ -12,44 +12,40 @@
             'use strict';
 
             /**
-             * 在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。
-             * 请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
+             * HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天测试组开完会后,他又发话了:
+             * 在古老的一维模式识别中,常常需要计算连续子向量的最大和,当向量全为正数的时候,问题很好解决。
+             * 但是,如果向量中包含负数,是否应该包含某个负数,并期望旁边的正数会弥补它呢？
              * 
-             * 思路：择从左下角开始搜寻，
-             * 然后不满足就可以弃掉对应的行或者列
+             * 例如:{6,-3,-2,7,-15,1,2,2},连续子向量的最大和为8(从第0个开始,到第3个为止)。
+             * 你会不会被他忽悠住？(子向量的长度至少是1)
+             * 
+             * 思路：
+             * 记录一个最大值，
+             * 遍历，每次和小于0时就重置sum
+             * 每次sum改变的时候，计算是否最大值
              */
-            function Find(target, array) {
-                if (!array || !array.length || !array[0] || !array[0].length) {
-                    return false;
+            function FindGreatestSumOfSubArray(array) {
+                if (!array || !array.length) {
+                    return 0;
                 }
-                const arr = array;
-                const rows = arr.length;
-                const cols = arr[0].length;
-                
-                let i;
-                let j;
-                
-                for (i = rows - 1, j = 0; i >= 0 && j < cols;) {
-                    if (target === arr[i][j]) {
-                        return true;
-                    } else if (target < arr[i][j]) {
-                        i--;
-                    } else if (target > arr[i][j]) {
-                        j++;
+                const len = array.length;
+                let max = array[0];
+                let sum = array[0];
+
+                for (let i = 1; i < len; i++) {
+                    if (sum < 0) {
+                        sum = 0;
                     }
+                    sum += array[i];
+
+                    max = Math.max(sum, max);
                 }
-                
-                return false;
+
+                return max;
             }
-            
-            
-            
-            console.log(Find(11, [
-                [1, 2, 3, 4, 5],
-                [2, 3, 4, 5, 6],
-                [3, 4, 5, 6, 7],
-                [4, 5, 6, 7, 8]
-            ]));
+
+            console.log(FindGreatestSumOfSubArray([6, -3, -2, 7, -15, 1, 2, 2]));
+            console.log(FindGreatestSumOfSubArray([-2, -8, -1, -5, -9]));
         </script>
     </body>
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>数值的整数次方</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 实现一个power功能
+             * 不需要考虑大数问题
+             * 
+             * 循环乘法由于时间复杂度过高，不予考虑
+             */
+            function power(base, exponent) {
+                // 直接取整
+                exponent = ~~exponent;
+                if (exponent === 0) {
+                    return 1;
+                }
+                if (exponent === 1 || base === 0) {
+                    return base;
+                }
+                const halfPower = power(base, exponent >> 1);
+                
+                if (exponent & 1) {
+                    // 如果指数是奇数
+                    return  halfPower * halfPower * base;
+                }
+                
+                return halfPower * halfPower;
+            }
+            
+            
+            console.log(power(2, 0));
+            console.log(power(2, 1));
+            console.log(power(2, 2));
+            console.log(power(2, 3));
+            console.log(power(2, 4));
+            
+            console.log(power(-2, 0));
+            console.log(power(-2, 1));
+            console.log(power(-2, 2));
+            console.log(power(-2, 3));
+            console.log(power(-2, 4));
+        </script>
+    </body>
+
+</html>
