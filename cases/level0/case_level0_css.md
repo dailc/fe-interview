@@ -6,7 +6,7 @@
 
 `width = content`
 
-2.ie盒模型(board盒模型)
+2.ie盒模型(border盒模型)
 
 `width = content + padding + border + margin`
 
@@ -20,7 +20,7 @@
 这种方案虽然是相对值，但是有一个缺点，改变一个节点的字体大小，会改变它所有的子节点的计算
 
 - rem和em类似，不过不同之处在于它是基于根节点的字体大小计算的(html节点-是html不是body)，
-这样改变任意节点都不会造成意外效果，用户更好
+这样改变任意节点都不会造成意外效果
 
 注意：在默认情况下，任意浏览器的默认字体高都是16px
 
@@ -54,7 +54,7 @@ body #content .data img:hover
 ```js
 .parent span.hello
 
-.parent .hello
+.parent span
 ```
 
 上面的权重分别是：`21`与`11`（会计算所有的生效选择符号）

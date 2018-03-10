@@ -201,6 +201,8 @@ https://segmentfault.com/a/1190000009545742
 
 https://segmentfault.com/q/1010000000694623
 
+https://segmentfault.com/a/1190000004246731
+
 ### es6的proxy与reflect
 
 https://segmentfault.com/a/1190000008326517
