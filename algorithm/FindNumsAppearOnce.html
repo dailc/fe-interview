@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>数组中只出现一次的数字</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 一个整型数组里除了两个数字之外，其他的数字都出现了两次。
+             * 请写程序找出这两个只出现一次的数字。
+             * 
+             * 思路：
+             * 先异或，得到一个数(`a`与`b`的异或)
+             * 去这个数任意一个为`1`的位(`diff &= -diff`可以取到)，与数组的元素`&`，可以得到两个数组
+             * 然后两个数组分别求值
+             */
+            function FindNumsAppearOnce(array) {
+                if (!array || !array.length) {
+                    return [];
+                }
+                const len = array.length;
+                const ans = [0, 0];
+                let diff = 0;
+                
+                for (let i = 0; i < len; i++) {
+                    diff ^= array[i];
+                }
+                
+                // 取得一个1位
+                diff &= diff - 1;
+                
+                for (let i = 0; i < len; i++) {
+                    if (array[i] & diff) {
+                        ans[0] ^= array[i];
+                    } else {
+                        ans[1] ^= array[i];
+                    }
+                }
+                
+                return ans;
+            }
+            
+            function FindNumsAppearOnce2(array) {
+                if (!array || !array.length) {
+                    return [];
+                }
+                const len = array.length;
+                const res = [];
+                
+                for (let i = 0; i < len; i++) {
+                    if (array.indexOf(array[i]) === array.lastIndexOf(array[i])) {
+                        res.push(array[i]);
+                    }
+                }
+                
+                return res;
+            }
+            
+            console.log(FindNumsAppearOnce([1, 2, 3, 3]));
+            console.log(FindNumsAppearOnce([1, 2, 3, 3, 4, 4]));
+        </script>
+    </body>
+
+</html>
