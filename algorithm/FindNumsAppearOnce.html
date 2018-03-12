@@ -33,7 +33,7 @@
                 }
                 
                 // 取得一个1位
-                diff &= diff - 1;
+                diff &= -diff;
                 
                 for (let i = 0; i < len; i++) {
                     if (array[i] & diff) {
