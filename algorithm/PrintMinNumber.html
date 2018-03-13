@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>把数组排成最小的数</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+             * 例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+             * 
+             * 思路：
+             * 
+             * 方法1：进行sort排序（这样是基于字符串排序的，排序完后直接就是最小的）
+             * 方法2：求全排列
+             */
+            function PrintMinNumber(numbers) {
+                if (!numbers) {
+                    return 0;
+                }
+                numbers.sort(function (a, b) {
+                    // 关键的算法，ab小于ba才会让a排在前面，取最小
+                    return (a + '' + b) - (b + '' + a);
+                });
+                
+                return numbers.join('');
+            }
+
+            const arr = [3, 32, 321];
+
+            console.log(PrintMinNumber(arr));
+        </script>
+    </body>
+
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>二叉树的深度</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一棵二叉树，求该树的深度。
+             * 从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+             * 
+             * 思路：
+             * 深度遍历，每次遍历一条路径就开始比较，留住最大值
+             */
+            function TreeDepth2(pRoot) {
+                if (!pRoot) {
+                    return 0;
+                }
+                const res = [0];
+                
+                dfs(res, pRoot, 0);
+                
+                return res[0];
+            }
+            
+            function dfs(res, pRoot, depth) {
+                if (!pRoot) {
+                    return;
+                }
+                if (!pRoot.left && !pRoot.right) {
+                    // 找到最后一个子节点，判断最大深度
+                    if (depth + 1 > res[0]) {
+                        res[0] = depth + 1;
+                    }
+                    return;
+                }
+                dfs(res, pRoot.left, depth + 1);
+                dfs(res, pRoot.right, depth + 1);
+            }
+            
+            function TreeDepth(pRoot) {
+                if (!pRoot) {
+                    return 0;
+                }
+                const left = TreeDepth(pRoot.left);
+                const right = TreeDepth(pRoot.right);
+                
+                return Math.max(left, right) + 1;
+            }
+            
+            
+            function TreeNode(x) {
+                this.val = x;
+                this.left = null;
+                this.right = null;
+            }
+            
+            const tree = new TreeNode(1);
+            const treeLeft = new TreeNode(2);
+            const treeRight = new TreeNode(3);
+            
+            tree.left = treeLeft;
+            tree.right = treeRight;
+            treeLeft.left = new TreeNode(4);
+            treeLeft.right = new TreeNode(5);
+            treeRight.left = new TreeNode(6);
+            treeRight.right = new TreeNode(7);
+
+            console.log(TreeDepth(tree));
+        </script>
+    </body>
+
+</html>

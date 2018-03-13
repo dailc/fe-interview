@@ -1490,6 +1490,36 @@ say(); // hello,world!1
     （例如join查询），减少磁盘IO指尽量不使用文件系统作为缓存、减少读写文件次数等。
     程序优化永远要优化慢的部分，换语言是无法“优化”的。
     
+## http的无状态
+
+HTTP协议是无状态的，指的是协议对于事务处理没有记忆能力，服务器不知道客户端是什么状态
+
+也就是说，打开一个服务器上的网页和你之前打开这个服务器上的网页之间没有任何联系
+
+注意，**无状态不代表HTTP不能保持TCP连接，更不能代表HTTP使用的是UDP协议（无连接）**
+    
+## http的长连接与短连接
+
+首先，看看在tcp/ip层面的定义：
+
+- 长连接：一个tcp/ip连接上可以连续发送多个数据包，在tcp连接保持期间，如果没有数据包发送，需要双方发检测包以维持此连接，
+一般需要自己做在线维持（类似于心跳包）
+
+- 短连接：通信双方有数据交互时，就建立一个tcp连接，数据发送完成后，则断开此tcp连接
+
+在http层面：
+
+- http1.0中，默认使用的是短连接，也就是说，浏览器没进行一次http操作，就建立一次连接，任务结束就中断连接，
+譬如每一个静态资源请求时都是一个单独的连接
+
+- http1.1起，默认使用长连接，使用长连接会有这一行`Connection: keep-alive`，譬如，
+在长连接的情况下，当一个网页打开完成后，客户端和服务端之间用于传输http的tcp连接不会关闭，
+如果客户端再次访问这个服务器的页面，会继续使用这一条已经建立的连接，
+keep-alive不会永远保持，它有一个持续时间，一般在服务器中配置（如apache），
+另外长连接需要客户端和服务器都支持时才有效
+
+注意，长连接和http2.0的多路复用是不一样的（上述应该可以看出）
+
 ## http状态码有那些？分别代表是什么意思？
 
 - 简单版
@@ -2155,3 +2185,70 @@ obj.toString = function() {
 // 转为数字时，会优先valueOf，所以是22
 console.log(+obj); // 22
 ```
+
+## promise的顺序
+
+```js
+new Promise(resolve => {
+    console.log(1);
+    resolve(3);
+    Promise.resolve().then(()=> console.log(4))
+}).then(num => {
+    console.log(num)
+});
+console.log(2)
+```
+
+顺序是：
+
+```js
+1
+2
+4
+3
+```
+
+解析：
+
+```js
+总体顺序：
+宏任务->微任务->浏览器->下一轮宏任务
+
+同步输出1（promise的函数默认执行）
+mictask队列延后添加（在函数执行完毕后，resolve(3)-会在下一次then时生成一个新的promise，进入链式调用）
+Promise.resolve().then，mictask直接添加这个任务（顺序比下一次then时早）
+同步输出2
+
+执行mictask，
+里面依次是Promise.resolve().then，resolve对应的then
+```
+
+关键：
+
+- Promise.resolve生成一个解析特定值后的promise对象
+
+- 顺序为，先将Promise.resolve().then加入mictask，然后函数执行完毕后，then时才会将resolve转换为promise，加入mictask
+
+## addEventlistener的传入参数
+
+```js
+dom.addEventlistener('click', func, options, useCapture, wantsUntrusted);
+
+options包括：
+capture:  Boolean（表示 listener 会在该类型的事件捕获阶段传播到该 EventTarget 时触发）
+once:  Boolean（表示 listener 在添加之后最多只调用一次）
+passive: Boolean（表示 listener 永远不会调用 preventDefault()）
+
+useCapture：
+是否使用捕获事件，true为捕获，false为冒泡，默认冒泡
+
+wantsUntrusted：
+如果为 true , 则事件处理程序会接收网页自定义的事件（此参数只适用于 Gecko）
+```
+
+## 是否所有的dom事件都会冒泡
+
+并不是，譬如focus之类的就不会
+
+判断：每个 event 都有一个event.bubbles属性，可以知道它可否冒泡（W3C定义）
+

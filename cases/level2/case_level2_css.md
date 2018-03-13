@@ -597,3 +597,47 @@ meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-sca
 还有一种是页面上同时添加了滑动事件，如：`overflow：auto/scroll`等，就会出现这样的BUG：
 当滑动页面时，input框（fixed）就会掉下来，fixed属性失效。
 解决是使用iscroll等插件（不使用overflow：auto/scroll，iScroll内部是自己用的translate动画-低版本也是js模拟动态修改top）
+
+## 实现自适应父元素宽度的正方形
+
+注意要点：
+
+```js
+margin: 100%
+padding: 100%
+```
+
+都是基于父元素的`宽度`进行
+
+但是
+
+```js
+height: 100%
+```
+
+是基于父元素的`高度`进行，
+如果父元素高度不定，就相当于`auto`效果（缺省值）
+
+本题的实现：
+
+```html
+<div class="parent">
+    <div class="child">
+        
+    </div>
+</div>
+```
+
+```js
+.parent {
+    background: red;
+    width: 200px;
+    height: 400px;
+}
+            
+.child {
+    background: blue;
+    width: 100%;
+    padding-bottom: 100%;
+}
+```
