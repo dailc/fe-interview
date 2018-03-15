@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>丑数</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 把只包含因子2、3和5的数称作丑数（Ugly Number）。
+             * 例如6、8都是丑数，但14不是，因为它包含因子7。 
+             * 习惯上我们把1当做是第一个丑数。
+             * 
+             * 求按从小到大的顺序的第N个丑数。
+             * 
+             * 思路：
+             * 基于2，3，5的因子，依次往后推
+             */
+            function GetUglyNumber_Solution(index) {
+                if (!index || index < 0) {
+                    return 0;
+                }
+
+                const uglyNumbers = [1];
+                
+                let nextGulyNum = 1;
+                let multiply2 = 0;
+                let multiply3 = 0;
+                let multiply5 = 0;
+                
+                while (nextGulyNum < index) {
+                    const minVal = Math.min.call(
+                        null,
+                        uglyNumbers[multiply2] * 2,
+                        uglyNumbers[multiply3] * 3,
+                        uglyNumbers[multiply5] * 5
+                    );
+                    
+                    uglyNumbers[nextGulyNum] = minVal;
+                    
+                    // 更新2，3，5因子， <= 下一次要确保比这次的值大
+                    while (uglyNumbers[multiply2] * 2 <= minVal) {
+                        multiply2++;
+                    }
+                     while (uglyNumbers[multiply3] * 3 <= minVal) {
+                        multiply3++;
+                    }
+                      while (uglyNumbers[multiply5] * 5 <= minVal) {
+                        multiply5++;
+                    }
+                    
+                    nextGulyNum++;
+                }
+                
+                return uglyNumbers[nextGulyNum - 1];
+            }
+
+            console.log(GetUglyNumber_Solution(3));
+        </script>
+    </body>
+
+</html>

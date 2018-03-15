@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>二叉搜索树的后序遍历</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。
+             * 如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+             * 
+             * 二叉搜索树：
+             * 左侧节点一定会小于中间
+             * 右侧节点一定会大于中间
+             * 
+             * 譬如一个搜索树的后序遍历是：
+             * 1,3,2,5,7,6,4
+             * 
+             * 思路：
+             * 递归，先找到根节点，
+             * 然后依次递归判断左侧和右侧树
+             */
+            function VerifySquenceOfBST(sequence) {
+                if (!sequence || !sequence.length) {
+                    return false;
+                }
+                
+                // 判断[0, len - 1]之间是否符合
+                return VerifySquenceOfBSTWithIndex(sequence, 0, sequence.length - 1);
+            }
+            
+            function VerifySquenceOfBSTWithIndex(sequence, begin, end) {
+                if (!sequence || !sequence.length) {
+                    return false;
+                }
+                if (end <= begin) {
+                    return true;
+                }
+                // 找到根节点，end是根节点
+                const root = sequence[end];
+                // 左右子树的分割index
+                let partitionIndex = begin;
+                
+                while (partitionIndex < end) {
+                    if (sequence[partitionIndex] > root) {
+                        // 如果已经是右树节点了（右树才大于根节点）
+                        break;
+                    }
+                    partitionIndex++;
+                }
+                
+                // 判断右侧是否有节点小于根节点，有则不符合条件
+                // 根节点本身就无需判断了
+                for (let i = partitionIndex; i < end; i++) {
+                    if (sequence[i] > root) {
+                        return false;
+                    }
+                }
+                
+                // 递归判断左树，这样可以避免一些资源浪费
+                let isleft = true;
+                
+                if (partitionIndex > begin) {
+                    isleft = VerifySquenceOfBSTWithIndex(sequence, begin, partitionIndex - 1);
+                }
+                
+                // 递归判断右树
+                let isRight = true;
+                
+                if (partitionIndex < end) {
+                    isleft = VerifySquenceOfBSTWithIndex(sequence, partitionIndex, end - 1);
+                }
+                
+                return isleft && isRight;
+            }
+            
+            
+            console.log(VerifySquenceOfBST([]));
+        </script>
+    </body>
+
+</html>
