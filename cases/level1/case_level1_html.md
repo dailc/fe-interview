@@ -305,3 +305,9 @@ table改为div+css
 采用cdn加速
 http服务器的缓存
 dom操作优化
+
+## img的alt与title有何异同
+
+- `alt`是当图像无法显示时候的替代文字
+
+- `title`则是图像正常加载，然后鼠标刷上去时显示的提示文本

@@ -648,3 +648,33 @@ height: 100%
     padding-bottom: 100%;
 }
 ```
+
+## rgba()和opacity的透明效果有什么不同
+
+首先，`rgba()`和`opacity`都能实现透明效果，不同之处：
+
+- `opacity`作用于元素，以及元素内所有内容的透明度
+
+- `rgba()`只作用于元素的颜色或其背景色
+（而且设置rgba透明的元素的子元素不会继承透明效果！）
+
+## letter-spacing的妙用？
+
+可以用于消除inline-block元素间的换行符空格间隙问题
+
+## css的content属性
+
+css的`content`属性专门应用在 `before/after` 伪元素上，用于来插入生成内容。
+
+譬如插入伪元素清除浮动，
+插入伪元素作为元素之间的分隔符等
+
+```js
+.clearfix:after {
+    content:".";
+    display:block; 
+    height:0;
+    visibility:hidden; 
+    clear:both;
+}
+```

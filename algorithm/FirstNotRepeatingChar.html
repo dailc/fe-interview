@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>第一个只出现一次的字符</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 在一个字符串(1<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置
+             * 
+             * 思路：
+             * 哈希表，第一遍计算，第二遍读取
+             */
+            function FirstNotRepeatingChar(str) {
+                if (!str) {
+                    return -1;
+                }
+                const hashMap = {};
+                const len = str.length;
+                
+                for (let i = 0; i < len; i++) {
+                    const ch = str.charAt(i);
+                    
+                    if (!hashMap[ch]) {
+                        hashMap[ch] = 1;
+                    } else {
+                        hashMap[ch]++;
+                    }
+                }
+                
+                for (let i = 0; i < len; i++) {
+                    const ch = str.charAt(i);
+                    
+                    if (hashMap[ch] === 1) {
+                        return i;
+                    }
+                }
+                
+                return -1;
+            }
+            
+            /**
+             * 思路2：
+             * indexof与lastindexof
+             */
+            function FirstNotRepeatingChar(str) {
+                if (!str) {
+                    return -1;
+                }
+                const len = str.length;
+                
+                for (let i = 0; i < len; i++) {
+                    const ch = str.charAt(i);
+                    
+                    if (str.indexOf(ch) === str.lastIndexOf(ch)) {
+                        return i;
+                    }
+                }
+                
+                return -1;
+            }
+            
+            console.log(FirstNotRepeatingChar('google'));
+        </script>
+    </body>
+
+</html>
