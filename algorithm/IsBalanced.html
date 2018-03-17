@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>平衡二叉树</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+             * 
+             * 思路：
+             * 递归遍历左右子树的深度
+             * 用后续遍历
+             */
+            function IsBalanced_Solution(pRoot) {
+                if (!pRoot) {
+                    return true;
+                }
+                const res = [true];
+                
+                getDepth(res, pRoot);
+                
+                return res[0];
+            }
+            
+            function getDepth(res, pRoot) {
+                if (!pRoot) {
+                    return 0;
+                }
+                const left = getDepth(res, pRoot.left);
+                const right = getDepth(res, pRoot.right);
+                
+                if (Math.abs(left - right) > 1) {
+                    res[0] = false;
+                }
+                
+                return left > right ? left + 1 : right + 1;
+            }
+            
+            function TreeNode(x) {
+                this.val = x;
+                this.left = null;
+                this.right = null;
+            }
+            
+            const tree = new TreeNode(1);
+            
+            const treeLeft = new TreeNode(2);
+            const treeRight = new TreeNode(3);
+            
+            tree.left = treeLeft;
+            tree.right = treeRight;
+            treeLeft.left = new TreeNode(4);
+            treeLeft.right = new TreeNode(5);
+            treeRight.left = new TreeNode(6);
+            treeRight.right = new TreeNode(7);
+            
+            
+
+            console.log(IsBalanced_Solution(tree));
+        </script>
+    </body>
+
+</html>
