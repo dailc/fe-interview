@@ -428,6 +428,8 @@ __setInterval的缺点__
 
 - 就算正常间隔执行，多个定时器的代码执行时间可能会比预期小（因为代码执行需要一定时间）
 
+注意：浏览器的优化，如果队列中已经有setInterval事件了（未执行的），不会再重复添加了
+
 
 __推荐使用requestAnimationFrame替代setTimeout__
 

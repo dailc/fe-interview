@@ -18,12 +18,58 @@
              * 
              * 思路：需要找规律
              * 
+             * 如果第 i 位(自右向左，从1开始标号)上的数字是0，
+             * 则第 i 位可能出现 1 的次数由更高位决定(若没有高位，则视高位为0)，
+             * 等于更高位数乘以当前位数的权重(10^(i-1))
+             * 
+             * 如果第 i 位上的数字为 1，
+             * 则第 i 位上出现 1 的次数不仅受更高位影响，还受低位影响(若没有低位，视低位为0)，
+             * 等于更高位数乘以当前位数的权重 (10^(i-1)) + (低位数 + 1)
+             * 
+             * 如果第 i 位上的数字大于 1，
+             * 则第 i 位上可能出现 1 的次数仅由更高位决定(若没有高位，视高位为0)，
+             * 等于(更高位数 + 1)乘以当前位数的权重 (10^(i-1))
+             * 
+             * 总结：(当计算右数第 i 位包含的 x 的个数时)
+             * 依次判断个位，十位，百位
+             * 
+             * 取第 i位左边(高位)的数字，乘以 10^(i-1)，得到基础值 a
+             * 取第 i 位数字，计算修正值:
+             * 如果大于 x , 则结果为 a + 10^(i-1)
+             * 如果小于 x，则结果为 a
+             * 如果等于 x，则取第 i 位右边(低位)数字，设为 b，最后结果为 a + b + 1
+             * 
+             * https://www.cnblogs.com/lengender-12/p/6876897.html
              */
             function NumberOf1Between1AndN_Solution(n) {
+                if (n < 1) {
+                    return 0;
+                }
+                if (n < 9) {
+                    return 1;
+                }
                 
+                let high = 0;
+                let k = 0;
+                let cur = 0;
+                let count = 0;
+                
+                for (let i = 1; k = ~~(n / i); i *= 10) {
+                    high = ~~(k / 10);
+                    count += high * i;
+                    cur = k % 10;
+                    
+                    if (cur > 1) {
+                        count += i;
+                    } else if (cur === 1) {
+                        count += n - k * i + 1;
+                    }
+                }
+                
+                return count;
             }
             
-            console.log(NumberOf1Between1AndN_Solution(5));
+            console.log(NumberOf1Between1AndN_Solution(11));
         </script>
     </body>
 
