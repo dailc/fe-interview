@@ -1,34 +1,155 @@
 # 难度等级1，最常见的一些概念，初级必须了解
 
-## css定义的权重
+## CSS选择符有哪些？
 
-权重规则：
+选择符包括：
 
-标签权重1，class 10, id 100,内联 style 1000，具体如下
-
-```css
-/*1*/
-div {}
-
-/*10*/
-.class1 {}
-
-/*100*/
-#id1 {}
-
-/*100+1*/
-#id1 div {}
-
-/*10+1*/
-.class1 div {}
-
-/*10+10+1*/
-.class1 .class2 div {}
+```js
+`*`，
+`id`，
+`class`，
+`tag`，
+`.a > .b`，
+`.a .b`，
+`.a.b`（必须两个都满足），
+`a:hover`（一些伪类状态），
+`a::before`（伪元素），
+`a[rel = "external"]`（属性选择）
+等等
 ```
 
-如果权重相同，最后定义的样式会起作用
+## CSS3有哪些新特性？
 
-`!important`代表最高权重(据说是100W)
+新增各种css选择器
+如`:not(.input)`  所有class不是input的节点
+
+圆角
+`border-radius:6px`
+
+多列布局
+`multi-column layout`
+
+阴影与反射
+`shadow/reflect`
+
+文字特效
+`text-shadow`
+
+文字渲染
+`text-decoration`
+
+线性渐变
+`gradient`
+
+旋转，平移等变化
+`rotate transform`
+
+## CSS哪些属性可以继承？
+
+- 可继承属性
+
+`color`，`font-size`，`font-family`，`font-style`，`visibility`，`line-height`，`cursor`
+
+- 不可继承
+
+`border`，`padding`，`margin`，`width`，`height`等等
+
+可以看出，与盒模型布局相关的属性基本都是不可继承的
+
+## display有哪些值？说明他们的作用。
+
+- `none`，隐藏元素，并且不保留位置（如果是`visibility: hidden`的话会，虽然看不见，但是保留位置）
+
+- `block`，块级元素，默认情况下会占据整行，可以设置宽高等元素
+
+- `inline`，内联元素，无法设置宽高（`padding`和`margin`也无效。布局时需注意）
+
+- `inline-block`，内联的块级，可以设置宽高
+
+- `table`，表格
+
+- `table-cell`，表格元素
+
+- `table-caption`，表格头部
+
+- `box`，`flex`的前身，伸缩性布局
+
+- `flex`，弹性布局，不计入普通文档流
+
+- `list-item` 列表，会为元素内容生成一个块型盒，随后再生成一个列表型的行内盒。其效果就和ul中出现项目列表符号一样。
+通俗地说就是会在内容前面自动加上黑点，而display:block则不会出现黑点。
+
+注意，`list-item`为元素生成了一个块模型，随后再生成一个列表型的行内盒。
+
+## display:none和visibility:hidden的区别？
+
+相同点： 都能将网页上的某个元素隐藏
+
+不同点：
+display:none。隐藏对象并且不保留空间，即使用后该对象会从页面上消失，看不见，摸不着
+涉及到了DOM结构，故产生reflow与repaint
+
+visibility:hidden。使得对象在网页不可见（点击事件也无法触发），但是对象在网页上所占的空间没变（变为一块空白占据原有空间）
+保留空间，不影响结构，故只产生repaint
+
+在渲染时，visibility:hidden被渲染成了空盒子，仍然在render树中，
+而display:none的元素是将节点从整个render tree中移除，所以不是布局中的一部分
+
+所以，很多时候visibility:hidden更方便
+
+## position的值relative和absolute定位原点是？
+
+- absolute
+生成绝对定位元素，相对于值不为static的第一个父元素进行定位
+
+- fixed
+绝对定位，相对于浏览器窗口进行定位
+
+- relative
+生成相对定位，相对于其正常位置进行定位。（relative不会导致元素脱离文档流）
+
+- static
+默认值，没有定位,元素出现在正常流中(文档流)，忽略top,bottom,left,right,z-index等声明
+
+- inherit
+从父元素集成position值
+
+## position属性的三个值：relative，absolute，fixed的区别？
+
+- relative:
+生成相对元素，无top,left时，元素就是在正常的文档流中，
+譬如如果设置了left:20px，就会从左侧偏离20像素
+
+- absolute:
+生成绝对定位元素，相对于上级元素中第一个position属性非static的元素来定位
+使用left,right,top,bottom来定位
+
+- fixed:
+生成绝对定位元素，相对于浏览器视窗来定位
+使用left,right,top,bottom定位
+
+- position的其它值:
+static:默认值，没有定位，元素出现在正常流中
+忽略top,bottom,left,right或者z-index声明
+
+一般情况下，对于一些动画元素会采用absolute来单独布局，因为这样可以脱离普通文档流，减少回流影响的单位数量
+
+## 对line-height是如何理解的？
+
+指定了一行字的高度，定义是同一个元素中（比如同一个p）两个文本行基线之间的距离
+如果div没有高度，但是里面有文字，那么它会被文字的line-height默认撑开
+
+line-height只影响行内元素， 
+具有可继承性，块级元素的子元素会继承该特性，并在行内元素上生效
+
+譬如，简单的把height设置和行高一样的话，可以实现单行文本居中
+
+## 设置元素浮动后，该元素的display值是什么?
+
+浮动后的display值自动变为了display:block
+
+哪怕以前是inline，浮动后也会变为block
+（因为浮动时，对象将被视作块对象block-level）
 
 ## css table的一些属性？
 
@@ -47,38 +168,50 @@ div {}
 
 但是，如果设置了border-collapse，不生效，这个属性会被忽略，空的cell仍然会显示background color
 
-## 如何将标准盒模型转化为IE盒模型？
+## 相对定位
 
-通过css3的`box-sizing`属性
+在使用相对定位时，无论是否移动，元素仍然占据原有空间。
+因此移动元素会导致它覆盖其它框
 
-它有如下值：
+而绝对定位则因为不在文档流中，因此不占据空间，不会覆盖
 
-1. content-box 
+## css的初始化（抽离样式模块）怎么写，说说思路。
 
-    - 标准盒模型
+这种说法应该指的是：css的初始化，消除不同浏览器下标签的样式差异
 
-    - 这是由 CSS2.1 规定的宽度高度行为。
-    
-    - 宽度和高度分别应用到元素的内容框。
-    
-    - 在宽度和高度之外绘制元素的内边距和边框。
-    
-2. border-box
+一般采用的是一段经典的cssreset写法
 
-    - IE盒模型
-    
-    - 为元素设定的宽度和高度决定了元素的边框盒。
-    
-    - 就是说，为元素指定的任何内边距和边框都将在已设定的宽度和高度内进行绘制。
-    
-    - 通过从已设定的宽度和高度分别减去边框和内边距才能得到内容的宽度和高度。
-    
-    - 在很多布局中，这个属性很好用
-    
-3. inherit
+包括  body,h1,h2...等标签的margin和padding置0
+一些标签的通用字体设置
+table的边框同设等
 
-    - 规定应从父元素继承 box-sizing 属性的值
-    
+## overflow:scroll不能平滑滚动的问题
+
+特别是iOS下
+
+1.需要-webkit-overflow-scrolling： touch开启硬件加速
+(底层用了一个原生控件来显示的)
+
+2.或者类似于iScroll一样，自己内部用translate动画模拟
+
+## input与textarea的区别
+
+input单行
+
+textarea多行
+
+input自闭合
+
+textarea结对
+
+input有value属性可以设置
+
+textarea直接在标签间的文本设置（但是可以获取value）
+
+textarea有一些row、col指定大小
+
+input有Maxlength之类的
+
 ## 静态、自适应、流式、响应式布局的各自特点和区别？
 
 - 静态布局:一般用于传统的web设计，不管浏览器尺寸多少，网页只会有一套布局，不会有自适应现象
@@ -110,60 +243,6 @@ div {}
 用float或者inline或绝对定位使得不换行
 简单的可以用border来区分是否正确
 
-## CSS选择符有哪些？
-
-选择符包括：
-
-```js
-`*`，
-`id`，
-`class`，
-`tag`，
-`.a > .b`，
-`.a .b`，
-`.a.b`（必须两个都满足），
-`a:hover`（一些伪类状态），
-`a::before`（伪元素），
-`a[rel = "external"]`（属性选择）
-等等
-```
-
-## CSS3有哪些新特性？
-
-新增各种css选择器
-如:not(.input)   所有class不是input的节点
-
-圆角
-border-radius:6px
-
-多列布局
-multi-column layout
-
-阴影与反射
-shadow/reflect
-
-文字特效
-text-shadow
-
-文字渲染
-text-decoration
-
-线性渐变
-gradient
-
-旋转，平移等变化
-rotate transform
-
-## CSS哪些属性可以继承？
-
-- 可继承属性
-
-`color`，`font-size`，`font-family`，`font-style`，`visibility`，`line-height`，`cursor`
-
-- 不可继承
-
-`border`，`padding`，`margin`，`width`，`height`等等
-
 ## css sprite是什么，有什么优缺点?
 
 概念：将多个小图片拼接到一个图片中。通过background-position和元素尺寸调节需要显示的背景图案。
@@ -178,45 +257,6 @@ rotate transform
 1.图片合并麻烦（可以用在线工具或者node等自动工具）
 2.维护麻烦，修改一个图片可能需要从新布局整个图片，样式
 
-## display有哪些值？说明他们的作用。
-
-- `none`，隐藏元素，并且不保留位置（如果是另一个属性，`visible`的话会，虽然看不见，但是保留位置）
-
-- `block`，块级元素，默认情况下会占据整行，可以设置宽高等元素
-
-- `inline`，内联元素，无法设置宽高（`padding`和`margin`也无效。布局时需注意）
-
-- `inline-block`，内联的块级，可以设置宽高
-
-- `table`，表格
-
-- `table-cell`，表格元素
-
-- `table-caption`，表格头部
-
-- `box`，`flex`的前身，伸缩性布局
-
-- `flex`，弹性布局，不计入普通文档流
-
-- `list-item` 列表，会为元素内容生成一个块型盒，随后再生成一个列表型的行内盒。其效果就和ul中出现项目列表符号一样。
-通俗地说就是会在内容前面自动加上黑点，而display:block则不会出现黑点。
-
-## position的值relative和absolute定位原点是？
-
-- absolute
-生成绝对定位元素，相对于值不为static的第一个父元素进行定位
-
-- fixed
-绝对定位，相对于浏览器窗口进行定位
-
-- relative
-生成相对定位，相对于其正常位置进行定位。（relative不会导致元素脱离文档流）
-
-- static
-默认值，没有定位,元素出现在正常流中(文档流)，忽略top,bottom,left,right,z-index等声明
-
-- inherit
-从父元素集成position值
 
 ### 移动端布局用过媒体查询（@media）么
 
@@ -250,69 +290,6 @@ rotate transform
 
 代表在打印模式下的样式，而且这种模式下，单位一般是`pt`
 
-## display:none和visibility:hidden的区别？
-
-相同点： 都能将网页上的某个元素隐藏
-
-不同点：
-display:none。隐藏对象并且不保留空间，即使用后该对象会从页面上消失，看不见，摸不着
-涉及到了DOM结构，故产生reflow与repaint
-
-visibility:hidden。使得对象在网页不可见（点击事件也无法触发），但是对象在网页上所占的空间没变（变为一块空白占据原有空间）
-保留空间，不影响结构，故只产生repaint
-
-在渲染时，visibility:hidden被渲染成了空盒子，仍然在render树中，
-而display:none的元素是将节点从整个render tree中移除，所以不是布局中的一部分
-
-所以，很多时候visibility:hidden更方便
-
-## position属性的三个值：relative，absolute，fixed的区别？
-
-- relative:
-生成相对元素，无top,left时，元素就是在正常的文档流中，
-譬如如果设置了left:20px，就会从左侧偏离20像素
-
-- absolute:
-生成绝对定位元素，相对于上级元素中第一个position属性非static的元素来定位
-使用left,right,top,bottom来定位
-
-- fixed:
-生成绝对定位元素，相对于浏览器视窗来定位
-使用left,right,top,bottom定位
-
-- position的其它值:
-static:默认值，没有定位，元素出现在正常流中
-忽略top,bottom,left,right或者z-index声明
-
-一般情况下，对于一些动画元素会采用absolute来单独布局，因为这样可以脱离普通文档流，减少回流影响的单位数量
-
-## 对line-height是如何理解的？
-
-指定了一行字的高度，定义是同一个元素中（比如同一个p）两个文本行基线之间的距离
-如果div没有高度，但是里面有文字，那么它会被文字的line-height默认撑开
-
-line-height只影响行内元素，并不能直接应用与块级元素
-具有可继承性，块级元素的子元素会继承该特性，并在行内元素上生效
-
-譬如，简单的把height设置和行高一样的话，可以实现单行文本居中
-
-## 设置元素浮动后，该元素的display值是什么?
-
-浮动后的display值自动变为了display:block
-
-## 怎么让chrome支持小于12px的文字？
-
-使用小于12px的字体，非chrome可以不考虑兼容，chrome中加上
-
-```js
--webkit-text-size-adjust: none
-```
-
-有一个后果，就是如果放大了网页，字体不会随着一起放大（所以不建议全局使用，而是特定需要兼容的使用）
-
-其他障眼法
-如用图片替代文字
-
 ## style样式动态设置
 
 譬如
@@ -322,19 +299,6 @@ myDiv.style.width = '100px';
 ```
 
 注意，如果设置为`100`，没有带单位，会被自动忽略，因为没有度量单位（当然，很久以前的混杂模式中，会有一个默认的px，不过标准模式必须带单位）
-
-## 在网页中应该使用奇数还是偶数字体？为什么？
-
-偶数字体
-
-1.（重要）偶数字号相对更容易和web设计的其他部分构成比例关系（譬如16 * 0.5 = 8）
-
-2.一些字体点阵（点阵字体也叫位图字体）只提供偶数字体（如早期windows自带中易宋体-新宋体等），而奇数13时用的是小一号的点阵（每个字的占据空间大了1px，但点阵没变）
-据说早起的windows字体点阵中，有2，14，15，16，唯独少13
-
-3.后续偶数更多的是一种习惯
-
-另外，12显示英文很好，但是中文太小，14对中英文都太大，13比较合适（譬如知乎是13）
 
 ## 全屏滚动的原理是什么？用到了css的哪些属性？
 
@@ -357,15 +321,6 @@ Flash Of Unstyled Cotent
 解决方案是：
 
 样式放在head中，这样在加载文档前样式已经有了，或者其它的优化css加载时间的方案
-
-## overflow:scroll不能平滑滚动的问题
-
-特别是iOS下
-
-1.需要-webkit-overflow-scrolling： touch开启硬件加速
-(底层用了一个原生控件来显示的)
-
-2.或者类似于iScroll一样，自己内部用translate动画模拟
 
 ## 视差滚动效果，如何给每页做不同动画？（回到顶部，向下滑动要再次出现，和只出现一次分别怎么做？）
 
@@ -444,24 +399,6 @@ body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, fo
   button, input, select, textarea { font-size:100%; }
   table { border-collapse:collapse; border-spacing:0; }
 ```
-
-## input与textarea的区别
-
-input单行
-
-textarea多行
-
-input自闭合
-
-textarea结对
-
-input有value属性可以设置
-
-textarea直接在标签间的文本设置（但是可以获取value）
-
-textarea有一些row、col指定大小
-
-input有Maxlength之类的
 
 ## 经常遇到的浏览器的兼容性有哪些？原因以及解决方法是什么？常用hack技巧？
 

@@ -180,6 +180,10 @@ __这个是正常现象！！！__这种表现是符合规范的应该有的表�
 
 ## 对BFC规范（块级格式化上下文：block formatting context）的理解？
 
+https://www.w3.org/TR/CSS21/visuren.html#block-formatting
+
+https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context
+
 BFC的全称是Blok formatting context(块级格式化上下文)
 
 W3C CSS2.1规范中的一个概念，它是一个独立容器，决定了元素如何对其内容进行定位，以及与其它元素的关系和相互作用
@@ -192,7 +196,7 @@ W3C CSS2.1规范中的一个概念，它是一个独立容器，决定了元素�
 触发BFC的条件:
 float的值不为none（所以，浮动元素其实也是一个BFC）
 overflow的值不为visible
-display的值为inline-block,table-cell,table-caption
+display的值为inline-block,table-cell,table-caption，flex, inline-flex（官方文档提到flex也是）
 position的值不为static或者releative中的任何一个
 
 有时候会把display：table也认为可以生成BFC，
