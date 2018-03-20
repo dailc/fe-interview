@@ -125,18 +125,6 @@ ECMAScript定义javascript语言的实现
 
 和前一个的差别只是从后开始遍历而已。
 
-
-## encodeURI和encodeURIComponent的区别？
-
-都是编码Unicode字符
-
-1. encodeURI只会将空格编码成20%（其它所有字符都原封不动）
-
-2. encodeURIComponent会将所有特殊字符编码，包括`/`，`:`，`#`，`&`，`=`，`?`，`;`，`@`，`+`等。
-但不会对这些ASCII字符和标点符号编码（` - _ . ! ~ * ' ( ) `）
-
-3. 注意，不要使用es3中废弃的escape（它只能正确编码ASCII字符）
-
 ## 说一说object类型中的内置对象
 
 ```js
@@ -256,25 +244,6 @@ IE下的`stopPropagation`要用`event.cancelBubble=true`替代)
 在事件捕获中，在div的监听函数内部使用这句代码可以阻住a标签捕获事件，所以a标签无法捕获到监听事件。
 (avveventListener的第三个参数为false代表使用冒泡机制，为true代表使用捕获机制，默认为false)
 
-
-## 说说写JavaScript的基本规范？
-
-1. 良好的代码规范，无规矩不成方圆，譬如airbnb的规范
-
-2. 如果是es5，采用严格模式，避免错误
-
-3. 尽量优雅
-
-```js
-===而不是==
-不使用全局变量
-使用[]而不是new Array
-for循环使用大括号
-if使用大括号
-不在一行声明多个变量
-等等
-```
-
 ## JavaScript原型，原型链 ? 有什么特点？
 
 这里随便简单描述点。
@@ -292,37 +261,6 @@ instance.constructor.prototype = instance.__proto__
 ```
 
 我们找一个属性时，会先看对象中是否有，如果没有，沿着原型链判断是否有，一直到检索Object的内置对象
-
-## What is a Polyfill?
-
-polyfill
-是指在旧浏览器上复制标准API的JavaScript补充
-可以动态地加载 JavaScript 代码或库，在不支持这些标准API的浏览器模拟它们
-
-因为 polyfill 模拟标准 API，所以能够以一种面向所有浏览器未来的方式针对这些 API 进行开发，
-一旦对这些 API 的支持变成绝对大多数，则可以方便地去掉 polyfill，无需做任何额外工作。
-
-例如，geolocation（地理位置）polyfill 可以在 navigator 对象上添加全局的 geolocation 对象，
-还能添加 getCurrentPosition 函数以及“坐标”回调对象，
-所有这些都是 W3C 地理位置 API 定义的对象和函数。
-
-## 做的项目中，有没有用过或自己实现一些 polyfill 方案（兼容性处理方案）？
-
-譬如：
-html5shiv(h5语义化标签)
-Geolocation
-Placeholder
-
-但是JQ之类的并不属于这个范畴
-polyfill是指标准API的适配，而jq是自己定义一套api
-
-譬如对requestAnimationFrame的兼容适配就属于一种polyfill
-
-### 使用正则实现获取文件扩展名？
-
-可以用正则提取(捕获组)
-str.match(/[.]([^.]+)$/)[1];
-没有可以设置为空
 
 ## 判断是否是函数
 
@@ -441,14 +379,6 @@ childNodes会包含空白符和文本节点
 
 一个是传数组，一个是传多个参数
 
-## 如何判断当前脚本运行在浏览器还是node环境？
-
-```js
-this === window ? 'browser' : 'node';
-```
-
- 通过判断Global对象是否为window，如果不为window，当前脚本没有运行在浏览器中
- 
 ## Javascript创建对象的几种方式？
 
 1. 隐式创建
@@ -484,15 +414,6 @@ var obj = xxx();
 var b = Object.create(a.prototype);
 ```
 
-## Javascript作用链域?
-
-全局函数无法查看局部函数的内部细节
-局部函数可以查看上层的函数细节，直至全局细节
-
-当需要从局部函数查找某一属性或方法时，
-如果当前作用域没有找到，就会上溯到上层作用域查找
-直至全局函数- 作用域链
-
 ## 谈谈this对象的简单理解。
 
 this总指向函数的直接调用者(而非间接调用者)
@@ -513,22 +434,6 @@ ajax();
 - ES5非严格模式中，函数调用如果未指定，默认this指向window
 
 - 严格模式中则为undefined
-
-## eval是做什么的？
-
-- 作用是把对应的字符串解析成js代码并运行
-
-- 尽量避免使用eval，不安全而且耗性能
-
-- 一次解析成js语句，一次执行
-
-在以前，常有人用
-
-```js
-var obj =eval('('+ str +')');
-```
-
-来将json字符串解析成json，但是h5中可以用`JSON.stringify`
 
 ## 如何判断一个对象是否属于某个类？
 
@@ -564,34 +469,7 @@ Object.defineProperty(a, Symbol.toStringTag, {
 Object.prototype.toString.call(a); // [object Date]
 ```
 
-## 立即执行函数，不暴露私有成员
 
-```js
-var module1 = (function() {
-    var count = 1;
-    
-    function change() {
-        count++;
-    }
-    
-    return {
-        change: change,
-    };
-)();
-```
-
-上面是一个立即执行函数，而且，一旦外部引用了change，会导致count无法被释放，形成闭包。
-（正常没有被引用，函数执行完后会被销毁）
-
-## 如何解决跨域问题？
-
-这个范围很大，包括js跨域，ifram跨域，ajax跨域等
-
-如ajax跨域一般是用jsonp(old)或者(cors)方案-需要后台进行配合配置
-
-或者用websocket等请求来进行数据交互
-
-另外window.postMessage也可跨域跨窗口传递消息（应该属于宏任务级别）
 
 ## AMD(Modules/Asynchronous-Definition)、CMD(Common-Module-Definition)规范的区别?
 
@@ -609,31 +487,6 @@ var module1 = (function() {
 as lazy as possible
 主要应用于sea.js
 推荐每一个模块职责单一
-
-## JSON的了解？
-
-JSON(JavaScript Object Notation)是一种轻量级的数据交换方式
-
-它是基于JavaScript的一个子集。
-数据格式简单，易于读写，占用带宽小
-
-例如（注意，必须要引号）
-
-```js
-{"name": "zhangsan", "age": "18"}
-```
-
-JSON字符串转JSON对象（后者是JS中内置的对象模型）
-
-```js
-eval('(' + str + ')')
-str.parseJSON
-JSON.parse(str)
-
-JSON转字符串
-obj.toJSONString()
-JSON.stringify(obj)
-```
 
 ## 用js实现千位分隔符?
 
@@ -658,21 +511,6 @@ screenX是相对于整个屏幕的坐标（整个显示器屏幕），所以在�
 clientX是相对于视口（浏览器可视窗口）的坐标（不计算页面滚动）
 
 pageX是相对于页面的坐标（包含滚动）
-
-## 如何编写高性能的Javascript？
-
-随意发挥
-
-不要用for-in，用for循环
-对对象进行缓存，特别是dom
-不要在函数内过度嵌套
-避免循环引用，防止内存泄露(无法回收)
-避免过多使用全局变量
-注意作用域
-字符串链接时可以用数组优化
-对象失效后及时去除引用，以便于垃圾回收器回收
-慎用闭包
-页面绘制时尽量减少回流或重绘
 
 ## 那些操作会造成内存泄漏？
 

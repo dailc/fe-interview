@@ -27,9 +27,24 @@
     </div>
 </div>
     <script>
-const str = 'style/libs/mui/mui.css';
+function closure() {
+    var count = {
+        n: 1
+    };
+    
+    return function () {
+        return count.n++;  
+    };
+}
 
-console.log(/\/libs\/.*\.css$/.test(str));
+const arr = [];
+
+
+setInterval(function() {
+    arr.push(closure());
+}, 10);
+
+
     </script>
     </body>
 

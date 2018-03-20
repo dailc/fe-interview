@@ -45,16 +45,6 @@ noframes
 等
 ```
 
-## HTML5 为什么只需要写 `<!DOCTYPE HTML>`，而不是`<!DOCTYPE HTML PUBLIC "-xxx.dtd">`？
-
-因为HTML5已经不再是SGML的子集，浏览器识别到`!DOCTYPE HTML`即可判断是H5页面
-
-HTML5与HTML4.01的区别
-
-- HTML5不基于SGML，因此不需要DTD引用，但也需要doctype来规范浏览器的行为
-
-- HTML4.01基于SGML，所以需要对DTD进行引用，才能告知浏览器使用的文档类型
-
 ## HTML5的一些特点
 
 1. H5不再基于SGML，而是作为一个独立的版本
@@ -72,24 +62,6 @@ Html5新元素(如header、nav、footer、adide、article、section等标签，a
 新的API(如localStorage、sessionStorage、indexedDB、websocket)，
 增加离线缓存(可以通过manifest配置- <html manifest=”路径”>)，
 废弃了部分属性(如img废弃name、html废弃version、form废弃accept…)，
-
-## 简述一下对HTML语义化的理解？
-
-譬如`<stoing>`是语义化的强调，语音设备会重读，而`<b>`仅仅是自然样式上的加粗
-
-通用，如果是列表，优先使用`ul,li`，而不是`div`大法层层嵌套
-
-即用正确的标签做正确的事情
-
-语义化的好处：
-
-1. html语义化让页面内容结构化，结构更清晰，便于浏览器解析
-
-2. 而且即使丢失css，也能保持基本格式
-
-3. 搜索引擎依赖于html标记来确定上下文和关键字权重，利于seo
-
-4. 同样，阅读源码时也更容易将网站分块，便于阅读维护理解
 
 ## 行内元素有哪些？块级元素有哪些空(void)元素有那些？
 
@@ -112,17 +84,6 @@ Html5新元素(如header、nav、footer、adide、article、section等标签，a
 当 DOMContentLoaded 事件触发时，仅当DOM加载完成，不包括样式表，图片，flash。
 (譬如如果有async加载的脚本就不一定完成)
 
-## 页面导入样式时，使用link和@import有什么区别？
-
-1. link属于XHTML标签的，除了加载css外，还能用于定义RSS，定义REL链接属性等作用，也可以加载一些其它文件，而且所有浏览器都支持
-页面被加载的同时，link会被加载，link加载时不会阻塞页面，而是会异步加载（譬如某浏览器可同时并发下载5个css）
-(注意，并行下载，甚至可以并行解析dom，但是会阻塞DOM的渲染)
-
-2.@import是css中才有的，只能用来载入css
-@import加载时会阻塞，也就是说，如果css用@import来加载，因为即便在头部书写，也会在页面结构被渲染后才加载css，造成页面的可能无样式的尴尬。
-@import是css2.1提出的，只有IE5上才能被识别，link是XHTML标签，无兼容问题（现在一般无需考虑IE兼容）
-一般的页面规范中都是禁止使用@import加载的，很影响体验
-
 ## 知道defer和async么，它们的作用？
 
 - async：异步加载脚本
@@ -139,33 +100,7 @@ Html5新元素(如header、nav、footer、adide、article、section等标签，a
 
 - 否则，如果普通的script，下载和执行时都会阻塞文档解析
 
-## Ajax是什么，如何创建一个Ajax?
 
-全称： `Asynchronous JavaScript And XML`
-异步传输 + js + xml
-也就是向服务器发送请求时，不必等待结果，而是可以同时做其他事情
-等到有结果了它会自己根据设定进行后续操作
-于此同时，页面不会整体刷新，提高了用户体验
-
-创建：
-1.创建一个XMLHttpRequest对象，也就是创建一个异步调用对象
-2.创建一个新的Http请求，并指定该HTTP请求的方法，url以及验证信息
-3.设置响应HTTP请求状态变化的函数
-4.发送HTTP请求
-5.获取异步调用返回的数据
-6.使用js和dom实现局部刷新
-
-## Ajax如何解决浏览器缓存问题？
-
-ajax请求中，只有get请求会有缓存
-
-解决方案
-
-1.ajax请求前加上:ajaxObj.setRequestHeader('If-Modified-Since', '0');
-2.ajax请求前加上:ajaxObj.setRequestHeader('Cache-Control', 'no-cache');
-3.在URL后面加上一个随机数: "random=" + Math.random();
-4.同理在url后面加上时间戳: "nowtime=" + (new Date()).getTime();
-5.jq中，可以: $.ajaxSetup({cache: false});
 
 ## 描述下cookies,sessionStorage,localStorage的区别
 
@@ -187,6 +122,7 @@ sessionStorage和localStorage一般是5m左右
 localStorage: 持久化，永久保存，除非主动删除
 sessionStorage: 当前浏览器窗口关闭后删除
 cookie: 设置的cookie过期时间之前一直有效，即使窗口或浏览器关闭
+
 
 ## 表单内包含元素都有哪些
 
@@ -232,36 +168,6 @@ label标签用来定义表单控制间的关系,
 
 譬如after可以插入伪元素（较常用），然后定义高度为1px，content为''，可以进行绝对定位，再设置背景色
 
-### title与h1的区别，b与strong的区别，i与em的区别？
-
-- title的属性没有明确意义，只表示是一个标题（也不会显示在页面中），h1则表示层次明确的标题，对页面的抓取也有影响
-
-    - title是每一个页面必须要的属性
-
-其它主要是： 语义化与自然样式的区别
-
-- 语义化标签strong,em更利于SEO，一些特殊设备也会处理（如朗读）譬如
-
-    - strong，标明的重点内容，有语气加强的含义，也同样会加粗，使用阅读设备时，会重度
-    而b仅展示强调内容（譬如加粗）
-
-- i内容为斜体，em表示强调的文本，也同样会斜
-
-一些拓展：
-自然样式标签
-
-```js
-b,i,u,s,pre
-```
-
-语义样式标签
-
-```js
-strong,em,ins,del,code
-```
-
-正常来说应该使用最符合的语义化标签（但是请勿滥用）
-
 ## 什么是cookie隔离？（或者说：请求资源时不要让它带cookie，怎么做）
 
 如果静态文件都放在主域名下，那么静态文件请求的时候都带有的cookie的数据提交给server
@@ -273,11 +179,6 @@ strong,em,ins,del,code
 这样降低请求头部大小，减少请求时间
 
 同时由于不会将cookie提交给server，也会减少server的解析环节，提高http解析速度
-
-## 页面编码和被请求的资源编码如果不一致如何处理？
-
-譬如，如果html页面是gbk的，js是utf8的，引入js时需要加上`charset='utf-8'`
-反之亦然
 
 ## 老项目的页面重构的一般流程
 
@@ -311,3 +212,22 @@ dom操作优化
 - `alt`是当图像无法显示时候的替代文字
 
 - `title`则是图像正常加载，然后鼠标刷上去时显示的提示文本
+
+## 网页验证码是干嘛的，是为了解决什么安全问题？
+
+主要作用是：区分是计算机程序自动操作还是人为手工操作
+
+可以防止恶意破解密码，刷票，论坛灌水等
+
+在国内，最早应该是为了防止暴力穷举密码，最主要是防止机器人
+
+## 知道什么是webkit么? 知道怎么用浏览器的各种工具来调试和debug代码么?
+
+Chrome（现在是blink）,safari浏览器的内核
+
+准确的说，chrome是基于chromium引擎，而使用webkit内核
+
+weblit是当初苹果开源的
+google在次基础上开发了chromium（现在内核变为了blink）
+
+chrome中的devtools的调试工具

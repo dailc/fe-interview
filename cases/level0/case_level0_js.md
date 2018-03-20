@@ -43,20 +43,16 @@ getElementById()
 document.querySelector()
 ```
 
+## encodeURI和encodeURIComponent的区别？
 
-## 同步和异步的区别？
+都是编码Unicode字符
 
-同步->顺序执行
+1. encodeURI只会将空格编码成20%（其它所有字符都原封不动）
 
-譬如 a -> b -> c
+2. encodeURIComponent会将所有特殊字符编码，包括`/`，`:`，`#`，`&`，`=`，`?`，`;`，`@`，`+`等。
+但不会对这些ASCII字符和标点符号编码（` - _ . ! ~ * ' ( ) `）
 
-异步，回调执行
-
-譬如
-
-一轮循环  a -> c
-
-循环结束后 b触发回调
+3. 注意，不要使用es3中废弃的escape（它只能正确编码ASCII字符）
 
 ## 检测浏览器版本版本有哪些方式？
 
@@ -73,3 +69,95 @@ document.querySelector()
 不过，在早期（那时候各种标准都不完善或没执行到位），
 经常是利用功能检测来判断的（譬如判断某个功能变量是否存在，如果存在就是xx环境等）
 
+## What is a Polyfill?
+
+polyfill
+是指在旧浏览器上复制标准API的JavaScript补充
+可以动态地加载 JavaScript 代码或库，在不支持这些标准API的浏览器模拟它们
+
+因为 polyfill 模拟标准 API，所以能够以一种面向所有浏览器未来的方式针对这些 API 进行开发，
+一旦对这些 API 的支持变成绝对大多数，则可以方便地去掉 polyfill，无需做任何额外工作。
+
+例如，geolocation（地理位置）polyfill 可以在 navigator 对象上添加全局的 geolocation 对象，
+还能添加 getCurrentPosition 函数以及“坐标”回调对象，
+所有这些都是 W3C 地理位置 API 定义的对象和函数。
+
+## 做的项目中，有没有用过或自己实现一些 polyfill 方案（兼容性处理方案）？
+
+譬如：
+html5shiv(h5语义化标签)
+Geolocation
+Placeholder
+
+但是JQ之类的并不属于这个范畴
+polyfill是指标准API的适配，而jq是自己定义一套api
+
+譬如对requestAnimationFrame的兼容适配就属于一种polyfill
+
+## 如何判断当前脚本运行在浏览器还是node环境？
+
+```js
+this === window ? 'browser' : 'node';
+```
+
+通过判断Global对象是否为window，如果不为window，当前脚本没有运行在浏览器中
+
+## eval是做什么的？
+
+- 作用是把对应的字符串解析成js代码并运行
+
+- 尽量避免使用eval，不安全而且耗性能
+
+- 一次解析成js语句，一次执行
+
+在以前，常有人用
+
+```js
+var obj =eval('('+ str +')');
+```
+
+来将json字符串解析成json，但是h5中可以用`JSON.stringify`
+
+## 立即执行函数，不暴露私有成员
+
+```js
+var module1 = (function() {
+    var count = 1;
+    
+    function change() {
+        count++;
+    }
+    
+    return {
+        change: change,
+    };
+)();
+```
+
+上面是一个立即执行函数，而且，一旦外部引用了change，会导致count无法被释放，形成闭包。
+（正常没有被引用，函数执行完后会被销毁）
+
+## JSON的了解？
+
+JSON(JavaScript Object Notation)是一种轻量级的数据交换方式
+
+它是基于JavaScript的一个子集。
+数据格式简单，易于读写，占用带宽小
+
+例如（注意，必须要引号）
+
+```js
+{"name": "zhangsan", "age": "18"}
+```
+
+JSON字符串转JSON对象（后者是JS中内置的对象模型）
+
+```js
+eval('(' + str + ')')
+str.parseJSON
+JSON.parse(str)
+
+JSON转字符串
+obj.toJSONString()
+JSON.stringify(obj)
+```

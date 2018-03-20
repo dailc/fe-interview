@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>数组中的逆序对</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。
+             * 输入一个数组,求出这个数组中的逆序对的总数P。
+             * 并将P对1000000007取模的结果输出。 即输出P%1000000007
+             * 
+             * 输入描述:
+             * 题目保证输入的数组中没有的相同的数字
+             * 数据范围：
+             * 对于%50的数据,size<=10^4
+             * 对于%75的数据,size<=10^5
+             * 对于%100的数据,size<=2*10^5
+             * 
+             * 示例1
+             * 输入：1,2,3,4,5,6,7,0
+             * 输出：7
+             * 
+             * 思路：
+             * 归并
+             */
+            function InversePairs(data) {
+                if (!data || !data.length) {
+                    return 0;
+                }
+                const copy = data.slice(0);
+                const count = inversePairsCore(data, copy, 0, data.length - 1);
+                
+                return count % 1000000007;
+            }
+            
+            function inversePairsCore(data, copy, start, end) {
+                let inversions = 0;
+                
+                if (start < end) {
+                    const mid = ~~((start + end) / 2);
+                    
+                    // 找左半段的逆序对数目
+                    inversions += inversePairsCore(data, copy, start, mid);
+                    // 找右半段的逆序对数目
+                    inversions += inversePairsCore(data, copy, mid + 1, end);
+                    // 在找完左右半段逆序对以后两段数组有序，然后找两段之间的逆序对。最小的逆序段只有一个元素
+                    inversions += mergeArray(data, copy, start, mid, end);
+                }
+                
+                return inversions;
+            }
+            
+            function mergeArray(data, copy, start, mid, end) {
+                let i = mid;
+                let j = end;
+                // 临时数组末尾坐标
+                let k = 0;
+                let count = 0;
+                
+                // 设定两个指针ij分别指向两段有序数组的头元素，将小的那一个放入到临时数组中去
+                while (i >= start && j > mid) {
+                    if (data[i] > data[j]) {
+                        // 从临时数组的最后一个位置开始排序
+                        copy[k++] = data[i--];
+                        // 因为arry[mid+1...j...end]是有序的，如果arry[i]>arry[j]，那么也大于arry[j]之前的元素
+                        // 从a[mid+1...j]一共有j-(mid+1)+1=j-mid
+                        count += j - mid;
+                    } else {
+                        copy[k++] = data[j--];
+                    }
+                }
+                
+                // 表示前半段数组中还有元素未放入临时数组
+                while (i >= start) {
+                    copy[k++] = data[i--];
+                }
+                
+                while (j > mid) {
+                    copy[k++] = data[j--];
+                }
+                
+                // 将临时数组中的元素写回到原数组当中去。
+                // 这一步主要是确保排序
+                for (let m = 0; m < k; m++) {
+                    data[end - m] = copy[m];
+                }
+                
+                return count;
+            }
+            
+            console.log(InversePairs([1, 2, 3, 4, 5, 6, 7, 0]));
+        </script>
+    </body>
+
+</html>
