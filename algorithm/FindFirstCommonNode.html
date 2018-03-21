@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>两个链表的第一个公共节点</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入两个链表，找出它们的第一个公共结点。
+             * 
+             * 思路：
+             * 1. 用两个栈存储指针的遍历情况
+             * 
+             * 2. 可以指针判断
+             * 假定 List1长度: a+n  List2 长度:b+n, 且 a<b
+             * 那么 p1 会先到链表尾部, 这时p2 走到 a+n位置,将p1换成List2头部
+             * 接着p2 再走b+n-(n+a) =b-a 步到链表尾部,这时p1也走到List2的b-a位置，还差a步就到可能的第一个公共节点。
+             * 将p2 换成 List1头部，p2走a步也到可能的第一个公共节点。如果恰好p1==p2,那么p1就是第一个公共节点。
+             * 或者p1和p2一起走n步到达列表尾部，二者没有公共节点，退出循环。 同理a>=b.
+             * 时间复杂度O(n+a+b)
+             * 
+             * 其实就是两个链表相加a+n+b+n；在走一起a+b+n步就行
+             */
+            function FindFirstCommonNode(pHead1, pHead2) {
+                if (!pHead1 || !pHead2) {
+                    return null;
+                }
+                const stack1 = [];
+                const stack2 = [];
+                
+                while (pHead1 || pHead2) {
+                    if (pHead1) {
+                        stack1.push(pHead1);
+                        pHead1 = pHead1.next;
+                    }
+                    if (pHead2) {
+                        stack2.push(pHead2);
+                        pHead2 = pHead2.next;
+                    }
+                }
+                
+                let commonNode = null;
+                
+                while (stack1.length && stack2.length) {
+                    const node1 = stack1.pop();
+                    const node2 = stack2.pop();
+                    
+                    if (node1 === node2) {
+                        commonNode = node1;
+                    }
+                }
+                
+                return commonNode;
+            }
+            
+            function FindFirstCommonNode2(pHead1, pHead2) {
+                if (!pHead1 || !pHead2) {
+                    return null;
+                }
+                let p1 = pHead1;
+                let p2 = pHead2;
+                
+                while (p1 !== p2) {
+                    p1 = !p1 ? pHead2 : p1.next;
+                    p2 = !p2 ? pHead1 : p2.next;
+                }
+                
+                return p1;
+            }
+            
+            function ListNode(x) {
+                this.val = x;
+                this.next = null;
+            }
+            
+            const list1 = new ListNode(1);
+            const list11 = new ListNode(11);
+            const list12 = new ListNode(12);
+            const list13 = new ListNode(13);
+            const list14 = new ListNode(14);
+            const list15 = new ListNode(15);
+            
+            list1.next = list11;
+            list11.next = list12;
+            list12.next = list13;
+            list13.next = list14;
+            list14.next = list15;
+            
+            const list2 = new ListNode(2);
+            const list21 = new ListNode(21);
+            const list22 = new ListNode(22);
+            const list23 = new ListNode(23);
+            
+            list2.next = list21;
+            list21.next = list22;
+            list22.next = list23;
+            list23.next = list15;
+
+            console.log(FindFirstCommonNode2(list1, list2));
+        </script>
+    </body>
+
+</html>
