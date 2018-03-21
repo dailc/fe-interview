@@ -1,0 +1,9 @@
+# worker
+
+## WebWorker与SharedWorker？
+
+Web Worker（Dedicated Worker）只属于某个页面，不会和其他页面的Render进程共享，所以Chrome在Render进程中创建一个新的线程来运行Worker中的JavaScript程序。
+
+SharedWorker是浏览器所有页面共享的，不能采用与Worker同样的方式实现，因为它不隶属于某个Render进程，可以为多个Render进程共享使用，
+所以Chrome浏览器为SharedWorker单独创建一个进程来运行JavaScript程序，在浏览器中每个相同的JavaScript只存在一个SharedWorker进程，不管它被创建多少次。
+

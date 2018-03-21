@@ -1,7 +1,5 @@
 # 基础巩固的若干题目
 
-重新整理中...
-
 基于网上的面试题以及各大JS书籍（如JavaScript高级程序设计），重写梳理，整理而来
 
 __不要把它当成面试宝典__
@@ -14,51 +12,16 @@ __不要把它当成面试宝典__
 
 它的作用是通过基础题目，梳理巩固自己的知识体系，从而拾遗补漏，打好基础，稳步前行。
 
-## 难度等级
+## 内容
 
-__level0__
-
-[cases/case_level0_html.md](cases/level0/case_level0_html.md)
-
-[cases/case_level0_js.md](cases/level0/case_level0_js.mdd)
-
-[cases/case_level0_css.md](cases/level0/case_level0_css.md)
-
-__level1__
-
-[cases/case_level1_html.md](cases/level1/case_level1_html.md)
-
-[cases/case_level1_js.md](cases/level1/case_level1_js.mdd)
-
-[cases/case_level1_css.md](cases/level1/case_level1_css.md)
-
-__level2__
-
-[cases/case_level2_html.md](cases/level2/case_level2_html.md)
-
-[cases/case_level2_js.md](cases/level2/case_level2_js.mdd)
-
-[cases/case_level2_css.md](cases/level2/case_level2_css.md)
-
-__level3__
-
-[cases/case_level3_html.md](cases/level3/case_level3_html.md)
-
-[cases/case_level3_js.md](cases/level3/case_level3_js.mdd)
-
-[cases/case_level3_css.md](cases/level3/case_level3_css.md)
-
-__level4__
-
-[cases/case_level4_html.md](cases/level4/case_level4_html.md)
-
-[cases/case_level4_js.md](cases/level4/case_level4_js.mdd)
-
-[cases/case_level4_css.md](cases/level4/case_level4_css.md)
+具体参考`cases`下的目录
 
 __精选系列__
 
-[一个页面从输入 URL 到页面加载显示完成，这个过程中都发生了什么？](cases/whenyourenteraurl.md)
+- [从输入URL到页面加载的过程？如何由一道题完善自己的前端知识体系！](https://segmentfault.com/a/1190000013662126)
+
+- [从浏览器多进程到JS单线程，JS运行机制最全面的一次梳理](https://segmentfault.com/a/1190000012925872)
+
 
 ## 参考来源
 
