@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>和为S的两个数字</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一个递增排序的数组和一个数字S，在数组中查找两个数，是的他们的和正好是S，
+             * 如果有多对数字的和等于S，输出两个数的乘积最小的。
+             * 
+             * 返回一个数组
+             * 
+             * 思路：
+             * 1. 双指针遍历，分别从头和尾开始
+             * 关于，乘积最小，其实越远越小，所以此方法不必考虑乘积是、
+             */
+            function FindNumbersWithSum(array, sum) {
+                if (!array || !array.length) {
+                    return [];
+                }
+                const len = array.length;
+                let first = 0;
+                let last = len - 1;
+                
+                while (first < last) {
+                    const currSum = array[first] + array[last];
+                    
+                    if (currSum === sum) {
+                        return [array[first], array[last]];
+                    } else if (currSum > sum) {
+                        last--;
+                    } else {
+                        first++;
+                    }
+                }
+                
+                return [];
+            }
+            
+            
+            console.log(FindNumbersWithSum([1, 2, 3, 4, 5, 6], 6));
+        </script>
+    </body>
+
+</html>

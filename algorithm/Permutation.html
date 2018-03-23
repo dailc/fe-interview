@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <title>字符串的排列</title>
+    </head>
+
+    <body>
+        <script>
+            'use strict';
+
+            /**
+             * 输入一个字符串,按字典序打印出该字符串中字符的所有排列。
+             * 例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+             * 
+             * 例如：
+             * 输入一个字符串,长度不超过9(可能有字符重复),字符只包括大小写字母。
+             */
+            function Permutation(str) {
+                if (!str) {
+                    return [];
+                }
+                const res = [];
+                const duplicates = {}
+                
+                permutationRecursely(res, duplicates, str.split(''), 0);
+                res.sort();
+                
+                return res;
+            }
+            
+            function permutationRecursely(res, duplicates, strArray, begin) {
+                if (begin === strArray.length - 1) {
+                    const str = strArray.join('');
+                    
+                    if (!duplicates[str]) {
+                        res.push(str);
+                        duplicates[str] = true;
+                    }
+                    return;
+                }
+                const len = strArray.length;
+                
+                for (let i = begin; i < len; i++) {
+                    let ch = strArray[i];
+                    
+                    strArray[i] = strArray[begin]
+                    strArray[begin] = ch;
+                    
+                    permutationRecursely(res, duplicates, strArray, begin + 1);
+                    
+                    // 有还原回来
+                    ch = strArray[i];
+                    strArray[i] = strArray[begin]
+                    strArray[begin] = ch;
+                }
+            }
+            
+            
+            console.log(Permutation('abc'));
+        </script>
+    </body>
+
+</html>
